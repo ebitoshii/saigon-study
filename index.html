@@ -95,7 +95,7 @@ input[type="search"] { flex: 1 1 180px; }
 .stat { background: var(--surface); padding: 14px 12px; display: grid; gap: 2px; }
 .stat b { font-family: var(--f-display); font-size: 1.7rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .stat span { font-size: .78rem; color: var(--muted); }
-.modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .module { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 16px; display: grid; gap: 6px; align-content: start; }
 .module:hover { border-color: var(--jade); }
 .module .big { font-family: var(--f-display); font-size: 1.6rem; line-height: 1; }
@@ -235,6 +235,57 @@ details summary { cursor: pointer; font-weight: 600; }
 .lq-opts button.right { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
 .lq-opts button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
 
+/* Progress & test */
+.prog { display: grid; grid-template-columns: 1.15fr 1fr; gap: 18px; }
+.prog-sets { grid-row: span 2; }
+.pg-sets { display: grid; gap: 7px; }
+.pg-row { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 4.8em; gap: 10px; align-items: center; font-size: .86rem; }
+.pg-row .lab { color: var(--ink); }
+.pg-row .num { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; font-size: .8rem; }
+.bar2 { height: 10px; background: var(--line); border-radius: 99px; overflow: hidden; display: flex; gap: 2px; }
+.bar2 i { display: block; height: 100%; }
+.sw { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.sw-m, .bar2 .m { background: var(--jade); }
+.sw-s, .bar2 .s { background: color-mix(in srgb, var(--jade) 40%, var(--surface)); }
+.pg-acc { display: grid; gap: 8px; }
+.acc { display: grid; grid-template-columns: 9.5em minmax(0, 1fr) 6.5em; gap: 10px; align-items: center; font-size: .86rem; }
+.acc .num { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .8rem; }
+.acc .num b { color: var(--ink); font-size: .9rem; }
+.meter { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--jade); border-radius: 99px; }
+.tchart svg { width: 100%; height: auto; display: block; }
+.tchart text { fill: var(--muted); font-family: var(--f-body); font-size: 10px; }
+.tchart .lbl { fill: var(--ink); font-weight: 600; font-size: 11px; }
+.tchart rect.bar { fill: var(--jade); }
+.tchart rect.bar:hover { fill: var(--ochre); }
+.tchart line { stroke: var(--line); }
+.heat { display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, 13px); grid-auto-columns: 13px; gap: 3px; }
+.heat i { border-radius: 3px; background: var(--line); }
+.heat i.l1 { background: color-mix(in srgb, var(--jade) 30%, var(--surface)); }
+.heat i.l2 { background: color-mix(in srgb, var(--jade) 60%, var(--surface)); }
+.heat i.l3 { background: var(--jade); }
+.empty { color: var(--muted); font-size: .9rem; }
+.t-head { display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.t-q { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 10px; }
+.t-sec { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 600; color: var(--ochre); }
+.t-prompt { font-family: var(--f-display); font-size: clamp(1.6rem, 6vw, 2.4rem); line-height: 1.25; }
+.t-prompt.en { font-family: var(--f-body); font-size: clamp(1.15rem, 4.5vw, 1.45rem); font-weight: 500; }
+.t-prompt.kj { font-family: var(--f-kanji); font-size: 3rem; font-weight: 600; }
+.t-opts { display: grid; gap: 8px; width: 100%; max-width: 560px; }
+.t-opts button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 11px 14px; font-size: 1rem; text-align: left; }
+.t-opts.vi button { font-family: var(--f-display); font-size: 1.1rem; }
+.t-opts.grid5 { grid-template-columns: repeat(5, 1fr); }
+.t-opts.grid5 button { text-align: center; padding: 10px 4px; font-size: .85rem; }
+.t-opts.grid3 { grid-template-columns: repeat(3, 1fr); }
+.t-opts.grid3 button { text-align: center; font-family: var(--f-display); font-size: 1.1rem; }
+.t-opts button.right { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.t-opts button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
+.t-explain { min-height: 1.5em; color: var(--muted); font-size: .92rem; }
+.t-score { font-family: var(--f-display); font-size: 3.4rem; line-height: 1; font-variant-numeric: tabular-nums; }
+.t-miss { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 9px 0; border-top: 1px solid var(--line); align-items: center; }
+.t-miss small { color: var(--muted); font-size: .82rem; grid-column: 1; }
+.t-miss .speak { grid-row: span 2; grid-column: 2; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -252,7 +303,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 .pb-line .speak { grid-row: span 2; grid-column: 2; }
 .pb-note { grid-column: 1 / -1; padding: 10px 16px; font-size: .88rem; border-top: 1px solid var(--line); background: var(--ochre-soft); }
 .cl-prompt { font-size: 2.4rem !important; }
-.cl-prompt u { text-decoration: none; display: inline-block; min-width: 2.2em; border-bottom: 3px solid var(--ochre); color: var(--ochre); }
+.cl-prompt u, u.blank { text-decoration: none; display: inline-block; min-width: 2.2em; border-bottom: 3px solid var(--ochre); color: var(--ochre); }
 .cl-opts { grid-template-columns: repeat(3, 1fr) !important; }
 .cl-ref { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 24px; margin-top: 10px; }
 .cl-ref div { padding: 8px 0; border-top: 1px solid var(--line); display: grid; gap: 2px; }
@@ -262,7 +313,10 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 .src-pill.on { background: var(--jade); color: var(--surface); }
 
 @media (max-width: 720px) {
-  .hero, .modules, .bridge-list, .rules, .cl-ref, .pat-list { grid-template-columns: 1fr; }
+  .hero, .modules, .bridge-list, .rules, .cl-ref, .pat-list, .prog { grid-template-columns: 1fr; }
+  .prog-sets { grid-row: auto; }
+  .pg-row, .acc { grid-template-columns: 7.5em minmax(0, 1fr) 4.6em; }
+  .t-opts.grid5 { grid-template-columns: repeat(3, 1fr); }
   .dl { grid-template-columns: minmax(0, 1fr) auto; }
   .dl .who { grid-row: auto; grid-column: 1 / -1; }
   .dl small { grid-column: 1; }
@@ -306,7 +360,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 4 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 5 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -318,7 +372,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
           <div class="stat"><b id="st-learned">0</b><span>words started</span></div>
           <div class="stat"><b id="st-streak">0</b><span>day streak</span></div>
         </div>
-        <button class="btn primary" data-go="cards">Start today's flashcards</button>
+        <div class="row"><button class="btn primary" data-go="cards" style="flex:1">Start today's flashcards</button><button class="btn" data-go="test" style="flex:1">Take a mock test</button></div>
         <p class="score" id="st-mastered"></p>
       </div>
     </div>
@@ -328,6 +382,25 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <button class="module" data-go="grammar"><span class="big vi">ăn chưa?</span><h3>Grammar &amp; dialogues</h3><p>18 core patterns, five Saigon conversations and a sentence builder.</p></button>
       <button class="module" data-go="usage"><span class="big vi">Dạ, anh ơi</span><h3>Pronouns &amp; classifiers</h3><p>Who is anh, chị, cô, chú? Plus một tô phở, một ly cà phê.</p></button>
       <button class="module" data-go="bridge"><span class="big kj">経済</span><h3>Kanji bridge</h3><p>Use your kanji: Sino-Vietnamese words, sound rules and false friends.</p></button>
+    </div>
+    <div class="prog">
+      <div class="panel prog-sets" style="display:grid;gap:10px">
+        <div class="row" style="justify-content:space-between"><h3>Words by set</h3>
+          <div class="legend"><span><i class="sw sw-m"></i>Level 5+</span><span><i class="sw sw-s"></i>Started</span></div></div>
+        <div id="pg-sets" class="pg-sets"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <h3>Practice accuracy</h3>
+        <div id="pg-acc" class="pg-acc"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <div class="row" style="justify-content:space-between"><h3>Mock tests</h3><span class="score" id="pg-test-sum"></span></div>
+        <div id="pg-tests"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:10px;align-content:start">
+        <div class="row" style="justify-content:space-between"><h3>Activity</h3><span class="score">last 12 weeks</span></div>
+        <div id="pg-heat" class="scroll"></div>
+      </div>
     </div>
     <div class="panel settings" id="audio-panel">
       <div class="row" style="justify-content:space-between"><h3>Audio</h3><span class="src-pill" id="audio-src"></span></div>
@@ -401,6 +474,11 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <div class="row" style="margin-bottom:8px"><input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)"><span class="score" id="browse-count"></span></div>
       <div class="wordlist" id="browse-list"></div>
     </div>
+  </section>
+
+  <!-- TEST -->
+  <section class="view" id="v-test" hidden>
+    <div class="panel" style="display:grid;gap:12px" id="t-wrap"></div>
   </section>
 
   <!-- GRAMMAR -->
@@ -1921,13 +1999,14 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-say]
 const sayBtn = t => `<button class="speak" data-say="${esc(t)}" aria-label="Play ${esc(t)}">${SPEAK_ICON}</button>`;
 
 /* ---------- routing ---------- */
-const VIEWS = ['home', 'tones', 'cards', 'grammar', 'usage', 'bridge'];
+const VIEWS = ['home', 'tones', 'cards', 'grammar', 'usage', 'bridge', 'test'];
 function go(v) {
   if (!VIEWS.includes(v)) v = 'home';
   VIEWS.forEach(n => { $('#v-' + n).hidden = n !== v; });
   $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.go === v ? 'page' : 'false'));
   if (v === 'home') renderHome();
   if (v === 'cards') renderCards();
+  if (v === 'test') startTest();
   store.set('view', v);
   window.scrollTo(0, 0);
 }
@@ -1948,6 +2027,7 @@ function streak() {
   return n;
 }
 const newToday = () => store.get('new_' + today(), 0);
+function recordStat(k, ok) { const st = store.get('stats', {}); const a = st[k] || [0, 0]; if (ok) a[0]++; a[1]++; st[k] = a; store.set('stats', st); }
 function deckWords() { return VI_VOCAB.filter(w => settings.cats.includes(w.cat)); }
 function buildQueue() {
   const now = Date.now();
@@ -1965,6 +2045,7 @@ function schedule(w, grade) {
   else if (grade === 'good') { s.lvl = Math.min(6, s.lvl + 1); s.due = now + INTERVALS[s.lvl] * DAY; }
   else { s.lvl = Math.min(6, s.lvl + 2); s.due = now + INTERVALS[s.lvl] * DAY * 1.3; }
   s.n++; srs[w.id] = s; store.set('srs', srs);
+  recordStat('cards', grade !== 'again');
   if (isNew) store.set('new_' + today(), newToday() + 1);
   logActivity();
 }
@@ -1988,6 +2069,7 @@ function renderHome() {
   const mastered = Object.values(srs).filter(s => s.lvl >= 5).length;
   $('#st-mastered').textContent = `${mastered} of ${VI_VOCAB.length} words at level 5 or above · ${Math.max(0, settings.newPerDay - newToday())} new words left today`;
   $('#mod-count').textContent = VI_VOCAB.length;
+  renderProgress();
 }
 $('#legend').innerHTML = VI_TONES.map(t => `<span class="tn-${t.key}"><i></i>${t.name}</span>`).join('');
 
@@ -2027,7 +2109,7 @@ function nextDrill() {
 $('#dr-answers').addEventListener('click', e => {
   const b = e.target.closest('button[data-tone]'); if (!b || drill.answered) return;
   drill.answered = true; drill.total++;
-  const ok = b.dataset.tone === drill.item.tone; if (ok) drill.right++;
+  const ok = b.dataset.tone === drill.item.tone; if (ok) drill.right++; recordStat('tone', ok);
   b.classList.add(ok ? 'right' : 'wrong');
   if (!ok) $(`#dr-answers [data-tone="${drill.item.tone}"]`).classList.add('right');
   $('#dr-prompt').innerHTML = colorize(drill.item.word);
@@ -2159,7 +2241,7 @@ function nextBq() {
 $('#bq-opts').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b || bq.done) return;
   bq.done = true; bq.total++;
-  const ok = b.dataset.v === bq.item[1]; if (ok) bq.right++;
+  const ok = b.dataset.v === bq.item[1]; if (ok) bq.right++; recordStat('kanji', ok);
   b.classList.add(ok ? 'right' : 'wrong');
   if (!ok) $$('#bq-opts button').find(x => x.dataset.v === bq.item[1]).classList.add('right');
   $('#bq-meaning').textContent = `${bq.item[1]} · ${bq.item[4]}`;
@@ -2220,7 +2302,7 @@ function nextCl() {
 $('#cl-opts').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b || cl.done) return;
   cl.done = true; cl.total++;
-  const ok = b.dataset.v === cl.item.cl; if (ok) cl.right++;
+  const ok = b.dataset.v === cl.item.cl; if (ok) cl.right++; recordStat('cl', ok);
   b.classList.add(ok ? 'right' : 'wrong');
   if (!ok) $$('#cl-opts button').find(x => x.dataset.v === cl.item.cl).classList.add('right');
   const phrase = `một ${cl.item.cl} ${cl.item.noun}`;
@@ -2352,7 +2434,7 @@ $$('[data-lq]').forEach(c => c.addEventListener('click', () => { lq.mode = c.dat
 $('#lq-opts').addEventListener('click', e => {
   const b = e.target.closest('[data-o]'); if (!b || lq.done) return;
   lq.done = true; lq.total++;
-  const ok = lq.opts[+b.dataset.o] === lq.item; if (ok) lq.right++;
+  const ok = lq.opts[+b.dataset.o] === lq.item; if (ok) lq.right++; recordStat('listen', ok);
   b.classList.add(ok ? 'right' : 'wrong');
   if (!ok) $(`#lq-opts [data-o="${lq.opts.indexOf(lq.item)}"]`).classList.add('right');
   $('#lq-reveal').innerHTML = `<span class="vi" style="font-size:1.15rem">${colorize(lq.item.vi)}</span><br>${esc(lq.item.en)}`;
@@ -2388,15 +2470,165 @@ $('#bd-next').addEventListener('click', nextBuild);
 $('#bd-check').addEventListener('click', () => {
   const built = bd.picked.map(k => bd.tokens[k].w.toLowerCase()).join(' ');
   bd.ok = built === bd.words.join(' ').toLowerCase();
-  bd.done = true; bd.total++; if (bd.ok) bd.right++;
+  bd.done = true; bd.total++; if (bd.ok) bd.right++; recordStat('build', bd.ok);
   $('#bd-feedback').innerHTML = (bd.ok ? '<b style="color:var(--good)">Đúng rồi!</b> ' : '<b style="color:var(--bad)">Not quite.</b> Answer: ') + `<span class="vi">${colorize(bd.item.vi)}</span>`;
   $('#bd-score').textContent = `${bd.right} / ${bd.total}`;
   drawBuild(); speak(bd.item.vi); logActivity();
 });
 
+/* ---------- PROGRESS ---------- */
+const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
+function renderProgress() {
+  const rows = Object.entries(VI_CATEGORIES).map(([k, label]) => {
+    const ws = VI_VOCAB.filter(w => w.cat === k);
+    const st = ws.filter(w => srs[w.id]).length, ms = ws.filter(w => srs[w.id] && srs[w.id].lvl >= 5).length;
+    return { label, total: ws.length, st, ms };
+  });
+  $('#pg-sets').innerHTML = rows.map(r => `<div class="pg-row" title="${esc(r.label)}: ${r.st} started, ${r.ms} at level 5+, ${r.total} words">
+      <span class="lab">${esc(r.label)}</span>
+      <span class="bar2">${r.ms ? `<i class="m" style="width:${r.ms / r.total * 100}%"></i>` : ''}${r.st - r.ms ? `<i class="s" style="width:${(r.st - r.ms) / r.total * 100}%"></i>` : ''}</span>
+      <span class="num">${r.st} / ${r.total}</span></div>`).join('');
+  const stats = store.get('stats', {});
+  const acc = Object.entries(ACC_LABELS).map(([k, label]) => {
+    const [r, t] = stats[k] || [0, 0];
+    return `<div class="acc"><span>${label}</span><span class="meter"><i style="width:${t ? r / t * 100 : 0}%"></i></span>
+      <span class="num">${t ? `<b>${Math.round(r / t * 100)}%</b> of ${t}` : 'not yet'}</span></div>`;
+  });
+  $('#pg-acc').innerHTML = acc.join('');
+  const tests = store.get('tests', []);
+  if (!tests.length) {
+    $('#pg-test-sum').textContent = '';
+    $('#pg-tests').innerHTML = '<p class="empty">No tests yet. A mock test takes about 5 minutes and mixes every skill.</p><button class="btn" data-go="test">Take your first test</button>';
+  } else {
+    const last = tests.slice(-10), W = 320, H = 130, pad = 22, bw = (W - pad) / 10;
+    const best = Math.max(...tests.map(t => Math.round(t.s / t.n * 100)));
+    $('#pg-test-sum').textContent = `${tests.length} taken · best ${best}%`;
+    let svg = `<svg viewBox="0 0 ${W} ${H + 18}" role="img" aria-label="Last ${last.length} mock test scores">`;
+    [0, 50, 100].forEach(v => { const y = H - v / 100 * (H - 16); svg += `<line x1="${pad}" x2="${W}" y1="${y}" y2="${y}"/><text x="0" y="${y + 3}">${v}%</text>`; });
+    last.forEach((t, i) => {
+      const pct = Math.round(t.s / t.n * 100), h = Math.max(4, pct / 100 * (H - 16)), x = pad + i * bw + 3, y = H - h;
+      const d = new Date(t.d);
+      svg += `<rect class="bar" x="${x}" y="${y}" width="${bw - 6}" height="${h}" rx="4"><title>${d.toLocaleDateString()} · ${t.s}/${t.n} (${pct}%)</title></rect>`;
+      svg += `<text x="${x + (bw - 6) / 2}" y="${H + 13}" text-anchor="middle">${d.getDate()}/${d.getMonth() + 1}</text>`;
+      if (i === last.length - 1) svg += `<text class="lbl" x="${x + (bw - 6) / 2}" y="${y - 4}" text-anchor="middle">${pct}%</text>`;
+    });
+    $('#pg-tests').innerHTML = `<div class="tchart">${svg}</svg></div>`;
+  }
+  const log = store.get('log', {});
+  const start = new Date(); start.setDate(start.getDate() - 83 - start.getDay());
+  let cells = '';
+  for (let i = 0; i < 84 + new Date().getDay() + 1; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    const key = d.toISOString().slice(0, 10), n = log[key] || 0;
+    cells += `<i class="${n > 40 ? 'l3' : n > 15 ? 'l2' : n ? 'l1' : ''}" title="${key}: ${n} activit${n === 1 ? 'y' : 'ies'}"></i>`;
+  }
+  $('#pg-heat').innerHTML = `<div class="heat">${cells}</div>`;
+}
+
+/* ---------- MOCK TEST ---------- */
+const pick = (arr, n) => { const a = arr.slice(); a.sort(() => Math.random() - .5); return a.slice(0, n); };
+const shuffle = a => a.sort(() => Math.random() - .5);
+const SEC = { tones: 'Tones', vocab: 'Vocabulary', grammar: 'Grammar', cl: 'Classifiers', kanji: 'Kanji bridge', listen: 'Listening' };
+let test = null;
+function swapVariant(words) {
+  const w = words.slice(); const i = Math.floor(Math.random() * (w.length - 1));
+  [w[i], w[i + 1]] = [w[i + 1], w[i]]; return w.join(' ');
+}
+function buildTest() {
+  const qs = [];
+  const toneWords = VI_TONE_SETS.flatMap(s => s.words);
+  pick(toneWords, 4).forEach(([w, m]) => qs.push({ sec: 'tones', prompt: esc(w), pClass: '', opts: VI_TONES.map(t => ({ label: t.name, v: t.key })), ans: toneOf(w), oClass: 'grid5', explain: `${w} (${m}) · ${toneName(toneOf(w))}`, say: w }));
+  const studied = VI_VOCAB.filter(w => srs[w.id]);
+  const vpool = studied.length >= 24 ? studied : VI_VOCAB.slice(0, 344);
+  const vocabQs = (n, dir) => pick(vpool, n).forEach(w => {
+    const same = VI_VOCAB.filter(x => x.cat === w.cat && x.en !== w.en && x.vi !== w.vi);
+    const opts = shuffle([w, ...pick(same.length >= 3 ? same : VI_VOCAB.filter(x => x.en !== w.en), 3)]);
+    qs.push(dir === 'vi'
+      ? { sec: 'vocab', prompt: colorize(w.vi), pClass: '', opts: opts.map(o => ({ label: esc(o.en), v: o.id })), ans: w.id, oClass: '', explain: `${w.vi} = ${w.en}`, say: w.vi }
+      : { sec: 'vocab', prompt: esc(w.en), pClass: 'en', opts: opts.map(o => ({ label: esc(o.vi), v: o.id })), ans: w.id, oClass: 'vi', explain: `${w.en} = ${w.vi}`, say: w.vi });
+  });
+  vocabQs(3, 'vi'); vocabQs(3, 'en');
+  pick(VI_BUILD_POOL.filter(x => x.vi.split(/\s+/).length >= 4), 4).forEach(x => {
+    const words = x.vi.split(/\s+/).map(clean);
+    const right = words.join(' '), set = new Set([right]);
+    let guard = 0; while (set.size < 4 && guard++ < 40) set.add(swapVariant(words));
+    const opts = shuffle([...set]);
+    qs.push({ sec: 'grammar', prompt: esc(x.en), pClass: 'en', opts: opts.map(o => ({ label: esc(o), v: o })), ans: right, oClass: 'vi', explain: x.vi, say: x.vi });
+  });
+  pick(VI_CLASS_ITEMS, 2).forEach(it => {
+    const others = pick(Object.keys(VI_CLASSIFIERS).filter(k => k !== it.cl), 5);
+    qs.push({ sec: 'cl', prompt: `một <u class="blank">?</u> ${esc(it.noun)}`, pClass: '', opts: shuffle([it.cl, ...others]).map(o => ({ label: esc(o), v: o })), ans: it.cl, oClass: 'grid3', explain: `một ${it.cl} ${it.noun} · ${it.en}`, say: `một ${it.cl} ${it.noun}` });
+  });
+  const kpool = VI_BRIDGE.filter(b => b[0].length === 2);
+  pick(kpool, 2).forEach(b => {
+    const opts = shuffle([b, ...pick(kpool.filter(x => x !== b), 3)]);
+    qs.push({ sec: 'kanji', prompt: esc(b[0]), pClass: 'kj', opts: opts.map(o => ({ label: esc(o[1]), v: o[1] })), ans: b[1], oClass: 'vi', explain: `${b[0]} ${b[1]} · ${b[3]} · ${b[4]}`, say: b[1] });
+  });
+  if (canHear()) {
+    pick(LQ_POOL, 2).forEach(x => {
+      const opts = shuffle([x, ...pick(LQ_POOL.filter(o => o !== x), 3)]);
+      qs.push({ sec: 'listen', listen: true, prompt: '', pClass: '', opts: opts.map(o => ({ label: esc(o.vi), v: o.vi })), ans: x.vi, oClass: 'vi', explain: `${x.vi} · ${x.en}`, say: x.vi });
+    });
+  } else vocabQs(2, 'vi');
+  return qs;
+}
+function startTest() { test = { qs: buildTest(), i: 0, answered: false, res: [] }; drawTest(); }
+function drawTest() {
+  const wrap = $('#t-wrap');
+  if (test.i >= test.qs.length) return drawResults();
+  const q = test.qs[test.i];
+  wrap.innerHTML = `
+    <div class="t-head"><h2>Mock test</h2><span class="score">Question ${test.i + 1} of ${test.qs.length}</span></div>
+    <div class="progress"><i style="width:${test.i / test.qs.length * 100}%"></i></div>
+    <div class="t-q">
+      <span class="t-sec">${SEC[q.sec]}</span>
+      ${q.listen ? `<button class="lq-play" id="t-play" aria-label="Play the sentence"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button><p class="note-line">What did you hear?</p>` : `<div class="t-prompt ${q.pClass}">${q.prompt}</div>`}
+      ${q.sec === 'tones' ? '<p class="note-line">Which tone is this?</p>' : q.sec === 'grammar' ? '<p class="note-line">Pick the correct word order</p>' : ''}
+      <div class="t-opts ${q.oClass}" id="t-opts">${q.opts.map((o, j) => `<button data-j="${j}">${o.label}</button>`).join('')}</div>
+      <div class="t-explain" id="t-explain"></div>
+      <div class="row"><button class="btn ghost" id="t-quit">End test</button><button class="btn primary" id="t-next" hidden>${test.i === test.qs.length - 1 ? 'See results' : 'Next'}</button></div>
+    </div>`;
+  test.answered = false;
+  if (q.listen) { $('#t-play').addEventListener('click', () => speak(q.say)); speak(q.say); }
+  $('#t-quit').addEventListener('click', () => { test.qs = test.qs.slice(0, Math.max(1, test.res.length)); test.i = test.res.length; drawTest(); });
+  $('#t-next').addEventListener('click', () => { test.i++; drawTest(); window.scrollTo(0, 0); });
+}
+$('#t-wrap').addEventListener('click', e => {
+  const b = e.target.closest('#t-opts [data-j]'); if (!b || test.answered) return;
+  test.answered = true;
+  const q = test.qs[test.i], o = q.opts[+b.dataset.j], ok = o.v === q.ans;
+  b.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $$('#t-opts [data-j]')[q.opts.findIndex(x => x.v === q.ans)].classList.add('right');
+  test.res.push({ q, ok });
+  $('#t-explain').innerHTML = `<b style="color:var(${ok ? '--good' : '--bad'})">${ok ? 'Đúng rồi!' : 'Not quite.'}</b> ${esc(q.explain)}`;
+  $('#t-next').hidden = false; $('#t-next').focus();
+  speak(q.say);
+});
+function drawResults() {
+  const res = test.res; if (!res.length) { go('home'); return; }
+  const score = res.filter(r => r.ok).length;
+  const sec = {};
+  res.forEach(r => { const a = sec[r.q.sec] || [0, 0]; if (r.ok) a[0]++; a[1]++; sec[r.q.sec] = a; });
+  if (!test.saved) {
+    const tests = store.get('tests', []); tests.push({ d: Date.now(), s: score, n: res.length, sec }); store.set('tests', tests.slice(-30));
+    test.saved = true; logActivity();
+  }
+  const pct = Math.round(score / res.length * 100);
+  const verdict = pct >= 90 ? 'Giỏi quá! Excellent.' : pct >= 70 ? 'Tốt lắm. Solid work.' : pct >= 50 ? 'Getting there. Review the misses below.' : 'Keep going. Focus on the sections with the lowest scores.';
+  const misses = res.filter(r => !r.ok);
+  $('#t-wrap').innerHTML = `
+    <div class="t-head"><h2>Results</h2><span class="score">${new Date().toLocaleDateString()}</span></div>
+    <div class="row" style="gap:18px;align-items:end"><span class="t-score">${pct}%</span><span>${score} of ${res.length} correct<br><span class="note-line">${verdict}</span></span></div>
+    <div class="pg-acc">${Object.entries(sec).map(([k, [r, t]]) => `<div class="acc"><span>${SEC[k]}</span><span class="meter"><i style="width:${r / t * 100}%"></i></span><span class="num"><b>${r}</b> of ${t}</span></div>`).join('')}</div>
+    ${misses.length ? `<h3 style="margin-top:6px">Review your misses</h3><div>${misses.map(m => `<div class="t-miss"><span class="vi">${esc(m.q.explain)}</span>${sayBtn(m.q.say)}<small>${SEC[m.q.sec]}</small></div>`).join('')}</div>` : '<p class="note-line">No misses. Perfect score!</p>'}
+    <div class="row"><button class="btn primary" id="t-again">Take another test</button><button class="btn" data-go="home">See progress</button></div>`;
+  $('#t-again').addEventListener('click', startTest);
+}
+
 /* ---------- boot ---------- */
 updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage(); initGrammar();
 const hash = (location.hash || '').slice(1);
-go(VIEWS.includes(hash) ? hash : store.get('view', 'home'));
+const startView = VIEWS.includes(hash) ? hash : store.get('view', 'home');
+go(startView === 'test' ? 'home' : startView);
 })();
 </script>
