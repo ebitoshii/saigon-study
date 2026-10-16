@@ -227,6 +227,14 @@ details summary { cursor: pointer; font-weight: 600; }
 .bd-feedback { min-height: 1.4em; font-size: .92rem; }
 .bd-feedback .vi { font-size: 1.08rem; }
 
+.lq-play { width: 76px; height: 76px; border-radius: 50%; border: 0; background: var(--jade); display: grid; place-items: center; }
+.lq-play svg { width: 34px; height: 34px; fill: var(--surface); margin-left: 4px; }
+.lq-opts { display: grid; gap: 8px; width: 100%; max-width: 560px; }
+.lq-opts button { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 11px 14px; font-size: 1rem; }
+.lq-opts.vi-opts button { font-family: var(--f-display); font-size: 1.1rem; }
+.lq-opts button.right { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.lq-opts button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -298,7 +306,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 3 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 4 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -404,6 +412,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
           <button class="chip" data-gv="pat" aria-pressed="true">Patterns</button>
           <button class="chip" data-gv="dia" aria-pressed="false">Dialogues</button>
           <button class="chip" data-gv="build" aria-pressed="false">Builder</button>
+          <button class="chip" data-gv="listen" aria-pressed="false">Listen</button>
         </div>
       </div>
       <p class="lede" id="gv-lede">Vietnamese grammar is mostly word order and a few small words. Verbs never change form.</p>
@@ -426,6 +435,24 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
           <button class="chip" id="dia-hide" aria-pressed="false">Listening mode: hide Vietnamese</button>
         </div>
         <div class="dia-lines" id="dia-lines"></div>
+      </div>
+    </div>
+
+    <div id="g-listen" hidden class="panel" style="display:grid;gap:14px">
+      <div class="row" style="justify-content:space-between">
+        <div class="subtabs" role="group" aria-label="Quiz type">
+          <button class="chip" data-lq="vi" aria-pressed="true">What did you hear?</button>
+          <button class="chip" data-lq="en" aria-pressed="false">What does it mean?</button>
+        </div>
+        <span class="score" id="lq-score"></span>
+      </div>
+      <p class="note-line" id="lq-note"></p>
+      <div class="drill lq">
+        <button class="lq-play" id="lq-play" aria-label="Play the sentence"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <div class="row"><button class="chip" id="lq-slow">Play slower</button></div>
+        <div class="lq-opts" id="lq-opts"></div>
+        <div class="meaning" id="lq-reveal"></div>
+        <button class="btn" id="lq-next">Next sentence</button>
       </div>
     </div>
 
@@ -944,12 +971,14 @@ $('#g-pat').addEventListener('click', e => {
 const GV_LEDE = {
   pat: 'Vietnamese grammar is mostly word order and a few small words. Verbs never change form.',
   dia: 'Real Saigon exchanges. Watch how each speaker picks pronouns. Play a line, or play the whole scene.',
-  build: 'Tap the words in the right order to build the sentence.'
+  build: 'Tap the words in the right order to build the sentence.',
+  listen: 'Train your ear on real sentences from the patterns and dialogues.'
 };
 function setGv(v) {
   stopDialogue();
   $$('[data-gv]').forEach(c => c.setAttribute('aria-pressed', c.dataset.gv === v));
-  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build';
+  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build'; $('#g-listen').hidden = v !== 'listen';
+  if (v === 'listen') updateLqNote();
   $('#gv-lede').textContent = GV_LEDE[v]; store.set('gv', v);
 }
 
@@ -999,8 +1028,55 @@ function initGrammar() {
   renderDialogue();
   $$('[data-gv]').forEach(c => c.addEventListener('click', () => setGv(c.dataset.gv)));
   setGv(store.get('gv', 'pat'));
-  nextBuild();
+  nextBuild(); nextLq();
 }
+
+/* listening quiz */
+const LQ_POOL = (() => {
+  const out = [], seen = new Set();
+  VI_GRAMMAR.forEach(g => g.ex.forEach(([vi, en]) => { if (!seen.has(vi)) { seen.add(vi); out.push({ vi, en }); } }));
+  VI_DIALOGUES.forEach(d => d.lines.forEach(([, vi, en]) => { if (!seen.has(vi)) { seen.add(vi); out.push({ vi, en }); } }));
+  return out;
+})();
+const lq = { mode: store.get('lqmode', 'vi'), item: null, opts: [], done: false, right: 0, total: 0 };
+function updateLqNote() {
+  $('#lq-note').textContent = canHear()
+    ? (recKeys.size ? `${LQ_POOL.length} sentences. Saigon recordings are used where available.` : `${LQ_POOL.length} sentences. Playing with your device voice until the Saigon recordings are added.`)
+    : 'No voice is available on this device, so the sentence is shown as text instead. Add a Vietnamese voice on the Home tab to practise listening.';
+}
+function nextLq() {
+  const item = LQ_POOL[Math.floor(Math.random() * LQ_POOL.length)];
+  const opts = [item];
+  while (opts.length < 4) { const o = LQ_POOL[Math.floor(Math.random() * LQ_POOL.length)]; if (!opts.includes(o)) opts.push(o); }
+  opts.sort(() => Math.random() - .5);
+  Object.assign(lq, { item, opts, done: false });
+  $$('[data-lq]').forEach(c => c.setAttribute('aria-pressed', c.dataset.lq === lq.mode));
+  const box = $('#lq-opts');
+  box.className = 'lq-opts' + (lq.mode === 'vi' ? ' vi-opts' : '');
+  box.innerHTML = opts.map((o, i) => `<button data-o="${i}">${esc(lq.mode === 'vi' ? o.vi : o.en)}</button>`).join('');
+  $('#lq-reveal').innerHTML = canHear() ? '' : `<span class="vi" style="font-size:1.2rem">${colorize(item.vi)}</span>`;
+}
+function playLq(slow) {
+  if (!lq.item) return;
+  const keep = settings.rate;
+  if (slow) settings.rate = '0.6';
+  speak(lq.item.vi);
+  settings.rate = keep;
+}
+$('#lq-play').addEventListener('click', () => playLq(false));
+$('#lq-slow').addEventListener('click', () => playLq(true));
+$('#lq-next').addEventListener('click', () => { nextLq(); playLq(false); });
+$$('[data-lq]').forEach(c => c.addEventListener('click', () => { lq.mode = c.dataset.lq; store.set('lqmode', lq.mode); nextLq(); }));
+$('#lq-opts').addEventListener('click', e => {
+  const b = e.target.closest('[data-o]'); if (!b || lq.done) return;
+  lq.done = true; lq.total++;
+  const ok = lq.opts[+b.dataset.o] === lq.item; if (ok) lq.right++;
+  b.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $(`#lq-opts [data-o="${lq.opts.indexOf(lq.item)}"]`).classList.add('right');
+  $('#lq-reveal').innerHTML = `<span class="vi" style="font-size:1.15rem">${colorize(lq.item.vi)}</span><br>${esc(lq.item.en)}`;
+  $('#lq-score').textContent = `${lq.right} / ${lq.total}`;
+  logActivity();
+});
 
 /* sentence builder */
 const PROPER = /^(Sài|Gòn|Bến|Thành|Singapore|Hà|Nội|Quận|Nhật|Việt|Tom|Lan)$/;

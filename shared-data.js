@@ -14,7 +14,14 @@ const VI_CATEGORIES = {
   v: 'Verbs',
   j: 'Describing words',
   q: 'Questions & particles',
-  s: 'Shopping & money'
+  s: 'Shopping & money',
+  h: 'Home & daily life',
+  e: 'People & feelings',
+  c: 'Around Saigon',
+  w: 'Work & jobs',
+  l: 'Free time',
+  x: 'Nature & animals',
+  z: 'Southern slang'
 };
 
 const VI_VOCAB_RAW = `
@@ -364,7 +371,510 @@ lấy cái này|I'll take this|s||
 coi thử|have a look / try|s|xem thử|
 `;
 
-const VI_VOCAB = VI_VOCAB_RAW.trim().split('\n').map((line, i) => {
+/* Tranche 4 additions, appended so existing flashcard ids (w0…) keep their progress */
+const VI_VOCAB_RAW_T4 = `
+bò kho|Saigon-style beef stew|f||
+bánh xèo|crispy rice pancake|f||
+bún bò Huế|spicy Huế beef noodle soup|f||
+bún thịt nướng|vermicelli with grilled pork|f||
+bánh canh|thick noodle soup|f||
+cháo|rice porridge|f||
+xôi|sticky rice|f||
+cơm chiên|fried rice|f||
+mì|egg noodles; instant noodles|f||
+lẩu|hotpot|f||
+ốc|sea snails|f||A Saigon night-time favourite
+chè|sweet dessert soup|f||
+bánh flan|crème caramel|f||From French flan
+sữa chua|yogurt|f||
+nước mía|sugarcane juice|f||
+nước dừa|coconut water|f||
+trà sữa|milk tea|f||
+bạc xỉu|milky coffee (more milk than coffee)|f||A Saigon speciality
+nước mắm|fish sauce|f||
+tương ớt|chilli sauce|f||
+ớt|chilli|f||
+tỏi|garlic|f||
+hành|onion; spring onion|f||
+chanh|lime|f||
+đường|sugar|f||Same spelling as "road"
+muối|salt|f||
+tiêu|pepper|f||
+dầu ăn|cooking oil|f||
+rau thơm|fresh herbs|f||
+giá|bean sprouts|f||Same spelling as "price"
+cua|crab|f||
+mực|squid|f||
+vịt|duck (meat)|f||
+sườn|pork ribs; pork chop|f||
+heo quay|roast pork|f|lợn quay|
+lạp xưởng|Chinese sausage|f||
+đậu hũ|tofu|f|đậu phụ|
+nấm|mushroom|f||
+khoai tây|potato|f||
+cà chua|tomato|f||
+dưa leo|cucumber|f|dưa chuột|
+xoài|mango|f||
+dừa|coconut|f||
+chuối|banana|f||
+sầu riêng|durian|f||
+mít|jackfruit|f||
+thanh long|dragon fruit|f||
+chôm chôm|rambutan|f||
+măng cụt|mangosteen|f||
+dưa hấu|watermelon|f||
+nướng|grilled|f||
+chiên|fried|f|rán|
+luộc|boiled|f||
+hấp|steamed|f||
+xào|stir-fried|f||
+sống|raw|f||Also means "to live"
+chín|cooked; ripe|f||Same word as "nine"
+đắng|bitter|f||
+lạt|bland (not salty enough)|f|nhạt|
+thực đơn|menu|f||Many places just say "menu"
+món|dish|f||
+khăn giấy|tissue; napkin|f||
+ống hút|straw|f||
+nĩa|fork|f|dĩa|In the South, dĩa means plate
+dĩa|plate|f|đĩa|
+tô|large bowl|f|bát tô|
+nồi|pot|f||
+chảo|frying pan|f||
+ăn sáng|have breakfast|f||
+ăn trưa|have lunch|f||
+ăn tối|have dinner|f||
+ăn vặt|snack|f||
+khát|thirsty|f||
+no rồi|I'm full|f||
+ăn thử|have a taste|f||
+phòng ngủ|bedroom|h||
+phòng tắm|bathroom|h||
+nhà bếp|kitchen|h||
+phòng khách|living room|h||
+cửa|door|h||
+cửa sổ|window|h||
+giường|bed|h||
+gối|pillow|h||
+mền|blanket|h|chăn|
+tủ lạnh|fridge|h||
+máy lạnh|air conditioner|h|điều hòa|
+quạt|fan|h||
+đèn|light; lamp|h||
+chìa khóa|key|h||
+bàn chải đánh răng|toothbrush|h||
+kem đánh răng|toothpaste|h||
+xà bông|soap|h|xà phòng|
+khăn tắm|bath towel|h||
+dầu gội|shampoo|h||
+máy giặt|washing machine|h||
+quần áo|clothes|h||
+giặt đồ|do the laundry|h|giặt quần áo|
+nấu cơm|cook a meal|h||
+rửa chén|wash the dishes|h|rửa bát|
+dọn dẹp|tidy up|h||
+tắm|shower; bathe|h||
+đánh răng|brush your teeth|h||
+thức dậy|wake up|h||
+đi ngủ|go to bed|h||
+mặc đồ|get dressed|h|mặc quần áo|
+nghỉ ngơi|rest|h||
+điện|electricity|h||
+nước nóng|hot water|h||
+mật khẩu|password|h||Mật khẩu wifi là gì? = what's the wifi password?
+sạc|charge (a phone)|h||
+cục sạc|charger|h||
+pin|battery|h||
+hàng xóm|neighbour|h||
+chủ nhà|landlord|h||
+tiền nhà|rent|h||
+căn hộ|apartment|h||
+chung cư|apartment building|h||
+hẻm|alley|h|ngõ|Saigon's small lanes. Nhà tui ở trong hẻm = I live down an alley
+lầu|floor; storey|h|tầng|Lầu 1 is the first floor above ground level
+thang máy|lift|h||
+cầu thang|stairs|h||
+vui vẻ|cheerful|e||
+hạnh phúc|happy (deeply)|e||
+buồn ngủ|sleepy|e||
+giận|angry|e||
+lo|worried|e||
+sợ|afraid|e||
+ngại|reluctant; shy|e||
+mắc cỡ|embarrassed; shy|e|xấu hổ|
+nhớ nhà|homesick|e||
+chán|bored; fed up|e||
+ngạc nhiên|surprised|e||
+yêu|love|e||
+thương|love (warm, caring)|e||Southerners often say thương where Hanoi says yêu
+ghét|hate|e||
+cô đơn|lonely|e||
+tự tin|confident|e||
+căng thẳng|stressed|e||
+thoải mái|comfortable; relaxed|e||
+hiền|gentle; kind|e||
+tốt bụng|kind-hearted|e||
+dễ chịu|pleasant|e||
+khó chịu|unpleasant; annoyed|e||
+vui tính|good-humoured|e||
+thông minh|smart|e||
+giỏi|good at; skilful|e||
+siêng|hard-working|e|chăm chỉ|
+làm biếng|lazy|e|lười|
+đẹp trai|handsome|e||
+xinh|pretty|e||
+mập|fat|e|béo|
+ốm|thin|e|gầy|In the South ốm means skinny; sick is bệnh
+cao|tall|e||
+thấp|short (height)|e||
+bạn trai|boyfriend|e||
+bạn gái|girlfriend|e||
+người yêu|sweetheart|e||
+đồng nghiệp|colleague|e||
+khách|guest; customer|e||
+người lạ|stranger|e||
+người nước ngoài|foreigner|e||
+ông bà|grandparents|e||
+cha mẹ|parents|e|bố mẹ|Ba má in casual Southern speech
+anh trai|older brother|e||
+chị gái|older sister|e||
+em trai|younger brother|e||
+em gái|younger sister|e||
+con cái|children (your kids)|e||
+cưới|get married|e||
+độc thân|single|e||
+sinh nhật|birthday|e||
+Sài Gòn|Saigon|c||The everyday name for Hồ Chí Minh City
+thành phố|city|c||
+trung tâm|city centre|c||
+chợ Bến Thành|Bến Thành market|c||
+nhà thờ Đức Bà|Notre-Dame Cathedral|c||
+bưu điện|post office|c||
+phố đi bộ|walking street|c||
+bờ sông|riverside|c||
+công viên|park|c||
+quán nhậu|beer-and-snack spot|c||
+xe đẩy|street cart|c||
+vỉa hè|pavement|c||Where much of Saigon eats and drinks
+đèn đỏ|red light|c||
+đèn xanh|green light|c||
+cầu|bridge|c||
+xe buýt|bus|c||
+trạm xe buýt|bus stop|c||
+tàu điện|metro train|c||
+ga|station|c||
+bến xe|bus terminal|c||
+siêu thị|supermarket|c||
+cửa hàng tiện lợi|convenience store|c||
+trung tâm thương mại|shopping mall|c||
+nhà hàng|restaurant|c||
+tiệm cắt tóc|barber shop|c||
+tiệm thuốc tây|pharmacy|c|hiệu thuốc|
+phòng khám|clinic|c||
+cây xăng|petrol station|c||
+bãi giữ xe|parking area|c|bãi gửi xe|
+gửi xe|park (a vehicle)|c||
+nón bảo hiểm|helmet|c|mũ bảo hiểm|
+ồn|noisy|c||
+yên tĩnh|quiet; peaceful|c||
+an toàn|safe|c||
+nguy hiểm|dangerous|c||
+cẩn thận|careful|c||Cẩn thận nha! = be careful!
+qua đường|cross the street|c||
+góc|corner|c||
+đối diện|opposite|c||
+bên cạnh|next to|c||
+đầu hẻm|entrance of the alley|c|đầu ngõ|
+cuối đường|end of the street|c||
+địa chỉ|address|c||
+bản đồ|map|c||
+đường băng|runway|a||
+buồng lái|cockpit|a||
+cơ phó|first officer|a||
+phi hành đoàn|flight crew|a||
+hành khách|passenger|a||
+ghế ngồi|seat|a||
+dây an toàn|seat belt|a||Thắt dây an toàn = fasten your seat belt
+lối thoát hiểm|emergency exit|a||
+áo phao|life jacket|a||
+lối đi|aisle|a||
+nhiễu động|turbulence|a||
+độ cao|altitude|a||
+tốc độ|speed|a||
+nhiên liệu|fuel|a||
+đài kiểm soát|control tower|a||
+quốc nội|domestic|a||
+quốc tế|international|a||
+nhà ga|terminal|a||
+làm thủ tục|check in (at the airport)|a||
+thẻ lên máy bay|boarding pass|a||
+hành lý xách tay|cabin baggage|a||
+hành lý ký gửi|checked baggage|a||
+hải quan|customs|a||
+xuất cảnh|exit (a country)|a||
+nhập cảnh|enter (a country)|a||
+thị thực|visa|a||People also just say visa
+chuyến bay thẳng|direct flight|a||
+quá cảnh|transit|a||
+hủy|cancel; cancelled|a||
+khởi hành|depart|a||
+lịch bay|flight schedule|a||
+giờ địa phương|local time|a||
+lệch múi giờ|jet lag|a||
+đặt phòng|book a room|a||
+nhận phòng|check in (hotel)|a||
+trả phòng|check out|a||
+đặt vé|book a ticket|a||
+chụp hình|take photos|a|chụp ảnh|
+biển|sea; beach|a||
+núi|mountain|a||
+đảo|island|a||
+công việc|work; job|w||
+đi làm|go to work|w||
+văn phòng|office|w||
+công ty|company|w||
+họp|have a meeting|w||
+cuộc họp|meeting|w||
+lương|salary|w||
+sếp|boss|w||
+nhân viên|employee; staff|w||
+nghỉ phép|take leave|w||
+tăng ca|overtime|w||
+gửi|send|w||
+hợp đồng|contract|w||
+kinh doanh|business|w||
+khách hàng|client|w||
+lịch hẹn|appointment|w||Đặt lịch hẹn = book an appointment
+nghề|profession|w||
+bác sĩ|doctor|w||
+y tá|nurse|w||
+giáo viên|teacher|w||
+kỹ sư|engineer|w||
+luật sư|lawyer|w||
+đầu bếp|chef|w||
+tài xế|driver|w||
+kỹ thuật viên|technician; massage therapist (at spas)|w||
+đầu tư|invest|w||
+cổ phiếu|share; stock|w||
+thị trường chứng khoán|stock market|w||
+lãi suất|interest rate|w||
+ngân hàng trung ương|central bank|w||
+sở thích|hobby|l||
+đi chơi|go out; hang out|l||
+đi dạo|go for a stroll|l||
+coi phim|watch a film|l|xem phim|
+nghe nhạc|listen to music|l||
+hát|sing|l||
+nhảy|dance; jump|l||
+chơi thể thao|play sport|l||
+đá banh|play football|l|đá bóng|
+bơi|swim|l||
+chạy bộ|go running|l||
+tập gym|work out|l||
+đọc sách|read (books)|l||
+chơi game|play video games|l||
+câu cá|go fishing|l||
+cắm trại|go camping|l||
+leo núi|go hiking|l||
+đi biển|go to the beach|l||
+nấu ăn|cook (as a hobby)|l||
+vẽ|draw; paint|l||
+uống cà phê|have coffee|l||
+đi nhậu|go out drinking|l||
+lễ hội|festival|l||
+Tết|Lunar New Year|l||
+Trung thu|Mid-Autumn Festival|l||
+nghỉ lễ|public holiday|l||
+quà|gift|l||
+tiệc|party|l||
+mắt|eye|b||
+mũi|nose|b||
+miệng|mouth|b||
+tai|ear|b||
+răng|tooth|b||
+tóc|hair|b||
+mặt|face|b||
+ngực|chest|b||
+eo|waist|b||
+hông|hip|b||Same word as casual Southern "no"
+đùi|thigh|b||
+đầu gối|knee|b||
+bắp chân|calf|b||
+bàn chân|foot|b||
+bàn tay|hand|b||
+ngón tay|finger|b||
+khuỷu tay|elbow|b||
+cổ tay|wrist|b||
+cổ chân|ankle|b||
+xương|bone|b||
+gân|tendon|b||
+da|skin|b||
+tim|heart|b||
+cảm|catch a cold|b||
+sốt|fever|b||
+ho|cough|b||
+nhức đầu|headache|b|đau đầu|
+đau bụng|stomachache|b||
+chóng mặt|dizzy|b||
+dị ứng|allergic|b||
+bị thương|injured|b||
+căng cơ|pulled muscle|b||
+chuột rút|cramp|b||
+khám bệnh|see a doctor|b||
+uống thuốc|take medicine|b||
+thư giãn|relax|b||
+dầu gió|medicated oil|b||A staple in Vietnamese homes
+bấm huyệt|acupressure|b||
+cạo gió|coin rubbing (folk remedy)|b||
+bắt đầu|start|v||
+kết thúc|end; finish|v||
+xong|done; finish|v||
+tiếp tục|continue|v||
+thử|try|v||
+hỏi|ask|v||
+trả lời|answer|v||
+giải thích|explain|v||
+dịch|translate|v||
+lặp lại|repeat|v||
+tìm|look for|v||
+mất|lose; take (time)|v||Mất 20 phút = it takes 20 minutes
+sửa|fix; repair|v||
+đổi|change; exchange|v||
+chọn|choose|v||
+quyết định|decide|v||
+hứa|promise|v||
+tin|believe|v||
+nghĩ|think|v||
+cảm thấy|feel|v||
+hy vọng|hope|v||
+mong|look forward to|v||
+gặp lại|meet again|v||
+đón|pick up (someone)|v||
+đưa|take (someone); hand over|v||
+mang|bring; carry|v||
+cầm|hold|v||
+để|put; leave|v||
+chạy|run|v||
+leo|climb|v||
+rớt|fall; drop|v|rơi|
+té|fall over|v|ngã|
+vô|go in; enter|v|vào|Vô đi! = come on in!
+ra|go out|v||
+lên|go up|v||
+xuống|go down|v||
+quay lại|come back|v||
+nói chuyện|chat; talk|v||
+la|scold; shout at|v|mắng|
+cười|laugh; smile|v||
+khóc|cry|v||
+hiểu lầm|misunderstand|v||
+xin|ask for (politely)|v||
+mượn|borrow|v||
+cho mượn|lend|v||
+giữ|keep|v||
+bỏ|throw away; quit|v||
+kiếm|look for; earn|v|tìm|Kiếm tiền = earn money
+tính|plan to; calculate|v||Tui tính đi Đà Lạt = I'm planning to go to Đà Lạt
+ngắn|short (length)|j||
+dài|long|j||
+rộng|wide; spacious|j||
+hẹp|narrow|j||
+nặng|heavy|j||
+cứng|hard|j||
+mềm|soft|j||
+ướt|wet|j||
+khô|dry|j||
+ấm|warm|j||
+mát|cool (pleasant)|j||Trời mát = nice cool weather
+yếu|weak|j||
+giàu|rich|j||
+nghèo|poor|j||
+quan trọng|important|j||
+đặc biệt|special|j||
+bình thường|normal; OK|j||
+giống|similar; alike|j||
+khác|different|j||
+đầy|full|j||
+trống|empty|j||
+nổi tiếng|famous|j||
+tuyệt vời|wonderful|j||
+dở|bad (quality, taste)|j||Phim này dở quá = this film is bad
+ghê|awful; (South) really|j||Ngon ghê! = so good!
+xịn|top quality, legit (slang)|j||
+sẵn sàng|ready|j||
+rõ|clear|j||
+năm nay|this year|t||
+năm sau|next year|t||
+năm ngoái|last year|t||
+tuần sau|next week|t||
+tuần trước|last week|t||
+tháng sau|next month|t||
+sáng nay|this morning|t||
+tối nay|tonight|t||
+ngày|day|t||
+hằng ngày|every day|t||
+mỗi tuần|every week|t||
+thỉnh thoảng|sometimes|t||
+ít khi|rarely|t||
+không bao giờ|never|t||
+lúc|at (a time)|t||Lúc 3 giờ = at 3 o'clock
+khoảng|about; around|t||
+trước|before|t||
+sau|after|t||
+mùa mưa|rainy season|t||In Saigon, roughly May to November
+mùa khô|dry season|t||
+giờ cao điểm|rush hour|t||
+trời|sky; weather|x||
+mặt trời|sun|x||
+mặt trăng|moon|x||
+mây|cloud|x||
+sấm|thunder|x||
+sét|lightning|x||
+ngập|flooded|x||Saigon streets often flood after heavy rain
+sông|river|x||
+cây|tree; plant|x||
+hoa|flower|x||
+con chó|dog|x||
+con mèo|cat|x||
+con vịt|duck|x||
+con muỗi|mosquito|x||
+con gián|cockroach|x||
+con chuột|mouse; rat|x||
+con rắn|snake|x||
+con khỉ|monkey|x||
+con trâu|water buffalo|x||
+con cá sấu|crocodile|x||
+dữ vậy|wow, that much?|z||
+quá trời|loads; so much|z||Đông quá trời = so crowded
+hết sẩy|awesome, the best|z||
+hổng biết|dunno|z|không biết|
+sao vậy?|what's wrong?|z|sao thế?|
+gì vậy?|what is it?|z|gì thế?|
+thiệt hả?|really?|z|thật à?|
+trời ơi|oh my god!|z||Often said chời ơi in the South
+thôi kệ|never mind; forget it|z||
+được rồi|OK, all right|z||
+không sao đâu|it's no big deal|z||
+từ từ|slowly; take it easy|z||Từ từ thôi! = easy does it
+chút xíu|a tiny bit|z||
+chút chút|a little|z||
+ghiền|hooked on; love|z|nghiện|Ghiền cà phê = hooked on coffee
+xỉn|drunk|z|say|
+khùng|crazy|z||
+cà chớn|cheeky; unreliable|z||
+lộn xộn|messy; chaotic|z||
+tào lao|nonsense|z||
+chảnh|stuck-up|z||
+vậy đó|that's how it is|z|thế đấy|
+ừ ha|oh right, true|z||
+hen|right? OK? (warm)|z||
+chứ sao|of course!|z||
+mắc mệt|a hassle; tiresome|z||
+mắc cười|funny|z|buồn cười|
+mắc ói|nauseating|z|buồn nôn|
+`;
+
+const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim()).split('\n').map((line, i) => {
   const [vi, en, cat, north, note] = line.split('|');
   return { id: 'w' + i, vi, en, cat, north: north || '', note: note || '' };
 });
