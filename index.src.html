@@ -160,7 +160,7 @@ input[type="search"] { flex: 1 1 180px; }
 .lvl { display: inline-grid; grid-template-columns: repeat(6, 5px); gap: 2px; }
 .lvl i { height: 12px; border-radius: 1px; background: var(--line); }
 .lvl i.on { background: var(--jade); }
-.subtabs { display: flex; gap: 6px; }
+.subtabs { display: flex; flex-wrap: wrap; gap: 6px; }
 details summary { cursor: pointer; font-weight: 600; }
 
 /* Bridge */
@@ -286,6 +286,17 @@ details summary { cursor: pointer; font-weight: 600; }
 .t-miss small { color: var(--muted); font-size: .82rem; grid-column: 1; }
 .t-miss .speak { grid-row: span 2; grid-column: 2; }
 
+.sh-card { border: 1px solid var(--line); border-radius: 14px; padding: 26px 18px; display: grid; gap: 8px; text-align: center; background: var(--surface); }
+.sh-vi { font-size: clamp(1.5rem, 5vw, 2.2rem); line-height: 1.3; }
+.sh-en { color: var(--muted); }
+.sh-ctrl .btn { flex: 1 1 auto; }
+#sh-rec.rec { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.nu-form { justify-content: center; }
+.nu-form input { font: inherit; font-size: 1.3rem; text-align: center; width: 12em; max-width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-variant-numeric: tabular-nums; }
+.nu-res { min-height: 3em; display: grid; gap: 4px; justify-items: center; text-align: center; }
+.nu-res .big { font-size: 1.4rem; font-variant-numeric: tabular-nums; font-weight: 600; }
+.nu-rules { display: grid; gap: 6px; margin-top: 10px; font-size: .9rem; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -360,7 +371,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 5 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 6 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -491,6 +502,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
           <button class="chip" data-gv="dia" aria-pressed="false">Dialogues</button>
           <button class="chip" data-gv="build" aria-pressed="false">Builder</button>
           <button class="chip" data-gv="listen" aria-pressed="false">Listen</button>
+          <button class="chip" data-gv="shadow" aria-pressed="false">Shadow</button>
         </div>
       </div>
       <p class="lede" id="gv-lede">Vietnamese grammar is mostly word order and a few small words. Verbs never change form.</p>
@@ -534,6 +546,29 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       </div>
     </div>
 
+    <div id="g-shadow" hidden class="panel" style="display:grid;gap:14px">
+      <div class="row" style="justify-content:space-between">
+        <span class="eyebrow">Listen · repeat · compare</span>
+        <span class="score" id="sh-count"></span>
+      </div>
+      <div class="sh-card">
+        <div class="sh-vi vi" id="sh-vi"></div>
+        <div class="sh-en" id="sh-en"></div>
+      </div>
+      <div class="row sh-ctrl">
+        <button class="btn primary" id="sh-listen">Listen</button>
+        <button class="btn" id="sh-rec">Record me</button>
+        <button class="btn" id="sh-mine" disabled>Play mine</button>
+        <button class="btn" id="sh-cmp" disabled>Compare</button>
+        <button class="btn ghost" id="sh-next">Next sentence</button>
+      </div>
+      <p class="note-line" id="sh-status">Listen first, then say it out loud, copying the rhythm and tones.</p>
+      <div class="row" style="border-top:1px solid var(--line);padding-top:12px">
+        <button class="chip" id="sh-loop" aria-pressed="false">Hands-free mode</button>
+        <span class="note-line">Plays a sentence, pauses for you to repeat it, plays it again, then moves on. Good for practising away from the screen.</span>
+      </div>
+    </div>
+
     <div id="g-build" hidden class="panel" style="display:grid;gap:14px">
       <div class="row" style="justify-content:space-between"><span class="eyebrow">Put the words in order</span><span class="score" id="bd-score"></span></div>
       <div class="bd-en" id="bd-en"></div>
@@ -550,6 +585,40 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 
   <!-- USAGE -->
   <section class="view" id="v-usage" hidden>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:grid;gap:4px"><span class="eyebrow">Con số · numbers and money</span><h2>Catch the number</h2></div>
+        <span class="score" id="nu-score"></span>
+      </div>
+      <p class="lede">Prices, times and phone numbers fly past in Saigon. Listen, then type what you heard.</p>
+      <div class="row" role="group" aria-label="Number type" id="nu-kinds">
+        <button class="chip" data-k="price" aria-pressed="true">Prices</button>
+        <button class="chip" data-k="time" aria-pressed="false">Times</button>
+        <button class="chip" data-k="phone" aria-pressed="false">Phone numbers</button>
+        <button class="chip" data-k="number" aria-pressed="false">Numbers</button>
+      </div>
+      <div class="drill">
+        <button class="lq-play" id="nu-play" aria-label="Play the number"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <p class="note-line" id="nu-hint"></p>
+        <form class="row nu-form" id="nu-form">
+          <input id="nu-in" inputmode="decimal" autocomplete="off" aria-label="Your answer">
+          <button class="btn primary" id="nu-check">Check</button>
+        </form>
+        <div class="nu-res" id="nu-res" aria-live="polite"></div>
+        <div class="row"><button class="btn ghost" id="nu-show">Show answer</button><button class="btn" id="nu-next">Next</button></div>
+      </div>
+      <details>
+        <summary>How Southern numbers work</summary>
+        <div class="nu-rules">
+          <p><b>21, 31, 41…</b> one becomes <span class="vi">mốt</span>: hai mươi mốt.</p>
+          <p><b>24, 34…</b> four is usually <span class="vi">tư</span>: hai mươi tư.</p>
+          <p><b>15, 25…</b> five becomes <span class="vi">lăm</span>: mười lăm, hai mươi lăm.</p>
+          <p><b>105</b> uses <span class="vi">lẻ</span> for the empty tens: một trăm lẻ năm.</p>
+          <p><b>1,000</b> is <span class="vi">ngàn</span> in the South (Hanoi: nghìn). Prices drop the zeros: 35.000đ = ba mươi lăm ngàn.</p>
+          <p><b>Half past</b> is <span class="vi">rưỡi</span>: hai giờ rưỡi. Phone numbers are read digit by digit, 0 = không.</p>
+        </div>
+      </details>
+    </div>
     <div class="panel" style="display:grid;gap:14px">
       <span class="eyebrow">Xưng hô · what to call people</span>
       <h2>Pronoun builder</h2>
@@ -1059,12 +1128,14 @@ const GV_LEDE = {
   pat: 'Vietnamese grammar is mostly word order and a few small words. Verbs never change form.',
   dia: 'Real Saigon exchanges. Watch how each speaker picks pronouns. Play a line, or play the whole scene.',
   build: 'Tap the words in the right order to build the sentence.',
-  listen: 'Train your ear on real sentences from the patterns and dialogues.'
+  listen: 'Train your ear on real sentences from the patterns and dialogues.',
+  shadow: 'Shadowing: copy a native speaker straight after hearing them. The fastest way to fix tones and rhythm.'
 };
 function setGv(v) {
   stopDialogue();
   $$('[data-gv]').forEach(c => c.setAttribute('aria-pressed', c.dataset.gv === v));
-  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build'; $('#g-listen').hidden = v !== 'listen';
+  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build'; $('#g-listen').hidden = v !== 'listen'; $('#g-shadow').hidden = v !== 'shadow';
+  if (v !== 'shadow') stopLoop();
   if (v === 'listen') updateLqNote();
   $('#gv-lede').textContent = GV_LEDE[v]; store.set('gv', v);
 }
@@ -1115,7 +1186,7 @@ function initGrammar() {
   renderDialogue();
   $$('[data-gv]').forEach(c => c.addEventListener('click', () => setGv(c.dataset.gv)));
   setGv(store.get('gv', 'pat'));
-  nextBuild(); nextLq();
+  nextBuild(); nextLq(); nextShadow(); initNumbers();
 }
 
 /* listening quiz */
@@ -1165,6 +1236,107 @@ $('#lq-opts').addEventListener('click', e => {
   logActivity();
 });
 
+/* shadowing */
+const sh = { i: 0, order: [], rec: null, chunks: [], url: null, loop: null, n: 0 };
+function nextShadow() {
+  if (!sh.order.length || sh.i >= sh.order.length) { sh.order = shuffle(LQ_POOL.map((_, k) => k)); sh.i = 0; }
+  const item = LQ_POOL[sh.order[sh.i++]]; sh.item = item;
+  $('#sh-vi').innerHTML = colorize(item.vi); $('#sh-en').textContent = item.en;
+  if (sh.url) { URL.revokeObjectURL(sh.url); sh.url = null; }
+  $('#sh-mine').disabled = true; $('#sh-cmp').disabled = true;
+  $('#sh-count').textContent = sh.n ? `${sh.n} practised this session` : '';
+}
+function playTimed(text, done) { const t0 = Date.now(); speak(text, () => done(Date.now() - t0)); }
+async function toggleRec() {
+  const btn = $('#sh-rec');
+  if (sh.rec && sh.rec.state === 'recording') { sh.rec.stop(); return; }
+  if (!navigator.mediaDevices || !window.MediaRecorder) { $('#sh-status').textContent = 'Recording is not supported in this browser. You can still shadow out loud.'; return; }
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch (e) { $('#sh-status').textContent = 'The microphone is blocked here. It works on your GitHub site once you allow microphone access. You can still shadow out loud.'; return; }
+  sh.chunks = []; sh.rec = new MediaRecorder(stream);
+  sh.rec.ondataavailable = e => sh.chunks.push(e.data);
+  sh.rec.onstop = () => {
+    stream.getTracks().forEach(t => t.stop());
+    if (sh.url) URL.revokeObjectURL(sh.url);
+    sh.url = URL.createObjectURL(new Blob(sh.chunks, { type: sh.rec.mimeType || 'audio/webm' }));
+    btn.textContent = 'Record me'; btn.classList.remove('rec');
+    $('#sh-mine').disabled = false; $('#sh-cmp').disabled = false;
+    $('#sh-status').textContent = 'Now compare: does your rise and fall match Adam’s?';
+    sh.n++; $('#sh-count').textContent = `${sh.n} practised this session`; logActivity();
+  };
+  sh.rec.start(); btn.textContent = 'Stop'; btn.classList.add('rec');
+  $('#sh-status').textContent = 'Recording… say the sentence, then tap Stop.';
+  setTimeout(() => { if (sh.rec && sh.rec.state === 'recording') sh.rec.stop(); }, 10000);
+}
+function playMine(done) { if (!sh.url) return; const a = new Audio(sh.url); a.onended = () => done && done(); a.play().catch(() => {}); }
+$('#sh-listen').addEventListener('click', () => sh.item && speak(sh.item.vi));
+$('#sh-rec').addEventListener('click', toggleRec);
+$('#sh-mine').addEventListener('click', () => playMine());
+$('#sh-cmp').addEventListener('click', () => speak(sh.item.vi, () => setTimeout(() => playMine(), 500)));
+$('#sh-next').addEventListener('click', () => { nextShadow(); speak(sh.item.vi); });
+function stopLoop() {
+  if (!sh.loop) return;
+  sh.loop = null; $('#sh-loop').setAttribute('aria-pressed', 'false');
+  $('#sh-status').textContent = 'Hands-free mode stopped.';
+}
+$('#sh-loop').addEventListener('click', () => {
+  if (sh.loop) return stopLoop();
+  if (!canHear()) { $('#sh-status').textContent = 'Hands-free mode needs audio.'; return; }
+  const run = sh.loop = {}; $('#sh-loop').setAttribute('aria-pressed', 'true');
+  const cycle = () => {
+    if (sh.loop !== run) return;
+    $('#sh-status').textContent = 'Listen…';
+    playTimed(sh.item.vi, ms => {
+      if (sh.loop !== run) return;
+      $('#sh-status').textContent = 'Your turn: repeat it now.';
+      setTimeout(() => {
+        if (sh.loop !== run) return;
+        $('#sh-status').textContent = 'Listen again…';
+        speak(sh.item.vi, () => setTimeout(() => {
+          if (sh.loop !== run) return;
+          sh.n++; logActivity(); nextShadow(); cycle();
+        }, 1200));
+      }, Math.max(1500, ms * 1.3 + 800));
+    });
+  };
+  cycle();
+});
+
+/* numbers */
+const nu = { kind: store.get('nukind', 'price'), item: null, done: false, right: 0, total: 0 };
+const NU_HINT = { price: 'Type the price in đồng, e.g. 35000', time: 'Type the time, e.g. 7:15', phone: 'Type the phone number, digits only', number: 'Type the number' };
+const digits = s => String(s).replace(/\D/g, '');
+function nextNumber() {
+  const pool = VI_NUM_POOL.filter(x => x.kind === nu.kind);
+  let item; do { item = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && item === nu.item);
+  Object.assign(nu, { item, done: false });
+  $$('#nu-kinds .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === nu.kind));
+  $('#nu-hint').textContent = canHear() ? NU_HINT[nu.kind] : 'No audio on this device, so read it instead: ' + item.vi;
+  $('#nu-in').value = ''; $('#nu-res').innerHTML = '';
+  $('#nu-in').inputMode = nu.kind === 'time' ? 'text' : 'numeric';
+}
+function revealNumber(ok) {
+  const it = nu.item;
+  $('#nu-res').innerHTML = `${ok === undefined ? '' : `<b style="color:var(${ok ? '--good' : '--bad'})">${ok ? 'Đúng rồi!' : 'Not quite.'}</b>`}
+    <span class="big">${esc(it.show)}</span><span class="vi">${colorize(it.vi)}</span>`;
+}
+function initNumbers() {
+  $('#nu-kinds').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; nu.kind = b.dataset.k; store.set('nukind', nu.kind); nextNumber(); });
+  $('#nu-play').addEventListener('click', () => nu.item && speak(nu.item.vi));
+  $('#nu-form').addEventListener('submit', e => {
+    e.preventDefault(); if (nu.done || !$('#nu-in').value.trim()) return;
+    const ok = digits($('#nu-in').value) === digits(nu.item.answer);
+    nu.done = true; nu.total++; if (ok) nu.right++;
+    recordStat('numbers', ok); logActivity();
+    $('#nu-score').textContent = `${nu.right} / ${nu.total}`;
+    revealNumber(ok);
+  });
+  $('#nu-show').addEventListener('click', () => { nu.done = true; revealNumber(); speak(nu.item.vi); });
+  $('#nu-next').addEventListener('click', () => { nextNumber(); speak(nu.item.vi); $('#nu-in').focus(); });
+  nextNumber();
+}
+
 /* sentence builder */
 const PROPER = /^(Sài|Gòn|Bến|Thành|Singapore|Hà|Nội|Quận|Nhật|Việt|Tom|Lan)$/;
 const bd = { item: null, picked: [], tokens: [], done: false, right: 0, total: 0 };
@@ -1200,7 +1372,7 @@ $('#bd-check').addEventListener('click', () => {
 });
 
 /* ---------- PROGRESS ---------- */
-const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
+const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', numbers: 'Numbers', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
 function renderProgress() {
   const rows = Object.entries(VI_CATEGORIES).map(([k, label]) => {
     const ws = VI_VOCAB.filter(w => w.cat === k);

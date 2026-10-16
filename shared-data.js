@@ -1268,8 +1268,104 @@ const VI_DIALOGUES = [
       ['Lan', 'Giỏi quá! Em nói tiếng Việt hay ghê.', 'Impressive! Your Vietnamese is really good.'],
       ['Tom', 'Dạ, em mới học thôi. Chị nói chậm chút được không?', 'I’ve only just started. Could you speak a bit slower?'],
       ['Lan', 'Được chứ. Rất vui được gặp em.', 'Of course. Nice to meet you.']
+    ] },
+  /* Tranche 6 */
+  { id: 'airport', title: 'Airport check-in', place: 'Sân bay Tân Sơn Nhất',
+    cast: 'The check-in agent is younger, so you are anh and she is em.',
+    lines: [
+      ['Agent', 'Chào anh. Anh cho em xin hộ chiếu với vé nha.', 'Hello. May I have your passport and ticket?'],
+      ['You', 'Đây em.', 'Here you go.'],
+      ['Agent', 'Anh có hành lý ký gửi không?', 'Do you have any checked baggage?'],
+      ['You', 'Có, một cái vali.', 'Yes, one suitcase.'],
+      ['Agent', 'Anh muốn ngồi cửa sổ hay lối đi?', 'Window or aisle?'],
+      ['You', 'Cho anh ghế cửa sổ nha.', 'A window seat, please.'],
+      ['Agent', 'Dạ, đây là thẻ lên máy bay. Cửa số mười hai, lên máy bay lúc tám giờ rưỡi.', 'Here’s your boarding pass. Gate twelve, boarding at half past eight.'],
+      ['You', 'Cám ơn em.', 'Thank you.']
+    ] },
+  { id: 'hotel', title: 'Hotel check-in', place: 'Khách sạn · Quận 1',
+    cast: 'The receptionist is younger, so you are anh and he is em.',
+    lines: [
+      ['Reception', 'Dạ, chào anh. Anh đặt phòng chưa?', 'Hello. Do you have a booking?'],
+      ['You', 'Anh đặt rồi, tên Tom.', 'Yes, under the name Tom.'],
+      ['Reception', 'Dạ, anh cho em mượn hộ chiếu chút nha.', 'May I borrow your passport for a moment?'],
+      ['You', 'Mấy giờ trả phòng vậy em?', 'What time is check-out?'],
+      ['Reception', 'Dạ, mười hai giờ trưa. Ăn sáng từ sáu giờ tới mười giờ.', 'Twelve noon. Breakfast is from six to ten.'],
+      ['You', 'Mật khẩu wifi là gì em?', 'What’s the wifi password?'],
+      ['Reception', 'Dạ, mật khẩu ở sau thẻ phòng. Phòng anh ở lầu năm.', 'It’s on the back of your key card. Your room is on the fifth floor.'],
+      ['You', 'Cám ơn em nha.', 'Thanks!']
+    ] },
+  { id: 'clinic', title: 'At the clinic', place: 'Phòng khám',
+    cast: 'You call the doctor bác sĩ and yourself em; she calls you em.',
+    lines: [
+      ['Doctor', 'Em bị sao?', 'What seems to be the problem?'],
+      ['You', 'Dạ, em bị sốt với ho từ hôm qua.', 'I’ve had a fever and a cough since yesterday.'],
+      ['Doctor', 'Em có bị đau họng không?', 'Do you have a sore throat?'],
+      ['You', 'Dạ có, hơi đau. Em cũng nhức đầu nữa.', 'Yes, a little. I have a headache too.'],
+      ['Doctor', 'Em có dị ứng thuốc gì không?', 'Are you allergic to any medicine?'],
+      ['You', 'Dạ không.', 'No.'],
+      ['Doctor', 'Em bị cảm thôi. Uống thuốc này ngày hai lần, sau khi ăn.', 'It’s just a cold. Take this medicine twice a day, after meals.'],
+      ['You', 'Dạ, cám ơn bác sĩ.', 'Thank you, doctor.']
+    ] },
+  { id: 'plans', title: 'Making plans with a friend', place: 'Nhắn tin · texting',
+    cast: 'Close male friends in Saigon often call each other ông and themselves tui.',
+    lines: [
+      ['Minh', 'Tối nay ông rảnh không? Đi nhậu nha!', 'Are you free tonight? Let’s go for drinks!'],
+      ['You', 'Tối nay tui bận rồi. Mai được không?', 'I’m busy tonight. How about tomorrow?'],
+      ['Minh', 'Được. Mấy giờ?', 'Sure. What time?'],
+      ['You', 'Bảy giờ tối nha. Ở đâu?', 'Seven in the evening. Where?'],
+      ['Minh', 'Quán ốc gần nhà tui đi, ngon lắm.', 'The snail place near my house. It’s really good.'],
+      ['You', 'Ok, tui đi Grab tới. Gửi địa chỉ cho tui nha.', 'OK, I’ll get a Grab there. Send me the address.'],
+      ['Minh', 'Rồi, mai gặp nha!', 'Done. See you tomorrow!']
     ] }
 ];
+
+/* ===================== Numbers (Southern conventions) =====================
+   mốt (1 after 20+), tư (4 after 20+), lăm (5 after 10+), lẻ (zero tens), ngàn (thousand). */
+const VI_DIGITS = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+function viTriple(n, full) {
+  const h = Math.floor(n / 100), t = Math.floor(n / 10) % 10, u = n % 10, D = VI_DIGITS, out = [];
+  if (h > 0 || full) out.push(D[h] + ' trăm');
+  if (t === 0) { if (u > 0) out.push((h > 0 || full ? 'lẻ ' : '') + D[u]); }
+  else if (t === 1) { out.push('mười'); if (u > 0) out.push(u === 5 ? 'lăm' : D[u]); }
+  else { out.push(D[t] + ' mươi'); if (u > 0) out.push(u === 1 ? 'mốt' : u === 4 ? 'tư' : u === 5 ? 'lăm' : D[u]); }
+  return out.join(' ');
+}
+function viNum(n) {
+  if (n === 0) return 'không';
+  const groups = [Math.floor(n / 1e6), Math.floor(n / 1e3) % 1000, n % 1000], names = ['triệu', 'ngàn', ''];
+  const out = []; let started = false;
+  groups.forEach((g, i) => {
+    if (g === 0) return;
+    out.push((viTriple(g, started) + (names[i] ? ' ' + names[i] : '')).trim());
+    started = true;
+  });
+  return out.join(' ');
+}
+const fmtVnd = n => n.toLocaleString('de-DE') + 'đ';
+const VI_NUM_POOL = (() => {
+  const items = [];
+  [0, 1, 4, 5, 7, 10, 11, 14, 15, 19, 20, 21, 24, 25, 30, 31, 34, 35, 45, 55, 68, 99, 100, 101, 105, 110, 115, 150, 205, 999,
+   1000, 1005, 1050, 2026, 10000, 15000, 100000, 1000000, 2500000].forEach(n =>
+    items.push({ kind: 'number', show: n.toLocaleString('de-DE'), answer: String(n), vi: viNum(n) }));
+  [5, 8, 10, 12, 15, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 85, 95, 100, 120, 150, 180, 200, 250, 300, 350, 450, 500,
+   1200, 1500, 2000, 3500].forEach(k => {
+    const n = k * 1000;
+    items.push({ kind: 'price', show: fmtVnd(n), answer: String(n), vi: viNum(n) });
+  });
+  [[6, 0, 'sáng'], [6, 30, 'sáng'], [7, 15, 'sáng'], [8, 0, 'sáng'], [8, 30, 'sáng'], [9, 45, 'sáng'], [10, 5, 'sáng'], [11, 20, 'trưa'],
+   [12, 0, 'trưa'], [1, 30, 'chiều'], [2, 15, 'chiều'], [3, 0, 'chiều'], [4, 40, 'chiều'], [5, 30, 'chiều'], [7, 0, 'tối'], [7, 30, 'tối'],
+   [8, 45, 'tối'], [9, 10, 'tối'], [10, 0, 'tối'], [11, 30, 'đêm']].forEach(([h, m, part]) => {
+    const vi = `${viNum(h)} giờ${m === 30 ? ' rưỡi' : m ? ' ' + viNum(m) + ' phút' : ''} ${part}`;
+    const en = { 'sáng': 'am', 'trưa': 'noon', 'chiều': 'pm', 'tối': 'pm', 'đêm': 'pm' }[part];
+    items.push({ kind: 'time', show: `${h}:${String(m).padStart(2, '0')} ${part === 'trưa' && h === 12 && !m ? 'noon' : en}`, answer: `${h}:${String(m).padStart(2, '0')}`, vi });
+  });
+  ['0903 145 278', '0918 602 335', '0937 480 916', '0868 213 754', '0789 365 102', '0702 994 618', '0909 571 283', '0386 140 597',
+   '0964 828 031', '0333 706 459'].forEach(p => {
+    const vi = p.split(' ').map(g => g.split('').map(d => VI_DIGITS[+d]).join(' ')).join(', ');
+    items.push({ kind: 'phone', show: p, answer: p.replace(/\s/g, ''), vi });
+  });
+  return items;
+})();
 
 /* Sentence builder pool: short sentences from patterns and dialogues */
 const VI_BUILD_POOL = (() => {

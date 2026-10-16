@@ -160,7 +160,7 @@ input[type="search"] { flex: 1 1 180px; }
 .lvl { display: inline-grid; grid-template-columns: repeat(6, 5px); gap: 2px; }
 .lvl i { height: 12px; border-radius: 1px; background: var(--line); }
 .lvl i.on { background: var(--jade); }
-.subtabs { display: flex; gap: 6px; }
+.subtabs { display: flex; flex-wrap: wrap; gap: 6px; }
 details summary { cursor: pointer; font-weight: 600; }
 
 /* Bridge */
@@ -286,6 +286,17 @@ details summary { cursor: pointer; font-weight: 600; }
 .t-miss small { color: var(--muted); font-size: .82rem; grid-column: 1; }
 .t-miss .speak { grid-row: span 2; grid-column: 2; }
 
+.sh-card { border: 1px solid var(--line); border-radius: 14px; padding: 26px 18px; display: grid; gap: 8px; text-align: center; background: var(--surface); }
+.sh-vi { font-size: clamp(1.5rem, 5vw, 2.2rem); line-height: 1.3; }
+.sh-en { color: var(--muted); }
+.sh-ctrl .btn { flex: 1 1 auto; }
+#sh-rec.rec { background: var(--bad); border-color: var(--bad); color: var(--surface); }
+.nu-form { justify-content: center; }
+.nu-form input { font: inherit; font-size: 1.3rem; text-align: center; width: 12em; max-width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-variant-numeric: tabular-nums; }
+.nu-res { min-height: 3em; display: grid; gap: 4px; justify-items: center; text-align: center; }
+.nu-res .big { font-size: 1.4rem; font-variant-numeric: tabular-nums; font-weight: 600; }
+.nu-rules { display: grid; gap: 6px; margin-top: 10px; font-size: .9rem; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -360,7 +371,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 5 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 6 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -491,6 +502,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
           <button class="chip" data-gv="dia" aria-pressed="false">Dialogues</button>
           <button class="chip" data-gv="build" aria-pressed="false">Builder</button>
           <button class="chip" data-gv="listen" aria-pressed="false">Listen</button>
+          <button class="chip" data-gv="shadow" aria-pressed="false">Shadow</button>
         </div>
       </div>
       <p class="lede" id="gv-lede">Vietnamese grammar is mostly word order and a few small words. Verbs never change form.</p>
@@ -534,6 +546,29 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       </div>
     </div>
 
+    <div id="g-shadow" hidden class="panel" style="display:grid;gap:14px">
+      <div class="row" style="justify-content:space-between">
+        <span class="eyebrow">Listen · repeat · compare</span>
+        <span class="score" id="sh-count"></span>
+      </div>
+      <div class="sh-card">
+        <div class="sh-vi vi" id="sh-vi"></div>
+        <div class="sh-en" id="sh-en"></div>
+      </div>
+      <div class="row sh-ctrl">
+        <button class="btn primary" id="sh-listen">Listen</button>
+        <button class="btn" id="sh-rec">Record me</button>
+        <button class="btn" id="sh-mine" disabled>Play mine</button>
+        <button class="btn" id="sh-cmp" disabled>Compare</button>
+        <button class="btn ghost" id="sh-next">Next sentence</button>
+      </div>
+      <p class="note-line" id="sh-status">Listen first, then say it out loud, copying the rhythm and tones.</p>
+      <div class="row" style="border-top:1px solid var(--line);padding-top:12px">
+        <button class="chip" id="sh-loop" aria-pressed="false">Hands-free mode</button>
+        <span class="note-line">Plays a sentence, pauses for you to repeat it, plays it again, then moves on. Good for practising away from the screen.</span>
+      </div>
+    </div>
+
     <div id="g-build" hidden class="panel" style="display:grid;gap:14px">
       <div class="row" style="justify-content:space-between"><span class="eyebrow">Put the words in order</span><span class="score" id="bd-score"></span></div>
       <div class="bd-en" id="bd-en"></div>
@@ -550,6 +585,40 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 
   <!-- USAGE -->
   <section class="view" id="v-usage" hidden>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:grid;gap:4px"><span class="eyebrow">Con số · numbers and money</span><h2>Catch the number</h2></div>
+        <span class="score" id="nu-score"></span>
+      </div>
+      <p class="lede">Prices, times and phone numbers fly past in Saigon. Listen, then type what you heard.</p>
+      <div class="row" role="group" aria-label="Number type" id="nu-kinds">
+        <button class="chip" data-k="price" aria-pressed="true">Prices</button>
+        <button class="chip" data-k="time" aria-pressed="false">Times</button>
+        <button class="chip" data-k="phone" aria-pressed="false">Phone numbers</button>
+        <button class="chip" data-k="number" aria-pressed="false">Numbers</button>
+      </div>
+      <div class="drill">
+        <button class="lq-play" id="nu-play" aria-label="Play the number"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+        <p class="note-line" id="nu-hint"></p>
+        <form class="row nu-form" id="nu-form">
+          <input id="nu-in" inputmode="decimal" autocomplete="off" aria-label="Your answer">
+          <button class="btn primary" id="nu-check">Check</button>
+        </form>
+        <div class="nu-res" id="nu-res" aria-live="polite"></div>
+        <div class="row"><button class="btn ghost" id="nu-show">Show answer</button><button class="btn" id="nu-next">Next</button></div>
+      </div>
+      <details>
+        <summary>How Southern numbers work</summary>
+        <div class="nu-rules">
+          <p><b>21, 31, 41…</b> one becomes <span class="vi">mốt</span>: hai mươi mốt.</p>
+          <p><b>24, 34…</b> four is usually <span class="vi">tư</span>: hai mươi tư.</p>
+          <p><b>15, 25…</b> five becomes <span class="vi">lăm</span>: mười lăm, hai mươi lăm.</p>
+          <p><b>105</b> uses <span class="vi">lẻ</span> for the empty tens: một trăm lẻ năm.</p>
+          <p><b>1,000</b> is <span class="vi">ngàn</span> in the South (Hanoi: nghìn). Prices drop the zeros: 35.000đ = ba mươi lăm ngàn.</p>
+          <p><b>Half past</b> is <span class="vi">rưỡi</span>: hai giờ rưỡi. Phone numbers are read digit by digit, 0 = không.</p>
+        </div>
+      </details>
+    </div>
     <div class="panel" style="display:grid;gap:14px">
       <span class="eyebrow">Xưng hô · what to call people</span>
       <h2>Pronoun builder</h2>
@@ -1887,8 +1956,104 @@ const VI_DIALOGUES = [
       ['Lan', 'Giỏi quá! Em nói tiếng Việt hay ghê.', 'Impressive! Your Vietnamese is really good.'],
       ['Tom', 'Dạ, em mới học thôi. Chị nói chậm chút được không?', 'I’ve only just started. Could you speak a bit slower?'],
       ['Lan', 'Được chứ. Rất vui được gặp em.', 'Of course. Nice to meet you.']
+    ] },
+  /* Tranche 6 */
+  { id: 'airport', title: 'Airport check-in', place: 'Sân bay Tân Sơn Nhất',
+    cast: 'The check-in agent is younger, so you are anh and she is em.',
+    lines: [
+      ['Agent', 'Chào anh. Anh cho em xin hộ chiếu với vé nha.', 'Hello. May I have your passport and ticket?'],
+      ['You', 'Đây em.', 'Here you go.'],
+      ['Agent', 'Anh có hành lý ký gửi không?', 'Do you have any checked baggage?'],
+      ['You', 'Có, một cái vali.', 'Yes, one suitcase.'],
+      ['Agent', 'Anh muốn ngồi cửa sổ hay lối đi?', 'Window or aisle?'],
+      ['You', 'Cho anh ghế cửa sổ nha.', 'A window seat, please.'],
+      ['Agent', 'Dạ, đây là thẻ lên máy bay. Cửa số mười hai, lên máy bay lúc tám giờ rưỡi.', 'Here’s your boarding pass. Gate twelve, boarding at half past eight.'],
+      ['You', 'Cám ơn em.', 'Thank you.']
+    ] },
+  { id: 'hotel', title: 'Hotel check-in', place: 'Khách sạn · Quận 1',
+    cast: 'The receptionist is younger, so you are anh and he is em.',
+    lines: [
+      ['Reception', 'Dạ, chào anh. Anh đặt phòng chưa?', 'Hello. Do you have a booking?'],
+      ['You', 'Anh đặt rồi, tên Tom.', 'Yes, under the name Tom.'],
+      ['Reception', 'Dạ, anh cho em mượn hộ chiếu chút nha.', 'May I borrow your passport for a moment?'],
+      ['You', 'Mấy giờ trả phòng vậy em?', 'What time is check-out?'],
+      ['Reception', 'Dạ, mười hai giờ trưa. Ăn sáng từ sáu giờ tới mười giờ.', 'Twelve noon. Breakfast is from six to ten.'],
+      ['You', 'Mật khẩu wifi là gì em?', 'What’s the wifi password?'],
+      ['Reception', 'Dạ, mật khẩu ở sau thẻ phòng. Phòng anh ở lầu năm.', 'It’s on the back of your key card. Your room is on the fifth floor.'],
+      ['You', 'Cám ơn em nha.', 'Thanks!']
+    ] },
+  { id: 'clinic', title: 'At the clinic', place: 'Phòng khám',
+    cast: 'You call the doctor bác sĩ and yourself em; she calls you em.',
+    lines: [
+      ['Doctor', 'Em bị sao?', 'What seems to be the problem?'],
+      ['You', 'Dạ, em bị sốt với ho từ hôm qua.', 'I’ve had a fever and a cough since yesterday.'],
+      ['Doctor', 'Em có bị đau họng không?', 'Do you have a sore throat?'],
+      ['You', 'Dạ có, hơi đau. Em cũng nhức đầu nữa.', 'Yes, a little. I have a headache too.'],
+      ['Doctor', 'Em có dị ứng thuốc gì không?', 'Are you allergic to any medicine?'],
+      ['You', 'Dạ không.', 'No.'],
+      ['Doctor', 'Em bị cảm thôi. Uống thuốc này ngày hai lần, sau khi ăn.', 'It’s just a cold. Take this medicine twice a day, after meals.'],
+      ['You', 'Dạ, cám ơn bác sĩ.', 'Thank you, doctor.']
+    ] },
+  { id: 'plans', title: 'Making plans with a friend', place: 'Nhắn tin · texting',
+    cast: 'Close male friends in Saigon often call each other ông and themselves tui.',
+    lines: [
+      ['Minh', 'Tối nay ông rảnh không? Đi nhậu nha!', 'Are you free tonight? Let’s go for drinks!'],
+      ['You', 'Tối nay tui bận rồi. Mai được không?', 'I’m busy tonight. How about tomorrow?'],
+      ['Minh', 'Được. Mấy giờ?', 'Sure. What time?'],
+      ['You', 'Bảy giờ tối nha. Ở đâu?', 'Seven in the evening. Where?'],
+      ['Minh', 'Quán ốc gần nhà tui đi, ngon lắm.', 'The snail place near my house. It’s really good.'],
+      ['You', 'Ok, tui đi Grab tới. Gửi địa chỉ cho tui nha.', 'OK, I’ll get a Grab there. Send me the address.'],
+      ['Minh', 'Rồi, mai gặp nha!', 'Done. See you tomorrow!']
     ] }
 ];
+
+/* ===================== Numbers (Southern conventions) =====================
+   mốt (1 after 20+), tư (4 after 20+), lăm (5 after 10+), lẻ (zero tens), ngàn (thousand). */
+const VI_DIGITS = ['không', 'một', 'hai', 'ba', 'bốn', 'năm', 'sáu', 'bảy', 'tám', 'chín'];
+function viTriple(n, full) {
+  const h = Math.floor(n / 100), t = Math.floor(n / 10) % 10, u = n % 10, D = VI_DIGITS, out = [];
+  if (h > 0 || full) out.push(D[h] + ' trăm');
+  if (t === 0) { if (u > 0) out.push((h > 0 || full ? 'lẻ ' : '') + D[u]); }
+  else if (t === 1) { out.push('mười'); if (u > 0) out.push(u === 5 ? 'lăm' : D[u]); }
+  else { out.push(D[t] + ' mươi'); if (u > 0) out.push(u === 1 ? 'mốt' : u === 4 ? 'tư' : u === 5 ? 'lăm' : D[u]); }
+  return out.join(' ');
+}
+function viNum(n) {
+  if (n === 0) return 'không';
+  const groups = [Math.floor(n / 1e6), Math.floor(n / 1e3) % 1000, n % 1000], names = ['triệu', 'ngàn', ''];
+  const out = []; let started = false;
+  groups.forEach((g, i) => {
+    if (g === 0) return;
+    out.push((viTriple(g, started) + (names[i] ? ' ' + names[i] : '')).trim());
+    started = true;
+  });
+  return out.join(' ');
+}
+const fmtVnd = n => n.toLocaleString('de-DE') + 'đ';
+const VI_NUM_POOL = (() => {
+  const items = [];
+  [0, 1, 4, 5, 7, 10, 11, 14, 15, 19, 20, 21, 24, 25, 30, 31, 34, 35, 45, 55, 68, 99, 100, 101, 105, 110, 115, 150, 205, 999,
+   1000, 1005, 1050, 2026, 10000, 15000, 100000, 1000000, 2500000].forEach(n =>
+    items.push({ kind: 'number', show: n.toLocaleString('de-DE'), answer: String(n), vi: viNum(n) }));
+  [5, 8, 10, 12, 15, 18, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 85, 95, 100, 120, 150, 180, 200, 250, 300, 350, 450, 500,
+   1200, 1500, 2000, 3500].forEach(k => {
+    const n = k * 1000;
+    items.push({ kind: 'price', show: fmtVnd(n), answer: String(n), vi: viNum(n) });
+  });
+  [[6, 0, 'sáng'], [6, 30, 'sáng'], [7, 15, 'sáng'], [8, 0, 'sáng'], [8, 30, 'sáng'], [9, 45, 'sáng'], [10, 5, 'sáng'], [11, 20, 'trưa'],
+   [12, 0, 'trưa'], [1, 30, 'chiều'], [2, 15, 'chiều'], [3, 0, 'chiều'], [4, 40, 'chiều'], [5, 30, 'chiều'], [7, 0, 'tối'], [7, 30, 'tối'],
+   [8, 45, 'tối'], [9, 10, 'tối'], [10, 0, 'tối'], [11, 30, 'đêm']].forEach(([h, m, part]) => {
+    const vi = `${viNum(h)} giờ${m === 30 ? ' rưỡi' : m ? ' ' + viNum(m) + ' phút' : ''} ${part}`;
+    const en = { 'sáng': 'am', 'trưa': 'noon', 'chiều': 'pm', 'tối': 'pm', 'đêm': 'pm' }[part];
+    items.push({ kind: 'time', show: `${h}:${String(m).padStart(2, '0')} ${part === 'trưa' && h === 12 && !m ? 'noon' : en}`, answer: `${h}:${String(m).padStart(2, '0')}`, vi });
+  });
+  ['0903 145 278', '0918 602 335', '0937 480 916', '0868 213 754', '0789 365 102', '0702 994 618', '0909 571 283', '0386 140 597',
+   '0964 828 031', '0333 706 459'].forEach(p => {
+    const vi = p.split(' ').map(g => g.split('').map(d => VI_DIGITS[+d]).join(' ')).join(', ');
+    items.push({ kind: 'phone', show: p, answer: p.replace(/\s/g, ''), vi });
+  });
+  return items;
+})();
 
 /* Sentence builder pool: short sentences from patterns and dialogues */
 const VI_BUILD_POOL = (() => {
@@ -1898,7 +2063,7 @@ const VI_BUILD_POOL = (() => {
   return out.filter(s => { const n = s.vi.split(/\s+/).length; return n >= 3 && n <= 9; });
 })();
 
-const AUDIO_LIST_SIZE = 1113;
+const AUDIO_LIST_SIZE = 1235;
 
 
 </script>
@@ -2341,12 +2506,14 @@ const GV_LEDE = {
   pat: 'Vietnamese grammar is mostly word order and a few small words. Verbs never change form.',
   dia: 'Real Saigon exchanges. Watch how each speaker picks pronouns. Play a line, or play the whole scene.',
   build: 'Tap the words in the right order to build the sentence.',
-  listen: 'Train your ear on real sentences from the patterns and dialogues.'
+  listen: 'Train your ear on real sentences from the patterns and dialogues.',
+  shadow: 'Shadowing: copy a native speaker straight after hearing them. The fastest way to fix tones and rhythm.'
 };
 function setGv(v) {
   stopDialogue();
   $$('[data-gv]').forEach(c => c.setAttribute('aria-pressed', c.dataset.gv === v));
-  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build'; $('#g-listen').hidden = v !== 'listen';
+  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build'; $('#g-listen').hidden = v !== 'listen'; $('#g-shadow').hidden = v !== 'shadow';
+  if (v !== 'shadow') stopLoop();
   if (v === 'listen') updateLqNote();
   $('#gv-lede').textContent = GV_LEDE[v]; store.set('gv', v);
 }
@@ -2397,7 +2564,7 @@ function initGrammar() {
   renderDialogue();
   $$('[data-gv]').forEach(c => c.addEventListener('click', () => setGv(c.dataset.gv)));
   setGv(store.get('gv', 'pat'));
-  nextBuild(); nextLq();
+  nextBuild(); nextLq(); nextShadow(); initNumbers();
 }
 
 /* listening quiz */
@@ -2447,6 +2614,107 @@ $('#lq-opts').addEventListener('click', e => {
   logActivity();
 });
 
+/* shadowing */
+const sh = { i: 0, order: [], rec: null, chunks: [], url: null, loop: null, n: 0 };
+function nextShadow() {
+  if (!sh.order.length || sh.i >= sh.order.length) { sh.order = shuffle(LQ_POOL.map((_, k) => k)); sh.i = 0; }
+  const item = LQ_POOL[sh.order[sh.i++]]; sh.item = item;
+  $('#sh-vi').innerHTML = colorize(item.vi); $('#sh-en').textContent = item.en;
+  if (sh.url) { URL.revokeObjectURL(sh.url); sh.url = null; }
+  $('#sh-mine').disabled = true; $('#sh-cmp').disabled = true;
+  $('#sh-count').textContent = sh.n ? `${sh.n} practised this session` : '';
+}
+function playTimed(text, done) { const t0 = Date.now(); speak(text, () => done(Date.now() - t0)); }
+async function toggleRec() {
+  const btn = $('#sh-rec');
+  if (sh.rec && sh.rec.state === 'recording') { sh.rec.stop(); return; }
+  if (!navigator.mediaDevices || !window.MediaRecorder) { $('#sh-status').textContent = 'Recording is not supported in this browser. You can still shadow out loud.'; return; }
+  let stream;
+  try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+  catch (e) { $('#sh-status').textContent = 'The microphone is blocked here. It works on your GitHub site once you allow microphone access. You can still shadow out loud.'; return; }
+  sh.chunks = []; sh.rec = new MediaRecorder(stream);
+  sh.rec.ondataavailable = e => sh.chunks.push(e.data);
+  sh.rec.onstop = () => {
+    stream.getTracks().forEach(t => t.stop());
+    if (sh.url) URL.revokeObjectURL(sh.url);
+    sh.url = URL.createObjectURL(new Blob(sh.chunks, { type: sh.rec.mimeType || 'audio/webm' }));
+    btn.textContent = 'Record me'; btn.classList.remove('rec');
+    $('#sh-mine').disabled = false; $('#sh-cmp').disabled = false;
+    $('#sh-status').textContent = 'Now compare: does your rise and fall match Adam’s?';
+    sh.n++; $('#sh-count').textContent = `${sh.n} practised this session`; logActivity();
+  };
+  sh.rec.start(); btn.textContent = 'Stop'; btn.classList.add('rec');
+  $('#sh-status').textContent = 'Recording… say the sentence, then tap Stop.';
+  setTimeout(() => { if (sh.rec && sh.rec.state === 'recording') sh.rec.stop(); }, 10000);
+}
+function playMine(done) { if (!sh.url) return; const a = new Audio(sh.url); a.onended = () => done && done(); a.play().catch(() => {}); }
+$('#sh-listen').addEventListener('click', () => sh.item && speak(sh.item.vi));
+$('#sh-rec').addEventListener('click', toggleRec);
+$('#sh-mine').addEventListener('click', () => playMine());
+$('#sh-cmp').addEventListener('click', () => speak(sh.item.vi, () => setTimeout(() => playMine(), 500)));
+$('#sh-next').addEventListener('click', () => { nextShadow(); speak(sh.item.vi); });
+function stopLoop() {
+  if (!sh.loop) return;
+  sh.loop = null; $('#sh-loop').setAttribute('aria-pressed', 'false');
+  $('#sh-status').textContent = 'Hands-free mode stopped.';
+}
+$('#sh-loop').addEventListener('click', () => {
+  if (sh.loop) return stopLoop();
+  if (!canHear()) { $('#sh-status').textContent = 'Hands-free mode needs audio.'; return; }
+  const run = sh.loop = {}; $('#sh-loop').setAttribute('aria-pressed', 'true');
+  const cycle = () => {
+    if (sh.loop !== run) return;
+    $('#sh-status').textContent = 'Listen…';
+    playTimed(sh.item.vi, ms => {
+      if (sh.loop !== run) return;
+      $('#sh-status').textContent = 'Your turn: repeat it now.';
+      setTimeout(() => {
+        if (sh.loop !== run) return;
+        $('#sh-status').textContent = 'Listen again…';
+        speak(sh.item.vi, () => setTimeout(() => {
+          if (sh.loop !== run) return;
+          sh.n++; logActivity(); nextShadow(); cycle();
+        }, 1200));
+      }, Math.max(1500, ms * 1.3 + 800));
+    });
+  };
+  cycle();
+});
+
+/* numbers */
+const nu = { kind: store.get('nukind', 'price'), item: null, done: false, right: 0, total: 0 };
+const NU_HINT = { price: 'Type the price in đồng, e.g. 35000', time: 'Type the time, e.g. 7:15', phone: 'Type the phone number, digits only', number: 'Type the number' };
+const digits = s => String(s).replace(/\D/g, '');
+function nextNumber() {
+  const pool = VI_NUM_POOL.filter(x => x.kind === nu.kind);
+  let item; do { item = pool[Math.floor(Math.random() * pool.length)]; } while (pool.length > 1 && item === nu.item);
+  Object.assign(nu, { item, done: false });
+  $$('#nu-kinds .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.k === nu.kind));
+  $('#nu-hint').textContent = canHear() ? NU_HINT[nu.kind] : 'No audio on this device, so read it instead: ' + item.vi;
+  $('#nu-in').value = ''; $('#nu-res').innerHTML = '';
+  $('#nu-in').inputMode = nu.kind === 'time' ? 'text' : 'numeric';
+}
+function revealNumber(ok) {
+  const it = nu.item;
+  $('#nu-res').innerHTML = `${ok === undefined ? '' : `<b style="color:var(${ok ? '--good' : '--bad'})">${ok ? 'Đúng rồi!' : 'Not quite.'}</b>`}
+    <span class="big">${esc(it.show)}</span><span class="vi">${colorize(it.vi)}</span>`;
+}
+function initNumbers() {
+  $('#nu-kinds').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b) return; nu.kind = b.dataset.k; store.set('nukind', nu.kind); nextNumber(); });
+  $('#nu-play').addEventListener('click', () => nu.item && speak(nu.item.vi));
+  $('#nu-form').addEventListener('submit', e => {
+    e.preventDefault(); if (nu.done || !$('#nu-in').value.trim()) return;
+    const ok = digits($('#nu-in').value) === digits(nu.item.answer);
+    nu.done = true; nu.total++; if (ok) nu.right++;
+    recordStat('numbers', ok); logActivity();
+    $('#nu-score').textContent = `${nu.right} / ${nu.total}`;
+    revealNumber(ok);
+  });
+  $('#nu-show').addEventListener('click', () => { nu.done = true; revealNumber(); speak(nu.item.vi); });
+  $('#nu-next').addEventListener('click', () => { nextNumber(); speak(nu.item.vi); $('#nu-in').focus(); });
+  nextNumber();
+}
+
 /* sentence builder */
 const PROPER = /^(Sài|Gòn|Bến|Thành|Singapore|Hà|Nội|Quận|Nhật|Việt|Tom|Lan)$/;
 const bd = { item: null, picked: [], tokens: [], done: false, right: 0, total: 0 };
@@ -2482,7 +2750,7 @@ $('#bd-check').addEventListener('click', () => {
 });
 
 /* ---------- PROGRESS ---------- */
-const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
+const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', numbers: 'Numbers', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
 function renderProgress() {
   const rows = Object.entries(VI_CATEGORIES).map(([k, label]) => {
     const ws = VI_VOCAB.filter(w => w.cat === k);
