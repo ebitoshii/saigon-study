@@ -622,3 +622,149 @@ function viAudioKey(text) {
   for (const b of bytes) { h ^= b; h = Math.imul(h, 0x01000193) >>> 0; }
   return h.toString(16).padStart(8, '0');
 }
+
+/* ===================== Tranche 3 ===================== */
+
+/* Grammar patterns. ex rows: [vietnamese, english]. Southern everyday register. */
+const VI_GRAMMAR = [
+  { id: 'la', title: 'Saying what something is', formula: 'A + là + noun',
+    text: 'Là links two nouns, like "is" in English. It never goes before an adjective.',
+    ex: [['Tui là phi công.', 'I am a pilot.'], ['Đây là ba tui.', 'This is my dad.'], ['Anh là người Singapore hả?', 'You’re Singaporean?']],
+    tip: 'Wrong: Trời là nóng. Right: Trời nóng.' },
+  { id: 'adj', title: 'Describing things', formula: 'noun + adjective (+ quá / lắm)',
+    text: 'Adjectives work like verbs, so no "is" is needed. Add quá or lắm after for "very", or rất before.',
+    ex: [['Phở này ngon quá!', 'This phở is so good!'], ['Hôm nay nóng lắm.', 'It’s very hot today.'], ['Cà phê hơi ngọt.', 'The coffee is a bit sweet.']],
+    tip: 'Quá is the most natural "so / very" in Saigon speech.' },
+  { id: 'neg', title: 'Saying no', formula: 'không / hông + verb · không phải (là) + noun',
+    text: 'Put không before the verb or adjective. With nouns, use không phải. In casual Southern speech không often becomes hông.',
+    ex: [['Tui không biết.', 'I don’t know.'], ['Em hông ăn cay được.', 'I can’t eat spicy food.'], ['Tui không phải là người Nhật.', 'I’m not Japanese.']],
+    tip: '' },
+  { id: 'yn', title: 'Yes/no questions', formula: '(có) + verb + không?',
+    text: 'Wrap the verb or adjective in có… không. Answer with có (yes) or the verb itself, or không (no).',
+    ex: [['Anh có đói không?', 'Are you hungry?'], ['Em có rảnh không?', 'Are you free?'], ['Đi cà phê hông?', 'Wanna get coffee? (casual)']],
+    tip: 'Polite answers start with dạ: Dạ có. Dạ không.' },
+  { id: 'tense', title: 'Past, now and future', formula: 'đã / đang / sẽ + verb',
+    text: 'Verbs never change form. Đã marks the past, đang an action in progress, sẽ the future. They are often dropped when a time word makes it clear.',
+    ex: [['Tui đang ăn cơm.', 'I’m eating.'], ['Ngày mai tui sẽ bay đi Sài Gòn.', 'Tomorrow I’ll fly to Saigon.'], ['Hôm qua tui đi chợ.', 'Yesterday I went to the market.']],
+    tip: '' },
+  { id: 'chua', title: 'Already and not yet', formula: 'verb + chưa? → rồi / chưa',
+    text: 'Ask "…yet?" with chưa at the end. Answer verb + rồi (already) or chưa (not yet).',
+    ex: [['Anh ăn cơm chưa?', 'Have you eaten yet?'], ['Dạ, ăn rồi.', 'Yes, I have.'], ['Chưa, em đang kẹt xe.', 'Not yet, I’m stuck in traffic.']],
+    tip: 'Ăn cơm chưa? is also an everyday greeting, like "how are you".' },
+  { id: 'want', title: 'Want, need, like', formula: 'muốn / cần / thích + verb',
+    text: 'These go straight before the verb, with nothing in between.',
+    ex: [['Tui muốn đi chợ Bến Thành.', 'I want to go to Bến Thành market.'], ['Em cần đổi tiền.', 'I need to change money.'], ['Anh thích uống cà phê sữa đá.', 'I like iced milk coffee.']],
+    tip: '' },
+  { id: 'can', title: 'Can and able to', formula: 'verb + được · (có thể) + verb',
+    text: 'Put được after the verb for "can". Có thể before the verb is more formal. Ask with … được không?',
+    ex: [['Anh nói tiếng Việt được không?', 'Can you speak Vietnamese?'], ['Tui nói được chút chút.', 'I can speak a little.'], ['Ở đây trả bằng thẻ được không?', 'Can I pay by card here?']],
+    tip: '' },
+  { id: 'o', title: 'Where things are', formula: 'noun + ở + place',
+    text: 'Ở means "at / in" and also "to live / stay".',
+    ex: [['Khách sạn ở đâu?', 'Where is the hotel?'], ['Tui ở Quận 1.', 'I’m staying in District 1.'], ['Nhà vệ sinh ở bên trái.', 'The toilet is on the left.']],
+    tip: '' },
+  { id: 'cmp', title: 'Comparing', formula: 'adj + hơn · adj + nhất · adj + bằng',
+    text: 'Hơn is "more than", nhất is "the most", bằng is "as … as".',
+    ex: [['Sài Gòn nóng hơn Hà Nội.', 'Saigon is hotter than Hanoi.'], ['Quán này ngon nhất.', 'This place is the best.'], ['Cái này mắc bằng cái kia.', 'This one costs as much as that one.']],
+    tip: '' },
+  { id: 'this', title: 'This and that', formula: 'classifier + noun + này / đó / kia',
+    text: 'Này (this), đó (that), kia (that over there) come after the noun.',
+    ex: [['Cái này bao nhiêu tiền?', 'How much is this?'], ['Tô phở đó ngon quá.', 'That bowl of phở looks great.'], ['Chiếc xe kia của ai?', 'Whose motorbike is that over there?']],
+    tip: '' },
+  { id: 'cho', title: 'Ordering and asking for things', formula: 'cho + me + thing',
+    text: 'Cho means "give". Cho tui… or cho em… is how you order or ask for anything.',
+    ex: [['Cho tui một ly trà đá.', 'An iced tea, please.'], ['Cho em tính tiền.', 'The bill, please.'], ['Cho tui coi cái đó.', 'Let me see that one.']],
+    tip: 'Use cho em with older staff, cho anh or cho chị with younger staff.' },
+  { id: 'soft', title: 'Softening commands', formula: 'verb + đi / nha',
+    text: 'Đi after a verb is an encouraging "go on". Nha makes a request friendly, like "OK?".',
+    ex: [['Ăn đi, ngon lắm!', 'Go on, eat, it’s really good!'], ['Chờ chút nha.', 'Wait a moment, OK?'], ['Lẹ lên đi!', 'Hurry up!']],
+    tip: 'Hanoi uses nhé where Saigon uses nha.' },
+  { id: 'vi', title: 'Because… so…', formula: 'vì… nên…',
+    text: 'Vì gives the reason, nên the result. Either half can stand alone.',
+    ex: [['Vì trời mưa nên tui ở nhà.', 'It’s raining, so I’m staying home.'], ['Tui mệt nên đi ngủ sớm.', 'I’m tired, so I’m going to bed early.']],
+    tip: '' },
+  { id: 'neu', title: 'If… then…', formula: 'nếu… thì…',
+    text: 'Nếu is "if", thì introduces the result.',
+    ex: [['Nếu anh rảnh thì mình đi cà phê nha.', 'If you’re free, let’s get coffee.'], ['Nếu mắc quá thì tui không mua.', 'If it’s too expensive, I won’t buy it.']],
+    tip: '' },
+  { id: 'cua', title: 'Possession', formula: 'thing + (của) + owner',
+    text: 'The owner comes after the thing. Của is often dropped for close things like family and home.',
+    ex: [['Đây là xe của tui.', 'This is my motorbike.'], ['Nhà tui ở gần đây.', 'My house is near here.']],
+    tip: '' },
+  { id: 'wh', title: 'Question words stay in place', formula: '… + gì / đâu / ai / bao nhiêu?',
+    text: 'Question words sit where the answer would go, so word order does not change.',
+    ex: [['Anh tên gì?', 'What’s your name?'], ['Anh đi đâu vậy?', 'Where are you going?'], ['Cái này là gì?', 'What is this?']],
+    tip: 'Vậy at the end makes a question sound natural and soft.' },
+  { id: 'part', title: 'Southern particles', formula: '… + nha / hen / ha / nè',
+    text: 'End particles carry tone of voice. These are the Saigon set.',
+    ex: [['Mai gặp nha.', 'See you tomorrow, OK?'], ['Đẹp quá ha!', 'So pretty, huh!'], ['Nè, cầm cái này.', 'Here, hold this.']],
+    tip: 'Hen is a warm "OK?" or "right?": Ngon hen? = Tasty, right?' }
+];
+
+/* Dialogues. lines: [speaker, vietnamese, english] */
+const VI_DIALOGUES = [
+  { id: 'cafe', title: 'At a café', place: 'Quán cà phê · Quận 3',
+    cast: 'You (older) order from a young staff member, so you are anh and they are em.',
+    lines: [
+      ['Staff', 'Dạ, anh uống gì?', 'What would you like to drink?'],
+      ['You', 'Cho anh một ly cà phê sữa đá, ít đường nha.', 'An iced milk coffee, less sugar please.'],
+      ['Staff', 'Dạ. Anh uống ở đây hay mang về?', 'Sure. For here or takeaway?'],
+      ['You', 'Uống ở đây.', 'For here.'],
+      ['Staff', 'Dạ, của anh hai mươi lăm ngàn.', 'That’s twenty-five thousand.'],
+      ['You', 'Nè, gửi em.', 'Here you go.'],
+      ['Staff', 'Dạ, cám ơn anh. Anh ngồi chờ chút nha.', 'Thank you. Please have a seat for a moment.']
+    ] },
+  { id: 'grab', title: 'Taking a Grab', place: 'Xe ôm Grab · Quận 1',
+    cast: 'The driver is a bit older, so he is anh and you are em.',
+    lines: [
+      ['You', 'Dạ, anh cho em tới chợ Bến Thành.', 'To Bến Thành market, please.'],
+      ['Driver', 'Ừ, lên xe đi em.', 'OK, hop on.'],
+      ['You', 'Từ đây tới đó bao lâu anh?', 'How long from here to there?'],
+      ['Driver', 'Kẹt xe quá, chắc khoảng hai mươi phút.', 'Traffic’s bad, probably about twenty minutes.'],
+      ['You', 'Dạ, anh dừng ở đây được rồi.', 'You can stop here, thanks.'],
+      ['Driver', 'Rồi, tới rồi nha em.', 'OK, we’re here.'],
+      ['You', 'Cám ơn anh nha.', 'Thanks!']
+    ] },
+  { id: 'market', title: 'Bargaining at the market', place: 'Chợ Bến Thành',
+    cast: 'The seller is your parents’ age, so she is cô and you are con.',
+    lines: [
+      ['Seller', 'Mua gì đi con! Áo đẹp lắm nè.', 'Come and buy! These shirts are lovely.'],
+      ['You', 'Dạ, cái áo này bao nhiêu tiền cô?', 'How much is this shirt?'],
+      ['Seller', 'Ba trăm ngàn.', 'Three hundred thousand.'],
+      ['You', 'Mắc quá! Cô bớt chút đi.', 'Too expensive! Give me a discount.'],
+      ['Seller', 'Rồi, hai trăm rưỡi nha.', 'OK, two hundred and fifty then.'],
+      ['You', 'Hai trăm được không cô?', 'How about two hundred?'],
+      ['Seller', 'Thôi được, lấy đi con.', 'Fine, take it.'],
+      ['You', 'Dạ, cám ơn cô.', 'Thank you.']
+    ] },
+  { id: 'spa', title: 'At the massage spa', place: 'Spa · Quận 1',
+    cast: 'The therapist is younger, so you are anh and they are em.',
+    lines: [
+      ['Therapist', 'Dạ, anh nằm xuống giùm em nha.', 'Please lie down for me.'],
+      ['Therapist', 'Anh bị đau ở đâu?', 'Where does it hurt?'],
+      ['You', 'Anh mỏi vai với lưng quá.', 'My shoulders and back are really stiff.'],
+      ['Therapist', 'Dạ. Anh muốn mạnh hay nhẹ?', 'OK. Firm or gentle?'],
+      ['You', 'Mạnh hơn chút nha em.', 'A bit firmer, please.'],
+      ['Therapist', 'Chỗ này đau không anh?', 'Does this spot hurt?'],
+      ['You', 'Hơi đau, nhưng được.', 'A little, but it’s fine.'],
+      ['Therapist', 'Anh thở sâu, thả lỏng nha.', 'Breathe deeply and relax.']
+    ] },
+  { id: 'meet', title: 'Meeting someone new', place: 'Tiệc · a party',
+    cast: 'Lan is a little older, so she is chị and Tom is em.',
+    lines: [
+      ['Tom', 'Chào chị, em tên Tom. Chị tên gì?', 'Hi, I’m Tom. What’s your name?'],
+      ['Lan', 'Chị tên Lan. Em người ở đâu?', 'I’m Lan. Where are you from?'],
+      ['Tom', 'Em là người Singapore. Em làm phi công.', 'I’m from Singapore. I’m a pilot.'],
+      ['Lan', 'Giỏi quá! Em nói tiếng Việt hay ghê.', 'Impressive! Your Vietnamese is really good.'],
+      ['Tom', 'Dạ, em mới học thôi. Chị nói chậm chút được không?', 'I’ve only just started. Could you speak a bit slower?'],
+      ['Lan', 'Được chứ. Rất vui được gặp em.', 'Of course. Nice to meet you.']
+    ] }
+];
+
+/* Sentence builder pool: short sentences from patterns and dialogues */
+const VI_BUILD_POOL = (() => {
+  const out = [];
+  VI_GRAMMAR.forEach(g => g.ex.forEach(([vi, en]) => out.push({ vi, en })));
+  VI_DIALOGUES.forEach(d => d.lines.forEach(([, vi, en]) => { if (!/[.!?]/.test(vi.slice(0, -1))) out.push({ vi, en }); }));
+  return out.filter(s => { const n = s.vi.split(/\s+/).length; return n >= 3 && n <= 9; });
+})();

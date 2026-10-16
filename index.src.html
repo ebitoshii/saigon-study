@@ -190,6 +190,43 @@ details summary { cursor: pointer; font-weight: 600; }
 .settings label { display: grid; gap: 4px; font-size: .88rem; }
 .settings select { width: 100%; }
 
+/* Grammar */
+.pat-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.pat { display: grid; gap: 8px; align-content: start; }
+.pat-head { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+.pat .formula { font-family: var(--f-display); font-style: italic; font-size: 1.02rem; color: var(--jade); }
+.pat p { font-size: .9rem; color: var(--muted); }
+.pat .exs { display: grid; }
+.ex { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 1px 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); }
+.ex .vi { font-size: 1.08rem; }
+.ex small { color: var(--muted); font-size: .82rem; }
+.ex .speak { grid-row: span 2; grid-column: 2; }
+.pat .tip { font-size: .84rem; background: var(--ochre-soft); padding: 7px 10px; border-radius: 6px; }
+.got { font-size: .78rem; border: 1px solid var(--line); background: transparent; border-radius: 99px; padding: 3px 10px; white-space: nowrap; }
+.got[aria-pressed="true"] { background: var(--jade); color: var(--surface); border-color: var(--jade); }
+.pat.learned { border-color: color-mix(in srgb, var(--jade) 50%, var(--line)); }
+.note-line { font-size: .88rem; color: var(--muted); }
+.dia-lines { display: grid; }
+.dl { display: grid; grid-template-columns: 84px minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; padding: 10px 8px; border-top: 1px solid var(--line); border-radius: 6px; }
+.dl.you { background: color-mix(in srgb, var(--jade-soft) 55%, transparent); }
+.dl.now { outline: 2px solid var(--ochre); outline-offset: -2px; }
+.dl .who { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; grid-row: span 2; }
+.dl .vi { font-size: 1.12rem; }
+.dl small { grid-column: 2; color: var(--muted); font-size: .84rem; }
+.dl .speak { grid-row: span 2; grid-column: 3; grid-row-start: 1; }
+.hide-vi .dl .vi { filter: blur(6px); transition: filter .2s; }
+.hide-vi .dl .vi:hover, .hide-vi .dl.now .vi { filter: none; }
+.hide-en .dl small { display: none; }
+.bd-en { font-size: 1.15rem; font-weight: 500; }
+.bd-answer { min-height: 58px; border: 1.5px dashed var(--line); border-radius: var(--r); padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.bd-answer.ok { border-style: solid; border-color: var(--good); }
+.bd-answer.no { border-style: solid; border-color: var(--bad); }
+.bd-bank { display: flex; flex-wrap: wrap; gap: 6px; min-height: 44px; }
+.tok { font-family: var(--f-display); font-size: 1.1rem; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 12px; }
+.tok:disabled { opacity: .25; }
+.bd-feedback { min-height: 1.4em; font-size: .92rem; }
+.bd-feedback .vi { font-size: 1.08rem; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -217,11 +254,16 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 .src-pill.on { background: var(--jade); color: var(--surface); }
 
 @media (max-width: 720px) {
-  .hero, .modules, .bridge-list, .rules, .cl-ref { grid-template-columns: 1fr; }
+  .hero, .modules, .bridge-list, .rules, .cl-ref, .pat-list { grid-template-columns: 1fr; }
+  .dl { grid-template-columns: minmax(0, 1fr) auto; }
+  .dl .who { grid-row: auto; grid-column: 1 / -1; }
+  .dl small { grid-column: 1; }
+  .dl .speak { grid-column: 2; grid-row: 2 / span 2; }
+  .tabs button { font-size: .66rem !important; }
   .pb-out { grid-template-columns: 1fr 1fr; }
   .pb-term:nth-child(2) { border-right: 0; }
   .pb-lines { grid-column: 1 / -1; border-top: 1px solid var(--line); }
-  .tabs { grid-template-columns: repeat(5, 1fr) !important; }
+  .tabs { grid-template-columns: repeat(6, 1fr) !important; }
   .tone-grid { grid-template-columns: repeat(2, 1fr); }
   .tone-grid .tone-card:last-child { grid-column: 1 / -1; }
   .tabs { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; background: var(--surface); border-top: 1px solid var(--line);
@@ -244,6 +286,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <button data-go="home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
       <button data-go="tones"><svg class="ic" viewBox="0 0 24 24"><path d="M3 14c3 0 4-8 7-8s3 12 6 12 3-6 5-6"/></svg>Tones</button>
       <button data-go="cards"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="6" width="13" height="14" rx="2"/><path d="M8 3h10a2 2 0 0 1 2 2v12"/></svg>Words</button>
+      <button data-go="grammar"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/><path d="M18 14l2 2-2 2"/></svg>Grammar</button>
       <button data-go="usage"><svg class="ic" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5M13.5 20c.3-2.6 1.8-4.4 3.5-4.4s3.2 1.8 3.5 4.4"/></svg>Usage</button>
       <button data-go="bridge"><svg class="ic" viewBox="0 0 24 24"><path d="M3 17h18M5 17c2-6 5-9 7-9s5 3 7 9M8 17v-4M12 17V8M16 17v-4"/></svg>Kanji</button>
     </nav>
@@ -255,7 +298,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 2 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 3 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -274,6 +317,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
     <div class="modules">
       <button class="module" data-go="tones"><span class="big vi" id="mod-tone">má</span><h3>Tone trainer</h3><p>Five Southern tones, with pitch drawings, Saigon sound rules and a listening drill.</p></button>
       <button class="module" data-go="cards"><span class="big vi">cám ơn</span><h3>Core words</h3><p><span id="mod-count">344</span> everyday Southern words with spaced repetition.</p></button>
+      <button class="module" data-go="grammar"><span class="big vi">ăn chưa?</span><h3>Grammar &amp; dialogues</h3><p>18 core patterns, five Saigon conversations and a sentence builder.</p></button>
       <button class="module" data-go="usage"><span class="big vi">Dạ, anh ơi</span><h3>Pronouns &amp; classifiers</h3><p>Who is anh, chị, cô, chú? Plus một tô phở, một ly cà phê.</p></button>
       <button class="module" data-go="bridge"><span class="big kj">経済</span><h3>Kanji bridge</h3><p>Use your kanji: Sino-Vietnamese words, sound rules and false friends.</p></button>
     </div>
@@ -348,6 +392,54 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
     <div id="browse-wrap" class="panel" hidden>
       <div class="row" style="margin-bottom:8px"><input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)"><span class="score" id="browse-count"></span></div>
       <div class="wordlist" id="browse-list"></div>
+    </div>
+  </section>
+
+  <!-- GRAMMAR -->
+  <section class="view" id="v-grammar" hidden>
+    <div class="panel" style="display:grid;gap:10px">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:grid;gap:4px"><span class="eyebrow">Ngữ pháp · grammar</span><h2>Build real sentences</h2></div>
+        <div class="subtabs" role="group" aria-label="Grammar section">
+          <button class="chip" data-gv="pat" aria-pressed="true">Patterns</button>
+          <button class="chip" data-gv="dia" aria-pressed="false">Dialogues</button>
+          <button class="chip" data-gv="build" aria-pressed="false">Builder</button>
+        </div>
+      </div>
+      <p class="lede" id="gv-lede">Vietnamese grammar is mostly word order and a few small words. Verbs never change form.</p>
+    </div>
+
+    <div id="g-pat" class="pat-list"></div>
+
+    <div id="g-dia" hidden style="display:grid;gap:14px">
+      <div class="row" id="dia-pick" role="group" aria-label="Choose a dialogue"></div>
+      <div class="panel" style="display:grid;gap:12px">
+        <div class="row" style="justify-content:space-between;align-items:start">
+          <div style="display:grid;gap:2px"><span class="eyebrow" id="dia-place"></span><h3 id="dia-title"></h3></div>
+          <div class="row">
+            <button class="btn primary" id="dia-play">Play all</button>
+          </div>
+        </div>
+        <p class="note-line" id="dia-cast"></p>
+        <div class="row">
+          <button class="chip" id="dia-en" aria-pressed="true">Show English</button>
+          <button class="chip" id="dia-hide" aria-pressed="false">Listening mode: hide Vietnamese</button>
+        </div>
+        <div class="dia-lines" id="dia-lines"></div>
+      </div>
+    </div>
+
+    <div id="g-build" hidden class="panel" style="display:grid;gap:14px">
+      <div class="row" style="justify-content:space-between"><span class="eyebrow">Put the words in order</span><span class="score" id="bd-score"></span></div>
+      <div class="bd-en" id="bd-en"></div>
+      <div class="bd-answer" id="bd-answer" aria-live="polite"></div>
+      <div class="bd-bank" id="bd-bank"></div>
+      <div class="bd-feedback" id="bd-feedback"></div>
+      <div class="row">
+        <button class="btn primary" id="bd-check">Check</button>
+        <button class="btn" id="bd-reset">Clear</button>
+        <button class="btn ghost" id="bd-next">Next sentence</button>
+      </div>
     </div>
   </section>
 
@@ -490,7 +582,7 @@ function updateAudioStatus() {
     ? `${recKeys.size} of ${total} phrases have Southern (Saigon) recordings. Anything else uses the device voice below.`
     : `Southern recordings are not installed yet, so the device voice is used. Once you generate them with make_audio.py, every word, drill and phrase plays in a Saigon voice.`;
 }
-function speak(text) {
+function speak(text, onDone) {
   const src = recSrc(text);
   if (src) {
     if (synth) synth.cancel();
@@ -498,14 +590,16 @@ function speak(text) {
     player = new Audio(src);
     player.preservesPitch = true;
     player.playbackRate = parseFloat(settings.rate) < 1 ? Math.max(0.7, parseFloat(settings.rate) + 0.05) : 1;
-    player.play().catch(() => {});
+    if (onDone) { player.onended = onDone; player.onerror = onDone; }
+    player.play().catch(() => { if (onDone) setTimeout(onDone, 1200); });
     return true;
   }
-  if (!synth || !viVoices.length) return false;
+  if (!synth || !viVoices.length) { if (onDone) setTimeout(onDone, 2200); return false; }
   synth.cancel();
   const u = new SpeechSynthesisUtterance(text.replace(/…/g, ''));
   u.voice = viVoices.find(v => v.name === settings.voice) || viVoices[0];
   u.lang = u.voice.lang; u.rate = parseFloat(settings.rate);
+  if (onDone) { u.onend = onDone; u.onerror = onDone; }
   synth.speak(u); return true;
 }
 const canHear = () => recKeys.size > 0 || viVoices.length > 0;
@@ -518,7 +612,7 @@ document.addEventListener('click', e => { const b = e.target.closest('[data-say]
 const sayBtn = t => `<button class="speak" data-say="${esc(t)}" aria-label="Play ${esc(t)}">${SPEAK_ICON}</button>`;
 
 /* ---------- routing ---------- */
-const VIEWS = ['home', 'tones', 'cards', 'usage', 'bridge'];
+const VIEWS = ['home', 'tones', 'cards', 'grammar', 'usage', 'bridge'];
 function go(v) {
   if (!VIEWS.includes(v)) v = 'home';
   VIEWS.forEach(n => { $('#v-' + n).hidden = n !== v; });
@@ -831,8 +925,119 @@ $('#cl-opts').addEventListener('click', e => {
 $('#cl-play').addEventListener('click', () => cl.item && speak(`một ${cl.item.cl} ${cl.item.noun}`));
 $('#cl-next').addEventListener('click', nextCl);
 
+/* ---------- GRAMMAR ---------- */
+const gramDone = store.get('gram', {});
+function renderPatterns() {
+  $('#g-pat').innerHTML = VI_GRAMMAR.map(g => `<article class="panel pat${gramDone[g.id] ? ' learned' : ''}">
+      <div class="pat-head"><h3>${esc(g.title)}</h3><button class="got" data-got="${g.id}" aria-pressed="${!!gramDone[g.id]}">${gramDone[g.id] ? 'Learned' : 'Mark learned'}</button></div>
+      <div class="formula">${esc(g.formula)}</div>
+      <p>${esc(g.text)}</p>
+      <div class="exs">${g.ex.map(([vi, en]) => `<div class="ex"><span class="vi">${colorize(vi)}</span>${sayBtn(vi)}<small>${esc(en)}</small></div>`).join('')}</div>
+      ${g.tip ? `<div class="tip">${esc(g.tip)}</div>` : ''}
+    </article>`).join('');
+}
+$('#g-pat').addEventListener('click', e => {
+  const b = e.target.closest('[data-got]'); if (!b) return;
+  const id = b.dataset.got; gramDone[id] = !gramDone[id]; if (!gramDone[id]) delete gramDone[id];
+  store.set('gram', gramDone); renderPatterns(); logActivity();
+});
+const GV_LEDE = {
+  pat: 'Vietnamese grammar is mostly word order and a few small words. Verbs never change form.',
+  dia: 'Real Saigon exchanges. Watch how each speaker picks pronouns. Play a line, or play the whole scene.',
+  build: 'Tap the words in the right order to build the sentence.'
+};
+function setGv(v) {
+  stopDialogue();
+  $$('[data-gv]').forEach(c => c.setAttribute('aria-pressed', c.dataset.gv === v));
+  $('#g-pat').hidden = v !== 'pat'; $('#g-dia').hidden = v !== 'dia'; $('#g-build').hidden = v !== 'build';
+  $('#gv-lede').textContent = GV_LEDE[v]; store.set('gv', v);
+}
+
+/* dialogues */
+let diaId = store.get('dia', VI_DIALOGUES[0].id), diaRun = null;
+function renderDialogue() {
+  const d = VI_DIALOGUES.find(x => x.id === diaId) || VI_DIALOGUES[0];
+  $$('#dia-pick .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.d === d.id));
+  $('#dia-place').textContent = d.place; $('#dia-title').textContent = d.title; $('#dia-cast').textContent = d.cast;
+  const lines = $('#dia-lines');
+  lines.innerHTML = d.lines.map(([who, vi, en], i) => `<div class="dl${who === 'You' || who === 'Tom' ? ' you' : ''}" data-i="${i}">
+      <span class="who">${esc(who)}</span><span class="vi">${colorize(vi)}</span>${sayBtn(vi)}<small>${esc(en)}</small></div>`).join('');
+}
+function stopDialogue() {
+  diaRun = null; if (synth) synth.cancel(); if (player) player.pause();
+  $$('.dl.now').forEach(x => x.classList.remove('now'));
+  $('#dia-play').textContent = 'Play all';
+}
+function playDialogue() {
+  if (diaRun) return stopDialogue();
+  const d = VI_DIALOGUES.find(x => x.id === diaId);
+  const run = diaRun = {}; let i = 0;
+  $('#dia-play').textContent = 'Stop';
+  const step = () => {
+    if (diaRun !== run) return;
+    $$('.dl.now').forEach(x => x.classList.remove('now'));
+    if (i >= d.lines.length) { stopDialogue(); logActivity(); return; }
+    const row = $(`.dl[data-i="${i}"]`); row.classList.add('now');
+    row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    const text = d.lines[i][1]; i++;
+    speak(text, () => setTimeout(step, 450));
+  };
+  step();
+}
+function initGrammar() {
+  renderPatterns();
+  $('#dia-pick').innerHTML = VI_DIALOGUES.map(d => `<button class="chip" data-d="${d.id}">${esc(d.title)}</button>`).join('');
+  $('#dia-pick').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; stopDialogue(); diaId = b.dataset.d; store.set('dia', diaId); renderDialogue(); });
+  $('#dia-play').addEventListener('click', playDialogue);
+  const toggle = (id, cls, invert) => $(id).addEventListener('click', e => {
+    const on = e.currentTarget.getAttribute('aria-pressed') !== 'true';
+    e.currentTarget.setAttribute('aria-pressed', on);
+    $('#dia-lines').classList.toggle(cls, invert ? !on : on);
+  });
+  toggle('#dia-en', 'hide-en', true);
+  toggle('#dia-hide', 'hide-vi', false);
+  renderDialogue();
+  $$('[data-gv]').forEach(c => c.addEventListener('click', () => setGv(c.dataset.gv)));
+  setGv(store.get('gv', 'pat'));
+  nextBuild();
+}
+
+/* sentence builder */
+const PROPER = /^(Sài|Gòn|Bến|Thành|Singapore|Hà|Nội|Quận|Nhật|Việt|Tom|Lan)$/;
+const bd = { item: null, picked: [], tokens: [], done: false, right: 0, total: 0 };
+const clean = w => w.replace(/[.,!?]/g, '');
+function nextBuild() {
+  const item = VI_BUILD_POOL[Math.floor(Math.random() * VI_BUILD_POOL.length)];
+  const words = item.vi.split(/\s+/).map(clean).map((w, i) => i === 0 && !PROPER.test(w) ? w.toLowerCase() : w);
+  let order = words.map((w, i) => ({ w, i }));
+  do { order.sort(() => Math.random() - .5); } while (order.length > 2 && order.every((t, i) => t.i === i));
+  Object.assign(bd, { item, words, tokens: order, picked: [], done: false });
+  $('#bd-en').textContent = item.en;
+  $('#bd-feedback').innerHTML = '';
+  drawBuild();
+}
+function drawBuild() {
+  const ans = $('#bd-answer');
+  ans.className = 'bd-answer' + (bd.done ? (bd.ok ? ' ok' : ' no') : '');
+  ans.innerHTML = bd.picked.length ? bd.picked.map((k, j) => `<button class="tok" data-un="${j}">${esc(bd.tokens[k].w)}</button>`).join('') : '<span class="score">Tap words below</span>';
+  $('#bd-bank').innerHTML = bd.tokens.map((t, k) => `<button class="tok" data-k="${k}" ${bd.picked.includes(k) ? 'disabled' : ''}>${esc(t.w)}</button>`).join('');
+  $('#bd-check').disabled = bd.done || bd.picked.length !== bd.tokens.length;
+}
+$('#bd-bank').addEventListener('click', e => { const b = e.target.closest('[data-k]'); if (!b || bd.done) return; bd.picked.push(+b.dataset.k); drawBuild(); });
+$('#bd-answer').addEventListener('click', e => { const b = e.target.closest('[data-un]'); if (!b || bd.done) return; bd.picked.splice(+b.dataset.un, 1); drawBuild(); });
+$('#bd-reset').addEventListener('click', () => { if (bd.done) return; bd.picked = []; drawBuild(); });
+$('#bd-next').addEventListener('click', nextBuild);
+$('#bd-check').addEventListener('click', () => {
+  const built = bd.picked.map(k => bd.tokens[k].w.toLowerCase()).join(' ');
+  bd.ok = built === bd.words.join(' ').toLowerCase();
+  bd.done = true; bd.total++; if (bd.ok) bd.right++;
+  $('#bd-feedback').innerHTML = (bd.ok ? '<b style="color:var(--good)">Đúng rồi!</b> ' : '<b style="color:var(--bad)">Not quite.</b> Answer: ') + `<span class="vi">${colorize(bd.item.vi)}</span>`;
+  $('#bd-score').textContent = `${bd.right} / ${bd.total}`;
+  drawBuild(); speak(bd.item.vi); logActivity();
+});
+
 /* ---------- boot ---------- */
-updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage();
+updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage(); initGrammar();
 const hash = (location.hash || '').slice(1);
 go(VIEWS.includes(hash) ? hash : store.get('view', 'home'));
 })();
