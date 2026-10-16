@@ -1,0 +1,839 @@
+<title>Sài Gòn Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Shippori+Mincho:wght@600&display=swap">
+<style>
+/* Layout: Saigon shophouse — jade shutters, yellow walls. Sticky top bar, single column of panels, bottom tab bar on phones. */
+:root {
+  --bg: #eef1ea;
+  --surface: #fbfcf8;
+  --ink: #1b2622;
+  --muted: #5b6862;
+  --line: #d3dbd2;
+  --jade: #1d6b58;
+  --jade-soft: #dcebe4;
+  --ochre: #c9921c;
+  --ochre-soft: #f6e8c4;
+  --lacquer: #a8392a;
+  --t-ngang: #58706a;
+  --t-huyen: #2f62a8;
+  --t-sac: #b8342a;
+  --t-hoinga: #b07a0c;
+  --t-nang: #7b3f97;
+  --good: #2c7a47;
+  --bad: #b23a2e;
+  --f-display: 'Lora', Georgia, 'Times New Roman', serif;
+  --f-body: 'Be Vietnam Pro', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-kanji: 'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121a17; --surface: #1a2420; --ink: #e8eee9; --muted: #9aaba3; --line: #2d3b35;
+  --jade: #4fb495; --jade-soft: #1f3a31; --ochre: #e5b14a; --ochre-soft: #3a2f16; --lacquer: #e07a62;
+  --t-ngang: #9fb6af; --t-huyen: #7fa9ec; --t-sac: #f07d6d; --t-hoinga: #e6b347; --t-nang: #c48ee0;
+  --good: #5fc283; --bad: #ef7a6c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #121a17; --surface: #1a2420; --ink: #e8eee9; --muted: #9aaba3; --line: #2d3b35;
+  --jade: #4fb495; --jade-soft: #1f3a31; --ochre: #e5b14a; --ochre-soft: #3a2f16; --lacquer: #e07a62;
+  --t-ngang: #9fb6af; --t-huyen: #7fa9ec; --t-sac: #f07d6d; --t-hoinga: #e6b347; --t-nang: #c48ee0;
+  --good: #5fc283; --bad: #ef7a6c; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--f-body); font-size: 15px; line-height: 1.55; padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--jade); }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--ochre); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h2 { font-size: 1.45rem; }
+h3 { font-size: 1.1rem; }
+p { margin: 0; }
+
+/* Top bar */
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--jade); color: #f4f7f2;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top-in { max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 16px; height: 56px; }
+.brand { font-family: var(--f-display); font-weight: 700; font-size: 1.25rem; letter-spacing: .01em; display: flex; align-items: baseline; gap: 8px; }
+.brand small { font-family: var(--f-body); font-weight: 500; font-size: .72rem; opacity: .8; letter-spacing: .08em; text-transform: uppercase; }
+.shutter { display: inline-grid; grid-template-columns: repeat(4, 3px); gap: 2px; height: 18px; align-self: center; }
+.shutter i { background: var(--ochre); border-radius: 1px; }
+.tabs { margin-left: auto; display: flex; gap: 4px; }
+.tabs button { background: none; border: 0; color: #f4f7f2; padding: 8px 12px; border-radius: 6px; font-weight: 500; opacity: .85; }
+.tabs button[aria-current="page"] { background: rgba(255,255,255,.16); opacity: 1; }
+.tabs button .ic { display: none; }
+
+main { max-width: 860px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 32px; }
+section.view { display: grid; gap: 18px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; }
+.eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; }
+.lede { color: var(--muted); max-width: 62ch; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 9px 14px; border-radius: 8px; font-weight: 500; }
+.btn.primary { background: var(--jade); border-color: var(--jade); color: var(--surface); }
+.btn.ghost { background: transparent; }
+.btn:disabled { opacity: .45; cursor: default; }
+.chip { border: 1px solid var(--line); background: transparent; padding: 5px 11px; border-radius: 99px; font-size: .85rem; }
+.chip[aria-pressed="true"] { background: var(--jade-soft); border-color: var(--jade); color: var(--ink); font-weight: 600; }
+.speak { border: 1px solid var(--line); background: var(--surface); width: 36px; height: 36px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; }
+.speak svg { width: 16px; height: 16px; fill: var(--jade); }
+input[type="search"], select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; min-width: 0; }
+input[type="search"] { flex: 1 1 180px; }
+
+/* Tone colouring */
+.vi { font-family: var(--f-display); }
+.tn-ngang { color: var(--t-ngang); } .tn-huyen { color: var(--t-huyen); } .tn-sac { color: var(--t-sac); }
+.tn-hoinga { color: var(--t-hoinga); } .tn-nang { color: var(--t-nang); }
+.plain .vi span { color: inherit; }
+
+/* Home */
+.hero { display: grid; grid-template-columns: 1.3fr 1fr; gap: 18px; align-items: stretch; }
+.hero-text { display: grid; gap: 10px; align-content: start; }
+.hero h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+.hero h1 .vi { font-style: italic; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.stat { background: var(--surface); padding: 14px 12px; display: grid; gap: 2px; }
+.stat b { font-family: var(--f-display); font-size: 1.7rem; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.stat span { font-size: .78rem; color: var(--muted); }
+.modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+.module { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r); padding: 16px; display: grid; gap: 6px; align-content: start; }
+.module:hover { border-color: var(--jade); }
+.module .big { font-family: var(--f-display); font-size: 1.6rem; line-height: 1; }
+.module .kj { font-family: var(--f-kanji); }
+.module p { color: var(--muted); font-size: .9rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .85rem; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 10px; height: 10px; border-radius: 50%; background: currentColor; display: inline-block; }
+.notice { background: var(--ochre-soft); border: 1px solid color-mix(in srgb, var(--ochre) 45%, transparent); border-radius: var(--r); padding: 12px 14px; font-size: .9rem; }
+
+/* Tones */
+.tone-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.tone-card { border: 1px solid var(--line); border-radius: var(--r); padding: 12px; display: grid; gap: 6px; align-content: start; background: var(--surface); min-width: 0; }
+.tone-card svg { width: 100%; height: auto; display: block; }
+.tone-card .nm { font-family: var(--f-display); font-weight: 700; font-size: 1.05rem; }
+.tone-card .mk { font-size: .78rem; color: var(--muted); }
+.tone-card .ex { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.tone-card .ex .vi { font-size: 1.5rem; }
+.tone-card p { font-size: .82rem; color: var(--muted); }
+.rules { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 22px; }
+.rule { display: grid; gap: 2px; padding-block: 8px; border-top: 1px solid var(--line); }
+.rule b { font-size: .9rem; }
+.rule span { font-size: .87rem; color: var(--muted); }
+.drill { display: grid; gap: 14px; justify-items: center; text-align: center; padding-block: 8px; }
+.drill .prompt { font-family: var(--f-display); font-size: 3rem; min-height: 4rem; line-height: 1.3; }
+.drill .meaning { color: var(--muted); min-height: 1.5em; }
+.answers { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; width: 100%; }
+.answers button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 10px 4px; display: grid; gap: 2px; justify-items: center; }
+.answers button svg { width: 44px; height: 26px; }
+.answers button.right { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.answers button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
+.score { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .9rem; }
+
+/* Flashcards */
+.card-stage { display: grid; gap: 14px; }
+.flash { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); padding: 28px 20px; min-height: 260px; display: grid; gap: 12px; align-content: center; justify-items: center; text-align: center; position: relative; }
+.flash::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px; border-radius: 14px 14px 0 0;
+  background: repeating-linear-gradient(90deg, var(--jade) 0 10px, transparent 10px 14px); opacity: .55; }
+.flash .front { font-family: var(--f-display); font-size: clamp(2rem, 7vw, 3.1rem); line-height: 1.2; }
+.flash .front.en { font-family: var(--f-body); font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 500; }
+.flash .back { display: grid; gap: 10px; justify-items: center; }
+.flash .gloss { font-size: 1.2rem; font-weight: 500; }
+.flash .north { font-size: .9rem; color: var(--muted); }
+.flash .north b { font-family: var(--f-display); color: var(--ink); }
+.flash .note { font-size: .9rem; color: var(--muted); max-width: 46ch; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.tag { font-size: .76rem; padding: 3px 9px; border-radius: 99px; background: var(--jade-soft); color: var(--ink); }
+.tag.tone { background: transparent; border: 1px solid currentColor; }
+.grades { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.grades button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 10px 4px; display: grid; gap: 1px; font-weight: 600; }
+.grades button small { font-weight: 400; color: var(--muted); font-size: .75rem; }
+.grades .g-again { border-color: color-mix(in srgb, var(--bad) 55%, var(--line)); }
+.grades .g-good { border-color: var(--jade); }
+.progress { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--ochre); width: 0; transition: width .25s; }
+.done { text-align: center; display: grid; gap: 10px; justify-items: center; padding: 30px 10px; }
+.wordlist { display: grid; gap: 0; }
+.wl { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) auto; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+.wl .vi { font-size: 1.12rem; }
+.wl .en { color: var(--muted); font-size: .9rem; }
+.wl .en em { font-style: normal; font-size: .8rem; }
+.lvl { display: inline-grid; grid-template-columns: repeat(6, 5px); gap: 2px; }
+.lvl i { height: 12px; border-radius: 1px; background: var(--line); }
+.lvl i.on { background: var(--jade); }
+.subtabs { display: flex; gap: 6px; }
+details summary { cursor: pointer; font-weight: 600; }
+
+/* Bridge */
+.corr { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.corr th, .corr td { text-align: left; padding: 8px 10px 8px 0; border-top: 1px solid var(--line); vertical-align: top; }
+.corr th { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-top: 0; }
+.corr td:last-child { font-family: var(--f-kanji); font-weight: 600; }
+.scroll { overflow-x: auto; }
+.bridge-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.br { border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; display: grid; grid-template-columns: auto minmax(0,1fr) auto; gap: 4px 14px; align-items: center; background: var(--surface); }
+.br .kj { font-family: var(--f-kanji); font-size: 1.9rem; font-weight: 600; grid-row: span 2; line-height: 1.1; }
+.br .vi { font-size: 1.15rem; }
+.br .jp { font-size: .82rem; color: var(--muted); }
+.br .mean { grid-column: 1 / -1; font-size: .88rem; }
+.br .nt { grid-column: 1 / -1; font-size: .8rem; color: var(--muted); }
+.flag { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+.flag.ff { background: color-mix(in srgb, var(--lacquer) 16%, transparent); color: var(--lacquer); }
+.flag.rev { background: var(--ochre-soft); color: var(--ink); }
+.bq .prompt { font-family: var(--f-kanji); font-size: 3.4rem; font-weight: 600; }
+.bq .opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; width: 100%; max-width: 440px; }
+.bq .opts button { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 12px 6px; font-family: var(--f-display); font-size: 1.1rem; }
+.bq .opts button.right { border-color: var(--good); background: color-mix(in srgb, var(--good) 14%, var(--surface)); }
+.bq .opts button.wrong { border-color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, var(--surface)); }
+
+/* Settings */
+.settings { display: grid; gap: 10px; }
+.settings label { display: grid; gap: 4px; font-size: .88rem; }
+.settings select { width: 100%; }
+
+/* Usage */
+fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
+.pb-form { display: grid; gap: 14px; }
+.pb-pair { display: flex; flex-wrap: wrap; gap: 14px 28px; }
+.pb-out { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 0; border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+.pb-term { padding: 14px 18px; display: grid; gap: 2px; align-content: start; border-right: 1px solid var(--line); background: var(--jade-soft); }
+.pb-term > span { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; }
+.pb-term b { font-family: var(--f-display); font-size: 2rem; line-height: 1.1; }
+.pb-lines { padding: 10px 16px; display: grid; gap: 0; min-width: 0; }
+.pb-line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); }
+.pb-line:first-child { border-top: 0; }
+.pb-line .vi { font-size: 1.12rem; }
+.pb-line small { grid-column: 1; color: var(--muted); font-size: .82rem; }
+.pb-line .speak { grid-row: span 2; grid-column: 2; }
+.pb-note { grid-column: 1 / -1; padding: 10px 16px; font-size: .88rem; border-top: 1px solid var(--line); background: var(--ochre-soft); }
+.cl-prompt { font-size: 2.4rem !important; }
+.cl-prompt u { text-decoration: none; display: inline-block; min-width: 2.2em; border-bottom: 3px solid var(--ochre); color: var(--ochre); }
+.cl-opts { grid-template-columns: repeat(3, 1fr) !important; }
+.cl-ref { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 24px; margin-top: 10px; }
+.cl-ref div { padding: 8px 0; border-top: 1px solid var(--line); display: grid; gap: 2px; }
+.cl-ref b { font-family: var(--f-display); font-size: 1.1rem; }
+.cl-ref span { font-size: .85rem; color: var(--muted); }
+.src-pill { font-size: .75rem; font-weight: 600; padding: 3px 10px; border-radius: 99px; background: var(--line); color: var(--ink); }
+.src-pill.on { background: var(--jade); color: var(--surface); }
+
+@media (max-width: 720px) {
+  .hero, .modules, .bridge-list, .rules, .cl-ref { grid-template-columns: 1fr; }
+  .pb-out { grid-template-columns: 1fr 1fr; }
+  .pb-term:nth-child(2) { border-right: 0; }
+  .pb-lines { grid-column: 1 / -1; border-top: 1px solid var(--line); }
+  .tabs { grid-template-columns: repeat(5, 1fr) !important; }
+  .tone-grid { grid-template-columns: repeat(2, 1fr); }
+  .tone-grid .tone-card:last-child { grid-column: 1 / -1; }
+  .tabs { position: fixed; left: 0; right: 0; bottom: 0; margin: 0; background: var(--surface); border-top: 1px solid var(--line);
+    padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+    display: grid; grid-template-columns: repeat(4, 1fr); z-index: 6; }
+  .tabs button { color: var(--muted); display: grid; justify-items: center; gap: 2px; font-size: .72rem; padding: 6px 2px; opacity: 1; }
+  .tabs button .ic { display: block; width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; }
+  .tabs button[aria-current="page"] { color: var(--jade); background: var(--jade-soft); }
+  .answers { grid-template-columns: repeat(3, 1fr); }
+  .drill .prompt { font-size: 2.5rem; }
+}
+@media (min-width: 721px) { body { padding-bottom: 0; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><span class="shutter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Sài Gòn Study <small>tiếng Việt · giọng Nam</small></div>
+    <nav class="tabs" aria-label="Sections">
+      <button data-go="home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
+      <button data-go="tones"><svg class="ic" viewBox="0 0 24 24"><path d="M3 14c3 0 4-8 7-8s3 12 6 12 3-6 5-6"/></svg>Tones</button>
+      <button data-go="cards"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="6" width="13" height="14" rx="2"/><path d="M8 3h10a2 2 0 0 1 2 2v12"/></svg>Words</button>
+      <button data-go="usage"><svg class="ic" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5M13.5 20c.3-2.6 1.8-4.4 3.5-4.4s3.2 1.8 3.5 4.4"/></svg>Usage</button>
+      <button data-go="bridge"><svg class="ic" viewBox="0 0 24 24"><path d="M3 17h18M5 17c2-6 5-9 7-9s5 3 7 9M8 17v-4M12 17V8M16 17v-4"/></svg>Kanji</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- HOME -->
+  <section class="view" id="v-home">
+    <div class="hero">
+      <div class="panel hero-text">
+        <span class="eyebrow">Tranche 2 · Southern Vietnamese</span>
+        <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
+        <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:14px;align-content:start">
+        <span class="eyebrow">Today</span>
+        <div class="stats">
+          <div class="stat"><b id="st-due">0</b><span>reviews due</span></div>
+          <div class="stat"><b id="st-learned">0</b><span>words started</span></div>
+          <div class="stat"><b id="st-streak">0</b><span>day streak</span></div>
+        </div>
+        <button class="btn primary" data-go="cards">Start today's flashcards</button>
+        <p class="score" id="st-mastered"></p>
+      </div>
+    </div>
+    <div class="modules">
+      <button class="module" data-go="tones"><span class="big vi" id="mod-tone">má</span><h3>Tone trainer</h3><p>Five Southern tones, with pitch drawings, Saigon sound rules and a listening drill.</p></button>
+      <button class="module" data-go="cards"><span class="big vi">cám ơn</span><h3>Core words</h3><p><span id="mod-count">344</span> everyday Southern words with spaced repetition.</p></button>
+      <button class="module" data-go="usage"><span class="big vi">Dạ, anh ơi</span><h3>Pronouns &amp; classifiers</h3><p>Who is anh, chị, cô, chú? Plus một tô phở, một ly cà phê.</p></button>
+      <button class="module" data-go="bridge"><span class="big kj">経済</span><h3>Kanji bridge</h3><p>Use your kanji: Sino-Vietnamese words, sound rules and false friends.</p></button>
+    </div>
+    <div class="panel settings" id="audio-panel">
+      <div class="row" style="justify-content:space-between"><h3>Audio</h3><span class="src-pill" id="audio-src"></span></div>
+      <p class="lede" id="rec-status"></p>
+      <p class="lede" id="voice-status">Checking for a Vietnamese voice…</p>
+      <div class="row" style="align-items:end">
+        <label style="flex:1 1 220px">Voice<select id="voice-sel"></select></label>
+        <label style="flex:0 1 140px">Speed<select id="rate-sel"><option value="0.6">Slow</option><option value="0.8">Learner</option><option value="1">Normal</option></select></label>
+        <button class="btn" id="voice-test">Test: xin chào</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TONES -->
+  <section class="view" id="v-tones" hidden>
+    <div class="panel" style="display:grid;gap:12px">
+      <span class="eyebrow">Thanh điệu · the tones</span>
+      <h2>Five tones in the South, not six</h2>
+      <p class="lede">Saigon speech merges hỏi and ngã into one dipping-rising tone. Pitch is drawn on a 1–5 scale, low to high. Tap a word to hear it.</p>
+      <div class="tone-grid" id="tone-grid"></div>
+    </div>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <h3>Tone drill</h3>
+        <div class="subtabs" role="group" aria-label="Drill mode">
+          <button class="chip" id="dm-listen" aria-pressed="true">Listen</button>
+          <button class="chip" id="dm-read" aria-pressed="false">Read</button>
+        </div>
+      </div>
+      <p class="lede" id="drill-help"></p>
+      <div class="drill">
+        <div class="row"><div class="prompt vi" id="dr-prompt">?</div><button class="speak" id="dr-play" aria-label="Play again"></button></div>
+        <div class="meaning" id="dr-meaning"></div>
+        <div class="answers" id="dr-answers"></div>
+        <div class="row"><button class="btn" id="dr-next">Next word</button><span class="score" id="dr-score"></span></div>
+      </div>
+    </div>
+    <div class="panel" style="display:grid;gap:10px">
+      <span class="eyebrow">Giọng Nam · Saigon sounds</span>
+      <h3>How Southern speech differs from the spelling</h3>
+      <p class="lede">These rules show up as tags on your flashcards whenever a word uses them.</p>
+      <div class="rules" id="rules"></div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="view" id="v-cards" hidden>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <h2>Core words</h2>
+        <div class="subtabs" role="group" aria-label="View">
+          <button class="chip" id="cv-study" aria-pressed="true">Study</button>
+          <button class="chip" id="cv-browse" aria-pressed="false">Browse</button>
+        </div>
+      </div>
+      <details id="deck-opts">
+        <summary>Deck options</summary>
+        <div style="display:grid;gap:10px;margin-top:10px">
+          <div class="row" id="cat-chips"></div>
+          <div class="row">
+            <label class="row" style="gap:6px;font-size:.9rem">Show first
+              <select id="dir-sel"><option value="vi">Vietnamese</option><option value="en">English</option></select></label>
+            <label class="row" style="gap:6px;font-size:.9rem">New words per day
+              <select id="new-sel"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></label>
+          </div>
+        </div>
+      </details>
+    </div>
+    <div id="study-wrap" class="card-stage"></div>
+    <div id="browse-wrap" class="panel" hidden>
+      <div class="row" style="margin-bottom:8px"><input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)"><span class="score" id="browse-count"></span></div>
+      <div class="wordlist" id="browse-list"></div>
+    </div>
+  </section>
+
+  <!-- USAGE -->
+  <section class="view" id="v-usage" hidden>
+    <div class="panel" style="display:grid;gap:14px">
+      <span class="eyebrow">Xưng hô · what to call people</span>
+      <h2>Pronoun builder</h2>
+      <p class="lede">Vietnamese has no neutral "I" and "you". You pick kinship words based on who you are talking to. Set the situation and the right words appear, with phrases you can say straight away.</p>
+      <div class="pb-form">
+        <fieldset><legend>They look…</legend><div class="row" id="pb-age"></div></fieldset>
+        <div class="pb-pair">
+          <fieldset><legend>They are</legend><div class="row" id="pb-them"><button class="chip" data-v="m" aria-pressed="true">a man</button><button class="chip" data-v="f" aria-pressed="false">a woman</button></div></fieldset>
+          <fieldset><legend>You are</legend><div class="row" id="pb-me"><button class="chip" data-v="m" aria-pressed="true">a man</button><button class="chip" data-v="f" aria-pressed="false">a woman</button></div></fieldset>
+          <fieldset id="pb-set-wrap"><legend>Setting</legend><div class="row" id="pb-set"><button class="chip" data-v="polite" aria-pressed="true">Polite / stranger</button><button class="chip" data-v="friends" aria-pressed="false">Friends</button></div></fieldset>
+        </div>
+      </div>
+      <div class="pb-out" id="pb-out" aria-live="polite"></div>
+    </div>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:grid;gap:4px"><span class="eyebrow">Loại từ · classifiers</span><h2>Classifier drill</h2></div>
+        <span class="score" id="cl-score"></span>
+      </div>
+      <p class="lede">Counting anything needs a classifier: một <b>tô</b> phở, một <b>ly</b> cà phê. These are the Southern choices; the Hanoi form is shown when it differs.</p>
+      <div class="drill bq">
+        <div class="row" style="justify-content:center"><div class="prompt vi cl-prompt" id="cl-prompt"></div><button class="speak" id="cl-play" aria-label="Play phrase"></button></div>
+        <div class="meaning" id="cl-meaning"></div>
+        <div class="opts cl-opts" id="cl-opts"></div>
+        <button class="btn" id="cl-next">Next</button>
+      </div>
+      <details>
+        <summary>All classifiers</summary>
+        <div class="cl-ref" id="cl-ref"></div>
+      </details>
+    </div>
+  </section>
+
+  <!-- BRIDGE -->
+  <section class="view" id="v-bridge" hidden>
+    <div class="panel" style="display:grid;gap:12px">
+      <span class="eyebrow">Hán Việt · 漢越</span>
+      <h2>Your kanji already know Vietnamese</h2>
+      <p class="lede">About 60% of Vietnamese vocabulary, and most formal words, come from Chinese. The same characters gave Japanese its on'yomi, so the sounds line up by rule.</p>
+      <div class="scroll"><table class="corr"><thead><tr><th>Japanese ending</th><th>Vietnamese ending</th><th>Examples (VN / JP)</th></tr></thead><tbody id="corr"></tbody></table></div>
+    </div>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between">
+        <h3>Kanji quiz</h3><span class="score" id="bq-score"></span>
+      </div>
+      <div class="drill bq">
+        <div class="prompt" id="bq-prompt"></div>
+        <div class="meaning" id="bq-meaning">Pick the Vietnamese reading</div>
+        <div class="opts" id="bq-opts"></div>
+        <button class="btn" id="bq-next">Next kanji</button>
+      </div>
+    </div>
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row">
+        <input type="search" id="br-q" placeholder="Search kanji, Vietnamese, romaji or meaning">
+        <div class="row" role="group" aria-label="Filter" id="br-filters">
+          <button class="chip" data-f="" aria-pressed="true">All</button>
+          <button class="chip" data-f="ff" aria-pressed="false">False friends</button>
+          <button class="chip" data-f="rev" aria-pressed="false">Reversed</button>
+        </div>
+      </div>
+      <div class="bridge-list" id="br-list"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+/*DATA*/
+/*AUDIO*/
+</script>
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- storage (vi_ prefix) ---------- */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('vi_' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('vi_' + k, JSON.stringify(v)); } catch (e) {} }
+};
+const settings = Object.assign({ voice: '', rate: '0.8', dir: 'vi', newPerDay: 20, cats: Object.keys(VI_CATEGORIES), drill: 'listen' }, store.get('settings', {}));
+const saveSettings = () => store.set('settings', settings);
+
+/* ---------- tones ---------- */
+const TONE_OF = { '̀': 'huyen', '́': 'sac', '̉': 'hoinga', '̃': 'hoinga', '̣': 'nang' };
+const toneOf = syl => { for (const ch of syl.normalize('NFD')) if (TONE_OF[ch]) return TONE_OF[ch]; return 'ngang'; };
+const toneName = k => VI_TONES.find(t => t.key === k).name;
+const colorize = text => text.split(/(\s+)/).map(p => /\S/.test(p) && /[a-zđ]/i.test(p) ? `<span class="tn-${toneOf(p)}">${esc(p)}</span>` : esc(p)).join('');
+const strip = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase();
+
+function contour(pts, w = 120, h = 70, sw = 3) {
+  const pad = 10, n = pts.length;
+  const x = i => pad + (i * (w - 2 * pad)) / (n - 1);
+  const y = v => h - pad - ((v - 1) * (h - 2 * pad)) / 4;
+  let d = `M${x(0)},${y(pts[0])}`;
+  for (let i = 1; i < n; i++) { const mx = (x(i - 1) + x(i)) / 2; d += ` C${mx},${y(pts[i - 1])} ${mx},${y(pts[i])} ${x(i)},${y(pts[i])}`; }
+  let grid = '';
+  for (let v = 1; v <= 5; v++) grid += `<line x1="${pad}" x2="${w - pad}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/>`;
+  return `<svg viewBox="0 0 ${w} ${h}" aria-hidden="true">${grid}<path d="${d}" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round"/><circle cx="${x(n - 1)}" cy="${y(pts[n - 1])}" r="${sw}" fill="currentColor"/></svg>`;
+}
+
+/* ---------- speech ---------- */
+const SPEAK_ICON = '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7" fill="none" stroke="var(--jade)" stroke-width="2" stroke-linecap="round"/></svg>';
+let viVoices = [];
+const synth = 'speechSynthesis' in window ? window.speechSynthesis : null;
+function loadVoices() {
+  if (!synth) { $('#voice-status').textContent = 'This browser has no speech support, so audio is off. Tone drawings and the Read drill still work.'; return; }
+  viVoices = synth.getVoices().filter(v => /^vi/i.test(v.lang));
+  const sel = $('#voice-sel');
+  sel.innerHTML = viVoices.length ? viVoices.map(v => `<option value="${esc(v.name)}">${esc(v.name)}</option>`).join('') : '<option value="">No Vietnamese voice found</option>';
+  if (settings.voice && viVoices.some(v => v.name === settings.voice)) sel.value = settings.voice;
+  $('#voice-status').textContent = viVoices.length
+    ? `${viVoices.length} Vietnamese voice${viVoices.length > 1 ? 's' : ''} available. Most built-in voices sound Northern, so trust the Southern sound rules over the audio for v, d, gi and final consonants.`
+    : 'No Vietnamese voice on this device yet. Add one in your system speech settings (on iPhone: Settings › Accessibility › Spoken Content › Voices › Vietnamese), then reload. The Read drill works without audio.';
+  updateDrillHelp();
+}
+/* Recorded Southern audio: bundled data (audio-data.js) or audio/<key>.mp3 next to the page.
+   Falls back to the device voice for anything not recorded. */
+const AUDIO_DATA = typeof VI_AUDIO_DATA !== 'undefined' ? VI_AUDIO_DATA : null;
+let recKeys = AUDIO_DATA ? new Set(Object.keys(AUDIO_DATA)) : new Set();
+let player = null;
+function recSrc(text) {
+  const k = viAudioKey(text);
+  if (!recKeys.has(k)) return null;
+  return AUDIO_DATA ? AUDIO_DATA[k] : `audio/${k}.mp3`;
+}
+function updateAudioStatus() {
+  const total = AUDIO_LIST_SIZE;
+  const on = recKeys.size > 0;
+  $('#audio-src').textContent = on ? 'Southern recordings' : 'Device voice';
+  $('#audio-src').classList.toggle('on', on);
+  $('#rec-status').textContent = on
+    ? `${recKeys.size} of ${total} phrases have Southern (Saigon) recordings. Anything else uses the device voice below.`
+    : `Southern recordings are not installed yet, so the device voice is used. Once you generate them with make_audio.py, every word, drill and phrase plays in a Saigon voice.`;
+}
+function speak(text) {
+  const src = recSrc(text);
+  if (src) {
+    if (synth) synth.cancel();
+    if (player) player.pause();
+    player = new Audio(src);
+    player.preservesPitch = true;
+    player.playbackRate = parseFloat(settings.rate) < 1 ? Math.max(0.7, parseFloat(settings.rate) + 0.05) : 1;
+    player.play().catch(() => {});
+    return true;
+  }
+  if (!synth || !viVoices.length) return false;
+  synth.cancel();
+  const u = new SpeechSynthesisUtterance(text.replace(/…/g, ''));
+  u.voice = viVoices.find(v => v.name === settings.voice) || viVoices[0];
+  u.lang = u.voice.lang; u.rate = parseFloat(settings.rate);
+  synth.speak(u); return true;
+}
+const canHear = () => recKeys.size > 0 || viVoices.length > 0;
+if (!AUDIO_DATA) {
+  fetch('audio/manifest.json').then(r => r.ok ? r.json() : []).then(keys => {
+    if (Array.isArray(keys) && keys.length) { recKeys = new Set(keys); updateAudioStatus(); updateDrillHelp(); }
+  }).catch(() => {});
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-say]'); if (b) speak(b.dataset.say); });
+const sayBtn = t => `<button class="speak" data-say="${esc(t)}" aria-label="Play ${esc(t)}">${SPEAK_ICON}</button>`;
+
+/* ---------- routing ---------- */
+const VIEWS = ['home', 'tones', 'cards', 'usage', 'bridge'];
+function go(v) {
+  if (!VIEWS.includes(v)) v = 'home';
+  VIEWS.forEach(n => { $('#v-' + n).hidden = n !== v; });
+  $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.go === v ? 'page' : 'false'));
+  if (v === 'home') renderHome();
+  if (v === 'cards') renderCards();
+  store.set('view', v);
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (b) { go(b.dataset.go); try { history.replaceState(null, '', '#' + b.dataset.go); } catch (err) {} } });
+
+/* ---------- SRS ---------- */
+const DAY = 86400000;
+const INTERVALS = [0, 1, 3, 7, 16, 35, 90]; // days, by level 0–6
+const srs = store.get('srs', {});
+const today = () => new Date().toISOString().slice(0, 10);
+function logActivity() {
+  const log = store.get('log', {}); log[today()] = (log[today()] || 0) + 1; store.set('log', log);
+}
+function streak() {
+  const log = store.get('log', {}); let n = 0; const d = new Date();
+  if (!log[d.toISOString().slice(0, 10)]) d.setDate(d.getDate() - 1);
+  while (log[d.toISOString().slice(0, 10)]) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+const newToday = () => store.get('new_' + today(), 0);
+function deckWords() { return VI_VOCAB.filter(w => settings.cats.includes(w.cat)); }
+function buildQueue() {
+  const now = Date.now();
+  const due = deckWords().filter(w => srs[w.id] && srs[w.id].due <= now).sort((a, b) => srs[a.id].due - srs[b.id].due);
+  const room = Math.max(0, settings.newPerDay - newToday());
+  const fresh = deckWords().filter(w => !srs[w.id]).slice(0, room);
+  return due.concat(fresh);
+}
+function schedule(w, grade) {
+  const s = srs[w.id] || { lvl: 0, due: 0, n: 0 };
+  const isNew = !srs[w.id];
+  const now = Date.now();
+  if (grade === 'again') { s.lvl = Math.max(0, s.lvl - 2); s.due = now + 10 * 60000; }
+  else if (grade === 'hard') { s.due = now + Math.max(0.5, INTERVALS[s.lvl] * 0.6) * DAY; }
+  else if (grade === 'good') { s.lvl = Math.min(6, s.lvl + 1); s.due = now + INTERVALS[s.lvl] * DAY; }
+  else { s.lvl = Math.min(6, s.lvl + 2); s.due = now + INTERVALS[s.lvl] * DAY * 1.3; }
+  s.n++; srs[w.id] = s; store.set('srs', srs);
+  if (isNew) store.set('new_' + today(), newToday() + 1);
+  logActivity();
+}
+function previewLabel(w, grade) {
+  const lvl = srs[w.id] ? srs[w.id].lvl : 0;
+  if (grade === 'again') return '10 min';
+  let d;
+  if (grade === 'hard') d = Math.max(0.5, INTERVALS[lvl] * 0.6);
+  else if (grade === 'good') d = INTERVALS[Math.min(6, lvl + 1)];
+  else d = INTERVALS[Math.min(6, lvl + 2)] * 1.3;
+  return d < 1 ? '12 hr' : Math.round(d) + (Math.round(d) === 1 ? ' day' : ' days');
+}
+
+/* ---------- HOME ---------- */
+function renderHome() {
+  const now = Date.now();
+  const started = Object.keys(srs).length;
+  $('#st-due').textContent = VI_VOCAB.filter(w => srs[w.id] && srs[w.id].due <= now).length;
+  $('#st-learned').textContent = started;
+  $('#st-streak').textContent = streak();
+  const mastered = Object.values(srs).filter(s => s.lvl >= 5).length;
+  $('#st-mastered').textContent = `${mastered} of ${VI_VOCAB.length} words at level 5 or above · ${Math.max(0, settings.newPerDay - newToday())} new words left today`;
+  $('#mod-count').textContent = VI_VOCAB.length;
+}
+$('#legend').innerHTML = VI_TONES.map(t => `<span class="tn-${t.key}"><i></i>${t.name}</span>`).join('');
+
+/* ---------- TONES ---------- */
+$('#tone-grid').innerHTML = VI_TONES.map(t => {
+  const first = t.example.split(' · ')[0];
+  return `<div class="tone-card tn-${t.key}">
+    <div class="nm">${t.name}</div>
+    ${contour(t.pts)}
+    <div class="mk">Mark: ${esc(t.mark)} · ${t.pts.join('')}</div>
+    <div class="ex"><span class="vi">${esc(t.example)}</span>${sayBtn(first)}</div>
+    <p>${esc(t.desc)}</p></div>`;
+}).join('');
+$('#rules').innerHTML = VI_SOUND_RULES.map(r => `<div class="rule"><b>${esc(r.label)}</b><span>${esc(r.text)}</span></div>`).join('');
+$('#dr-play').innerHTML = SPEAK_ICON;
+
+const drill = { item: null, answered: false, right: 0, total: 0 };
+function updateDrillHelp() {
+  const listen = settings.drill === 'listen';
+  $('#dm-listen').setAttribute('aria-pressed', listen); $('#dm-read').setAttribute('aria-pressed', !listen);
+  $('#drill-help').textContent = listen
+    ? (canHear() ? 'Listen to the word, then pick its tone. Words come from minimal sets like ma · mà · má · mả · mạ.' : 'Listen mode needs a Vietnamese voice. Switch to Read, or add a voice on the Home screen.')
+    : 'Read the word and pick the tone its mark stands for. Builds instant mark-to-pitch recall.';
+}
+function nextDrill() {
+  const set = VI_TONE_SETS[Math.floor(Math.random() * VI_TONE_SETS.length)];
+  const [word, meaning] = set.words[Math.floor(Math.random() * set.words.length)];
+  drill.item = { word, meaning, tone: toneOf(word) }; drill.answered = false;
+  const listen = settings.drill === 'listen' && canHear();
+  $('#dr-prompt').className = 'prompt vi';
+  $('#dr-prompt').innerHTML = listen ? '?' : esc(word);
+  $('#dr-play').hidden = !listen;
+  $('#dr-meaning').textContent = '';
+  $('#dr-answers').innerHTML = VI_TONES.map(t => `<button data-tone="${t.key}" class="tn-${t.key}">${contour(t.pts, 60, 36, 3)}<span style="color:var(--ink);font-size:.8rem">${t.name}</span></button>`).join('');
+  if (listen) speak(word);
+}
+$('#dr-answers').addEventListener('click', e => {
+  const b = e.target.closest('button[data-tone]'); if (!b || drill.answered) return;
+  drill.answered = true; drill.total++;
+  const ok = b.dataset.tone === drill.item.tone; if (ok) drill.right++;
+  b.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $(`#dr-answers [data-tone="${drill.item.tone}"]`).classList.add('right');
+  $('#dr-prompt').innerHTML = colorize(drill.item.word);
+  $('#dr-meaning').textContent = `${drill.item.meaning} · ${toneName(drill.item.tone)}`;
+  $('#dr-score').textContent = `${drill.right} / ${drill.total} this session`;
+  logActivity();
+});
+$('#dr-play').addEventListener('click', () => drill.item && speak(drill.item.word));
+$('#dr-next').addEventListener('click', nextDrill);
+$('#dm-listen').addEventListener('click', () => { settings.drill = 'listen'; saveSettings(); updateDrillHelp(); nextDrill(); });
+$('#dm-read').addEventListener('click', () => { settings.drill = 'read'; saveSettings(); updateDrillHelp(); nextDrill(); });
+
+/* ---------- CARDS ---------- */
+let queue = [], qi = 0, revealed = false, cardView = 'study';
+$('#cat-chips').innerHTML = Object.entries(VI_CATEGORIES).map(([k, v]) => `<button class="chip" data-cat="${k}" aria-pressed="${settings.cats.includes(k)}">${esc(v)}</button>`).join('');
+$('#cat-chips').addEventListener('click', e => {
+  const b = e.target.closest('[data-cat]'); if (!b) return;
+  const k = b.dataset.cat, on = settings.cats.includes(k);
+  if (on && settings.cats.length === 1) return;
+  settings.cats = on ? settings.cats.filter(c => c !== k) : settings.cats.concat(k);
+  b.setAttribute('aria-pressed', !on); saveSettings(); renderCards();
+});
+$('#dir-sel').value = settings.dir;
+$('#new-sel').value = String(settings.newPerDay);
+$('#dir-sel').addEventListener('change', e => { settings.dir = e.target.value; saveSettings(); drawCard(); });
+$('#new-sel').addEventListener('change', e => { settings.newPerDay = +e.target.value; saveSettings(); renderCards(); });
+function setCardView(v) {
+  cardView = v;
+  $('#cv-study').setAttribute('aria-pressed', v === 'study'); $('#cv-browse').setAttribute('aria-pressed', v === 'browse');
+  $('#study-wrap').hidden = v !== 'study'; $('#browse-wrap').hidden = v !== 'browse';
+  if (v === 'browse') renderBrowse();
+}
+$('#cv-study').addEventListener('click', () => setCardView('study'));
+$('#cv-browse').addEventListener('click', () => setCardView('browse'));
+
+function renderCards() { queue = buildQueue(); qi = 0; revealed = false; drawCard(); if (cardView === 'browse') renderBrowse(); }
+function drawCard() {
+  const wrap = $('#study-wrap');
+  if (qi >= queue.length) {
+    const nextDue = Object.entries(srs).filter(([id]) => deckWords().some(w => w.id === id)).map(([, s]) => s.due).sort((a, b) => a - b)[0];
+    const when = nextDue ? new Date(nextDue).toLocaleString([], { weekday: 'short', hour: '2-digit', minute: '2-digit' }) : null;
+    wrap.innerHTML = `<div class="panel done"><span class="eyebrow">Xong rồi!</span><h2>All done for now</h2>
+      <p class="lede">${queue.length ? `You reviewed ${queue.length} card${queue.length > 1 ? 's' : ''}.` : 'Nothing due in this deck.'} ${when ? `Next review: ${esc(when)}.` : ''}</p>
+      <div class="row" style="justify-content:center"><button class="btn" id="more-new">Add 10 more new words</button><button class="btn ghost" data-go="tones">Practise tones</button></div></div>`;
+    $('#more-new').addEventListener('click', () => { store.set('new_' + today(), Math.max(0, newToday() - 10)); renderCards(); });
+    return;
+  }
+  const w = queue[qi];
+  const isNew = !srs[w.id];
+  const viFirst = settings.dir === 'vi';
+  const rules = VI_SOUND_RULES.filter(r => r.test(w.vi));
+  const tones = [...new Set(w.vi.split(/\s+/).filter(s => /[a-zđ]/i.test(s)).map(toneOf))];
+  const front = viFirst
+    ? `<div class="row" style="justify-content:center"><div class="front vi">${colorize(w.vi)}</div>${sayBtn(w.vi)}</div>`
+    : `<div class="front en">${esc(w.en)}</div>`;
+  const back = `<div class="back">
+      ${viFirst ? `<div class="gloss">${esc(w.en)}</div>` : `<div class="row" style="justify-content:center"><div class="front vi">${colorize(w.vi)}</div>${sayBtn(w.vi)}</div>`}
+      ${w.north ? `<div class="north">Hanoi: <b>${esc(w.north)}</b></div>` : ''}
+      ${w.note ? `<div class="note">${esc(w.note)}</div>` : ''}
+      <div class="tags">${tones.map(t => `<span class="tag tone tn-${t}">${toneName(t)}</span>`).join('')}${rules.map(r => `<span class="tag" title="${esc(r.text)}">${esc(r.label)}</span>`).join('')}</div>
+    </div>`;
+  wrap.innerHTML = `
+    <div class="row" style="justify-content:space-between"><span class="score">${qi + 1} of ${queue.length} · ${esc(VI_CATEGORIES[w.cat])}${isNew ? ' · <b style="color:var(--ochre)">new</b>' : ''}</span>
+      <span class="lvl" aria-label="Level ${srs[w.id] ? srs[w.id].lvl : 0} of 6">${lvlBars(w)}</span></div>
+    <div class="progress"><i style="width:${(qi / queue.length) * 100}%"></i></div>
+    <div class="flash">${front}${revealed ? back : ''}</div>
+    ${revealed
+      ? `<div class="grades">${['again', 'hard', 'good', 'easy'].map(g => `<button class="g-${g}" data-grade="${g}">${g[0].toUpperCase() + g.slice(1)}<small>${previewLabel(w, g)}</small></button>`).join('')}</div>`
+      : `<button class="btn primary" id="reveal">Show answer</button>`}
+    <p class="score" style="text-align:center">Keys: space to reveal · 1–4 to grade · P to play</p>`;
+  if (!revealed) $('#reveal').addEventListener('click', reveal);
+  if (viFirst && !revealed) speak(w.vi);
+}
+function lvlBars(w) { const l = srs[w.id] ? srs[w.id].lvl : 0; return Array.from({ length: 6 }, (_, i) => `<i class="${i < l ? 'on' : ''}"></i>`).join(''); }
+function reveal() { revealed = true; drawCard(); if (settings.dir === 'en') speak(queue[qi].vi); }
+function grade(g) { schedule(queue[qi], g); if (g === 'again') queue.push(queue[qi]); qi++; revealed = false; drawCard(); }
+$('#study-wrap').addEventListener('click', e => { const b = e.target.closest('[data-grade]'); if (b) grade(b.dataset.grade); });
+document.addEventListener('keydown', e => {
+  if ($('#v-cards').hidden || cardView !== 'study' || e.target.matches('input, select, textarea')) return;
+  if (qi >= queue.length) return;
+  if (e.key === ' ' && !revealed) { e.preventDefault(); reveal(); }
+  else if (revealed && '1234'.includes(e.key)) grade(['again', 'hard', 'good', 'easy'][+e.key - 1]);
+  else if (e.key.toLowerCase() === 'p') speak(queue[qi].vi);
+});
+
+function renderBrowse() {
+  const q = strip($('#browse-q').value.trim());
+  const list = deckWords().filter(w => !q || strip(w.vi).includes(q) || w.en.toLowerCase().includes(q) || strip(w.north).includes(q));
+  $('#browse-count').textContent = `${list.length} words`;
+  $('#browse-list').innerHTML = list.map(w => `<div class="wl">
+      <div class="row" style="gap:6px;flex-wrap:nowrap;min-width:0"><span class="vi">${colorize(w.vi)}</span></div>
+      <div class="en">${esc(w.en)}${w.north ? ` <em>· Hanoi: ${esc(w.north)}</em>` : ''}</div>
+      <div class="row" style="gap:8px;flex-wrap:nowrap"><span class="lvl">${lvlBars(w)}</span>${sayBtn(w.vi)}</div></div>`).join('');
+}
+$('#browse-q').addEventListener('input', renderBrowse);
+
+/* ---------- BRIDGE ---------- */
+$('#corr').innerHTML = VI_BRIDGE_RULES.map(r => `<tr><td>${esc(r.jp)}</td><td>${esc(r.vi)}</td><td>${esc(r.ex)}</td></tr>`).join('');
+let brFilter = '';
+function renderBridge() {
+  const q = $('#br-q').value.trim().toLowerCase(), qs = strip(q);
+  const list = VI_BRIDGE.filter(b => (!brFilter || b[5] === brFilter) &&
+    (!q || b[0].includes(q) || strip(b[1]).includes(qs) || b[2].includes(q) || strip(b[3]).includes(qs) || b[4].toLowerCase().includes(q)));
+  $('#br-list').innerHTML = list.map(b => `<div class="br">
+      <div class="kj">${esc(b[0])}</div>
+      <div class="vi">${colorize(b[1])}</div>
+      <div class="row" style="gap:6px">${b[5] ? `<span class="flag ${b[5]}">${b[5] === 'ff' ? 'False friend' : 'Reversed'}</span>` : ''}${sayBtn(b[1])}</div>
+      <div class="jp">${esc(b[2])} · ${esc(b[3])}</div>
+      <div class="mean">${esc(b[4])}</div>
+      ${b[6] ? `<div class="nt">${esc(b[6])}</div>` : ''}</div>`).join('') || '<p class="lede">No matches.</p>';
+}
+$('#br-q').addEventListener('input', renderBridge);
+$('#br-filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-f]'); if (!b) return;
+  brFilter = b.dataset.f; $$('#br-filters .chip').forEach(c => c.setAttribute('aria-pressed', c === b)); renderBridge();
+});
+const bq = { item: null, done: false, right: 0, total: 0 };
+function nextBq() {
+  const pool = VI_BRIDGE.filter(b => b[0].length === 2);
+  const item = pool[Math.floor(Math.random() * pool.length)];
+  const opts = [item];
+  while (opts.length < 4) { const o = pool[Math.floor(Math.random() * pool.length)]; if (!opts.includes(o)) opts.push(o); }
+  opts.sort(() => Math.random() - .5);
+  bq.item = item; bq.done = false;
+  $('#bq-prompt').textContent = item[0];
+  $('#bq-meaning').textContent = `${item[2]} · ${item[3]} — pick the Vietnamese reading`;
+  $('#bq-opts').innerHTML = opts.map(o => `<button data-v="${esc(o[1])}">${esc(o[1])}</button>`).join('');
+}
+$('#bq-opts').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || bq.done) return;
+  bq.done = true; bq.total++;
+  const ok = b.dataset.v === bq.item[1]; if (ok) bq.right++;
+  b.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $$('#bq-opts button').find(x => x.dataset.v === bq.item[1]).classList.add('right');
+  $('#bq-meaning').textContent = `${bq.item[1]} · ${bq.item[4]}`;
+  $('#bq-score').textContent = `${bq.right} / ${bq.total}`;
+  speak(bq.item[1]); logActivity();
+});
+$('#bq-next').addEventListener('click', nextBq);
+
+/* ---------- settings ---------- */
+$('#voice-sel').addEventListener('change', e => { settings.voice = e.target.value; saveSettings(); });
+$('#rate-sel').value = settings.rate;
+$('#rate-sel').addEventListener('change', e => { settings.rate = e.target.value; saveSettings(); });
+$('#voice-test').addEventListener('click', () => { if (!speak('xin chào')) loadVoices(); });
+if (synth) { loadVoices(); synth.onvoiceschanged = loadVoices; } else loadVoices();
+
+/* ---------- USAGE: pronoun builder ---------- */
+const pb = Object.assign({ age: 'older', them: 'm', me: 'm', set: 'polite' }, store.get('pb', {}));
+function pressGroup(sel, val) { $$(sel + ' .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.v === val)); }
+function renderPronouns() {
+  pressGroup('#pb-age', pb.age); pressGroup('#pb-them', pb.them); pressGroup('#pb-me', pb.me); pressGroup('#pb-set', pb.set);
+  $('#pb-set-wrap').hidden = pb.age !== 'peer';
+  const r = viPronouns(pb.age, pb.them, pb.me, pb.set);
+  $('#pb-out').innerHTML = `
+    <div class="pb-term"><span>Call them</span><b class="vi">${colorize(r.you)}</b></div>
+    <div class="pb-term"><span>Call yourself</span><b class="vi">${colorize(r.I)}</b></div>
+    <div class="pb-lines">${r.lines.map(([vi, en]) => `<div class="pb-line"><span class="vi">${colorize(vi)}</span>${sayBtn(vi)}<small>${esc(en)}</small></div>`).join('')}</div>
+    <div class="pb-note">${r.older ? 'Start with <b>dạ</b> when answering or speaking up to them. ' : ''}${esc(r.note)} Talking about them: <b>${esc(r.third)}</b>.</div>`;
+  store.set('pb', pb);
+}
+function initUsage() {
+  $('#pb-age').innerHTML = VI_PRONOUN_AGES.map(a => `<button class="chip" data-v="${a.key}" title="${esc(a.hint)}">${esc(a.label)}</button>`).join('');
+  [['#pb-age', 'age'], ['#pb-them', 'them'], ['#pb-me', 'me'], ['#pb-set', 'set']].forEach(([sel, key]) => {
+    $(sel).addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; pb[key] = b.dataset.v; renderPronouns(); });
+  });
+  renderPronouns();
+  $('#cl-ref').innerHTML = Object.entries(VI_CLASSIFIERS).map(([k, c]) => {
+    const ex = VI_CLASS_ITEMS.filter(i => i.cl === k).slice(0, 3).map(i => `${k} ${i.noun}`).join(' · ');
+    return `<div><b class="vi">${colorize(k)}</b><span>${esc(c.en)}${c.north ? ` · Hanoi: ${esc(c.north)}` : ''}</span><span class="vi">${esc(ex)}</span></div>`;
+  }).join('');
+  $('#cl-play').innerHTML = SPEAK_ICON;
+  nextCl();
+}
+
+/* ---------- USAGE: classifier drill ---------- */
+const cl = { item: null, done: false, right: 0, total: 0 };
+function nextCl() {
+  const item = VI_CLASS_ITEMS[Math.floor(Math.random() * VI_CLASS_ITEMS.length)];
+  const all = Object.keys(VI_CLASSIFIERS);
+  const opts = [item.cl];
+  while (opts.length < 6) { const o = all[Math.floor(Math.random() * all.length)]; if (!opts.includes(o)) opts.push(o); }
+  opts.sort(() => Math.random() - .5);
+  cl.item = item; cl.done = false;
+  $('#cl-prompt').innerHTML = `một <u>&nbsp;?&nbsp;</u> ${colorize(item.noun)}`;
+  $('#cl-meaning').textContent = item.en;
+  $('#cl-play').hidden = true;
+  $('#cl-opts').innerHTML = opts.map(o => `<button data-v="${esc(o)}">${esc(o)}</button>`).join('');
+}
+$('#cl-opts').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || cl.done) return;
+  cl.done = true; cl.total++;
+  const ok = b.dataset.v === cl.item.cl; if (ok) cl.right++;
+  b.classList.add(ok ? 'right' : 'wrong');
+  if (!ok) $$('#cl-opts button').find(x => x.dataset.v === cl.item.cl).classList.add('right');
+  const phrase = `một ${cl.item.cl} ${cl.item.noun}`;
+  $('#cl-prompt').innerHTML = colorize(phrase);
+  const c = VI_CLASSIFIERS[cl.item.cl];
+  $('#cl-meaning').textContent = `${cl.item.en} · ${cl.item.cl}: ${c.en}${cl.item.note ? ' · ' + cl.item.note : ''}`;
+  $('#cl-play').hidden = false;
+  $('#cl-score').textContent = `${cl.right} / ${cl.total}`;
+  speak(phrase); logActivity();
+});
+$('#cl-play').addEventListener('click', () => cl.item && speak(`một ${cl.item.cl} ${cl.item.noun}`));
+$('#cl-next').addEventListener('click', nextCl);
+
+/* ---------- boot ---------- */
+updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage();
+const hash = (location.hash || '').slice(1);
+go(VIEWS.includes(hash) ? hash : store.get('view', 'home'));
+})();
+</script>
