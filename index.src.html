@@ -407,7 +407,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <p class="lede" id="rec-status"></p>
       <p class="lede" id="voice-status">Checking for a Vietnamese voice…</p>
       <div class="row" style="align-items:end">
-        <label style="flex:1 1 220px">Voice<select id="voice-sel"></select></label>
+        <label style="flex:1 1 220px" id="voice-sel-wrap">Device voice<select id="voice-sel"></select></label>
         <label style="flex:0 1 140px">Speed<select id="rate-sel"><option value="0.6">Slow</option><option value="0.8">Learner</option><option value="1">Normal</option></select></label>
         <button class="btn" id="voice-test">Test: xin chào</button>
       </div>
@@ -679,11 +679,16 @@ function recSrc(text) {
   return AUDIO_DATA ? AUDIO_DATA[k] : `audio/${k}.mp3`;
 }
 function updateAudioStatus() {
+  const all = recKeys.size >= AUDIO_LIST_SIZE;
+  $('#voice-status').hidden = all;
+  $('#voice-sel-wrap').hidden = all;
   const total = AUDIO_LIST_SIZE;
   const on = recKeys.size > 0;
   $('#audio-src').textContent = on ? 'Southern recordings' : 'Device voice';
   $('#audio-src').classList.toggle('on', on);
-  $('#rec-status').textContent = on
+  $('#rec-status').textContent = all
+    ? `All ${total} phrases play in a Southern (Saigon) voice. Use Speed to slow them down.`
+    : on
     ? `${recKeys.size} of ${total} phrases have Southern (Saigon) recordings. Anything else uses the device voice below.`
     : `Southern recordings are not installed yet, so the device voice is used. Once you generate them with make_audio.py, every word, drill and phrase plays in a Saigon voice.`;
 }
@@ -694,7 +699,7 @@ function speak(text, onDone) {
     if (player) player.pause();
     player = new Audio(src);
     player.preservesPitch = true;
-    player.playbackRate = parseFloat(settings.rate) < 1 ? Math.max(0.7, parseFloat(settings.rate) + 0.05) : 1;
+    player.playbackRate = { '0.6': 0.7, '0.8': 0.82, '1': 1 }[settings.rate] || 1;
     if (onDone) { player.onended = onDone; player.onerror = onDone; }
     player.play().catch(() => { if (onDone) setTimeout(onDone, 1200); });
     return true;
