@@ -1374,3 +1374,131 @@ const VI_BUILD_POOL = (() => {
   VI_DIALOGUES.forEach(d => d.lines.forEach(([, vi, en]) => { if (!/[.!?]/.test(vi.slice(0, -1))) out.push({ vi, en }); }));
   return out.filter(s => { const n = s.vi.split(/\s+/).length; return n >= 3 && n <= 9; });
 })();
+
+/* ===================== Tranche 7: the basics ===================== */
+
+/* Alphabet: [letter, letter name, phonics sound used when spelling/teaching, example, meaning] */
+const VI_ALPHABET = [
+  ['A a', 'a', 'a', 'ba', 'three'], ['Ă ă', 'á', 'á', 'ăn', 'eat'], ['Â â', 'ớ', 'ớ', 'cần', 'need'],
+  ['B b', 'bê', 'bờ', 'bạn', 'friend'], ['C c', 'xê', 'cờ', 'cá', 'fish'], ['D d', 'dê', 'dờ', 'da', 'skin'],
+  ['Đ đ', 'đê', 'đờ', 'đi', 'go'], ['E e', 'e', 'e', 'em', 'younger sibling'], ['Ê ê', 'ê', 'ê', 'đêm', 'night'],
+  ['G g', 'giê', 'gờ', 'gà', 'chicken'], ['H h', 'hát', 'hờ', 'hai', 'two'], ['I i', 'i ngắn', 'i', 'đi', 'go'],
+  ['K k', 'ca', 'cờ', 'kem', 'ice cream'], ['L l', 'e-lờ', 'lờ', 'lá', 'leaf'], ['M m', 'em-mờ', 'mờ', 'má', 'mom'],
+  ['N n', 'en-nờ', 'nờ', 'nói', 'speak'], ['O o', 'o', 'o', 'to', 'big'], ['Ô ô', 'ô', 'ô', 'cô', 'aunt; Miss'],
+  ['Ơ ơ', 'ơ', 'ơ', 'chợ', 'market'], ['P p', 'pê', 'pờ', 'pin', 'battery'], ['Q q', 'quy', 'quờ', 'quận', 'district'],
+  ['R r', 'e-rờ', 'rờ', 'rau', 'vegetables'], ['S s', 'ét-xì', 'sờ', 'sáu', 'six'], ['T t', 'tê', 'tờ', 'tám', 'eight'],
+  ['U u', 'u', 'u', 'ngủ', 'sleep'], ['Ư ư', 'ư', 'ư', 'thư', 'letter (mail)'], ['V v', 'vê', 'vờ', 'về', 'return'],
+  ['X x', 'ích-xì', 'xờ', 'xe', 'vehicle'], ['Y y', 'i dài', 'i', 'ly', 'glass']
+];
+
+/* Initial consonants: [spelling, Saigon sound (English hint), Hanoi sound if different, example, meaning, note] */
+const VI_CONSONANTS = [
+  ['b', 'b, with a slight gulp', '', 'ba', 'three', ''],
+  ['c · k · q', 'k, without a puff of air', '', 'cá', 'fish', 'k before i, e, ê, y; q always comes as qu'],
+  ['qu', 'w', 'kw', 'quá', 'very', 'Saigon: quá sounds like "wá"'],
+  ['ch', 'ch, softer, tongue flat', '', 'chợ', 'market', ''],
+  ['tr', 'tr, tongue curled back', 'same as ch', 'trà', 'tea', 'Saigon keeps tr and ch apart'],
+  ['d', 'y as in "yes"', 'z', 'da', 'skin', ''],
+  ['gi', 'y as in "yes"', 'z', 'gì', 'what', ''],
+  ['đ', 'd, with a slight gulp', '', 'đi', 'go', ''],
+  ['g · gh', 'soft, throaty g', '', 'gà', 'chicken', 'gh before i, e, ê: ghế (chair)'],
+  ['h', 'h', '', 'hai', 'two', ''],
+  ['kh', 'throaty kh, like German "Bach"', '', 'khách', 'guest', ''],
+  ['l', 'l', '', 'lá', 'leaf', ''],
+  ['m', 'm', '', 'mua', 'buy', ''],
+  ['n', 'n', '', 'nói', 'speak', ''],
+  ['ng · ngh', 'ng as in "sing", at the start', '', 'ngủ', 'sleep', 'ngh before i, e, ê: nghe (listen)'],
+  ['nh', 'ny, like Spanish ñ', '', 'nhà', 'house', ''],
+  ['ph', 'f', '', 'phở', 'phở', ''],
+  ['r', 'English-style r', 'z', 'rau', 'vegetables', 'Many Southerners say a light r or g-like sound'],
+  ['s', 's (often like sh)', 's', 'sáu', 'six', ''],
+  ['x', 's', '', 'xe', 'vehicle', 'In casual Saigon speech s and x often sound the same'],
+  ['t', 't, without a puff of air', '', 'tám', 'eight', ''],
+  ['th', 't with a puff of air', '', 'thư', 'letter (mail)', ''],
+  ['v', 'y (casual) or v', 'v', 'về', 'return', 'Saigon: về often sounds like "yề"']
+];
+
+/* Final sounds: [spelling, Saigon sound, example, meaning] */
+const VI_FINALS = [
+  ['-m', 'm', 'cơm', 'rice'], ['-p', 'p, not released', 'đẹp', 'beautiful'],
+  ['-n', 'ng after most vowels', 'bạn', 'friend'], ['-ng', 'ng', 'sông', 'river'],
+  ['-nh', 'n', 'anh', 'older brother'], ['-t', 'k, not released', 'tốt', 'good'],
+  ['-c', 'k, not released', 'học', 'study'], ['-ch', 't, not released', 'sạch', 'clean'],
+  ['-i · -y', 'ee glide', 'hai', 'two'], ['-o · -u', 'oo glide', 'sau', 'after']
+];
+
+/* Vowels: [spelling, English hint, example, meaning] */
+const VI_VOWELS = [
+  ['a', 'long "a" as in "father"', 'ba', 'three'],
+  ['ă', 'short, clipped "a"', 'ăn', 'eat'],
+  ['â', 'short "uh" as in "but"', 'cần', 'need'],
+  ['e', '"e" as in "bed", mouth open', 'em', 'younger sibling'],
+  ['ê', '"ay" as in "say", no glide', 'đêm', 'night'],
+  ['i · y', '"ee" as in "see"', 'đi', 'go'],
+  ['o', '"aw" as in "law"', 'to', 'big'],
+  ['ô', '"o" as in "go", no glide', 'cô', 'aunt; Miss'],
+  ['ơ', 'long "uh", like "er" without the r', 'ơi', 'hey!'],
+  ['u', '"oo" as in "food"', 'ngủ', 'sleep'],
+  ['ư', '"oo" with lips spread in a smile', 'thư', 'letter (mail)']
+];
+const VI_DIPHTHONGS = [
+  ['ia · iê', '"ee" sliding to "uh"', 'bia', 'beer'], ['ua · uô', '"oo" sliding to "uh"', 'mua', 'buy'],
+  ['ưa · ươ', '"ư" sliding to "uh"', 'mưa', 'rain'], ['ai', '"eye"', 'ai', 'who'],
+  ['ao', '"ow" as in "how", long', 'cao', 'tall'], ['au', 'short "ow"', 'sau', 'after'],
+  ['ay', 'short "eye"', 'tay', 'hand'], ['âu', '"oh", short', 'đâu', 'where'],
+  ['ây', '"ay" as in "day", short', 'đây', 'here'], ['oi', '"oy" as in "boy"', 'nói', 'speak'],
+  ['ôi', '"o" + "ee"', 'tôi', 'I'], ['ơi', '"uh" + "ee"', 'ơi', 'hey!'],
+  ['ui', '"oo-ee"', 'vui', 'happy'], ['eo', '"e" + "oo"', 'kẹo', 'candy'],
+  ['oa', '"wa"', 'hoa', 'flower'], ['uy', '"wee"', 'thủy', 'water (Sino)']
+];
+
+/* Numbers reference */
+const VI_COUNT = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 14, 15, 20, 21, 24, 25, 30, 55, 100, 101, 1000, 10000, 100000, 1000000]
+  .map(n => ({ n, vi: viNum(n) }));
+const VI_ORDINALS = [['1st', 'thứ nhất'], ['2nd', 'thứ hai'], ['3rd', 'thứ ba'], ['4th', 'thứ tư'], ['5th', 'thứ năm'], ['10th', 'thứ mười']];
+
+/* Calendar */
+const VI_WEEKDAYS = [['Monday', 'thứ hai', 'T2'], ['Tuesday', 'thứ ba', 'T3'], ['Wednesday', 'thứ tư', 'T4'], ['Thursday', 'thứ năm', 'T5'],
+  ['Friday', 'thứ sáu', 'T6'], ['Saturday', 'thứ bảy', 'T7'], ['Sunday', 'chủ nhật', 'CN']];
+const VI_MONTHS = ['tháng một', 'tháng hai', 'tháng ba', 'tháng tư', 'tháng năm', 'tháng sáu', 'tháng bảy', 'tháng tám', 'tháng chín', 'tháng mười', 'tháng mười một', 'tháng mười hai'];
+const VI_MONTH_EN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const VI_TIME_WORDS = [['day', 'ngày'], ['week', 'tuần'], ['month', 'tháng'], ['year', 'năm'], ['today', 'hôm nay'], ['yesterday', 'hôm qua'],
+  ['tomorrow', 'ngày mai'], ['solar calendar', 'dương lịch'], ['lunar calendar', 'âm lịch'], ['birthday', 'sinh nhật'],
+  ['spring', 'mùa xuân'], ['summer', 'mùa hè'], ['autumn', 'mùa thu'], ['winter', 'mùa đông'], ['rainy season', 'mùa mưa'], ['dry season', 'mùa khô']];
+const VI_LUNAR_DAYS = [['1st of the lunar month', 'mùng một'], ['10th of the lunar month', 'mùng mười'], ['15th (full moon)', 'rằm'], ['Lunar New Year', 'Tết']];
+const VI_ZODIAC = [
+  ['子', 'Tý', 'con chuột', 'rat', 2020], ['丑', 'Sửu', 'con trâu', 'buffalo', 2021], ['寅', 'Dần', 'con cọp', 'tiger', 2022],
+  ['卯', 'Mão', 'con mèo', 'cat (not rabbit!)', 2023], ['辰', 'Thìn', 'con rồng', 'dragon', 2024], ['巳', 'Tỵ', 'con rắn', 'snake', 2025],
+  ['午', 'Ngọ', 'con ngựa', 'horse', 2026], ['未', 'Mùi', 'con dê', 'goat', 2027], ['申', 'Thân', 'con khỉ', 'monkey', 2028],
+  ['酉', 'Dậu', 'con gà', 'rooster', 2029], ['戌', 'Tuất', 'con chó', 'dog', 2030], ['亥', 'Hợi', 'con heo', 'pig', 2031]
+];
+const VI_YEARS = [1990, 2000, 2010, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
+
+/* Date reader: built from short recorded pieces so any date can be spoken */
+function viDatePieces(d) {
+  const wd = (d.getDay() + 6) % 7;   // Monday = 0
+  return ['hôm nay là ' + VI_WEEKDAYS[wd][1], 'ngày ' + viNum(d.getDate()), VI_MONTHS[d.getMonth()], 'năm ' + viNum(d.getFullYear())];
+}
+function viDateText(d) {
+  const wd = (d.getDay() + 6) % 7;
+  return `${VI_WEEKDAYS[wd][1]}, ngày ${viNum(d.getDate())} ${VI_MONTHS[d.getMonth()]} năm ${viNum(d.getFullYear())}`;
+}
+const VI_BASICS_PHRASES = (() => {
+  const s = new Set();
+  VI_ALPHABET.forEach(a => { s.add(a[1]); s.add(a[2]); s.add(a[3]); });
+  VI_CONSONANTS.forEach(c => { s.add(c[3]); });
+  ['ghế', 'nghe'].forEach(w => s.add(w));
+  VI_FINALS.forEach(f => s.add(f[2]));
+  VI_VOWELS.forEach(v => s.add(v[2]));
+  VI_DIPHTHONGS.forEach(v => s.add(v[2]));
+  VI_COUNT.forEach(c => s.add(c.vi));
+  VI_ORDINALS.forEach(o => s.add(o[1]));
+  VI_WEEKDAYS.forEach(w => { s.add(w[1]); s.add('hôm nay là ' + w[1]); });
+  VI_MONTHS.forEach(m => s.add(m));
+  VI_TIME_WORDS.forEach(t => s.add(t[1]));
+  VI_LUNAR_DAYS.forEach(t => s.add(t[1]));
+  VI_ZODIAC.forEach(z => { s.add('năm ' + z[1]); s.add(z[2]); });
+  VI_YEARS.forEach(y => { s.add(viNum(y)); s.add('năm ' + viNum(y)); });
+  for (let d = 1; d <= 31; d++) s.add('ngày ' + viNum(d));
+  return [...s];
+})();

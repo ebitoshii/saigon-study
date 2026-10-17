@@ -297,6 +297,40 @@ details summary { cursor: pointer; font-weight: 600; }
 .nu-res .big { font-size: 1.4rem; font-variant-numeric: tabular-nums; font-weight: 600; }
 .nu-rules { display: grid; gap: 6px; margin-top: 10px; font-size: .9rem; }
 
+/* Sounds & basics */
+.sgroup { display: grid; gap: 18px; }
+.abc { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+.abc .tile { border: 1px solid var(--line); border-radius: var(--r); padding: 10px; display: grid; gap: 4px; background: var(--surface); }
+.abc .ltr { font-family: var(--f-display); font-size: 1.8rem; line-height: 1; }
+.abc .tile button { border: 0; background: none; padding: 2px 0; text-align: left; font-size: .85rem; color: var(--ink); display: flex; gap: 6px; align-items: baseline; }
+.abc .tile button:hover { color: var(--jade); }
+.abc .tile button small { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; min-width: 3.6em; }
+.snd-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 22px; }
+.snd { display: grid; grid-template-columns: 4.6em minmax(0, 1fr) auto; gap: 2px 12px; align-items: center; padding: 9px 0; border-top: 1px solid var(--line); }
+.snd .sp { font-family: var(--f-display); font-size: 1.25rem; font-weight: 600; grid-row: span 2; }
+.snd .how { font-size: .9rem; }
+.snd .how em { font-style: normal; font-size: .78rem; color: var(--lacquer); margin-left: 6px; }
+.snd .sx { font-size: .84rem; color: var(--muted); grid-column: 2; }
+.snd .sx .vi { color: var(--ink); font-size: 1rem; }
+.snd .speak { grid-row: span 2; grid-column: 3; grid-row-start: 1; }
+.snd .nt { grid-column: 2 / -1; font-size: .78rem; color: var(--muted); }
+.num-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.kv { display: grid; }
+.kv button { display: grid; grid-template-columns: minmax(3.5em, auto) minmax(0, 1fr); gap: 10px; align-items: baseline; text-align: left; border: 0; border-top: 1px solid var(--line); background: none; padding: 6px 0; }
+.kv button:hover .vi { color: var(--jade); }
+.kv .k { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; }
+.kv .vi { font-size: 1.02rem; }
+#dt-in { font: inherit; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); }
+.dt-out { display: grid; gap: 4px; }
+.dt-num { font-size: 1.5rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+.dt-out .vi { font-size: 1.25rem; }
+.zod { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+.zod button { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 10px; display: grid; gap: 2px; text-align: left; }
+.zod button.now { border-color: var(--ochre); background: var(--ochre-soft); }
+.zod .kj { font-family: var(--f-kanji); font-size: 1.6rem; font-weight: 600; line-height: 1.1; }
+.zod .vi { font-size: 1.05rem; }
+.zod small { color: var(--muted); font-size: .78rem; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -324,7 +358,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 .src-pill.on { background: var(--jade); color: var(--surface); }
 
 @media (max-width: 720px) {
-  .hero, .modules, .bridge-list, .rules, .cl-ref, .pat-list, .prog { grid-template-columns: 1fr; }
+  .hero, .modules, .bridge-list, .rules, .cl-ref, .pat-list, .prog, .snd-list, .num-cols { grid-template-columns: 1fr; }
   .prog-sets { grid-row: auto; }
   .pg-row, .acc { grid-template-columns: 7.5em minmax(0, 1fr) 4.6em; }
   .t-opts.grid5 { grid-template-columns: repeat(3, 1fr); }
@@ -357,7 +391,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
     <div class="brand"><span class="shutter" aria-hidden="true"><i></i><i></i><i></i><i></i></span>Sài Gòn Study <small>tiếng Việt · giọng Nam</small></div>
     <nav class="tabs" aria-label="Sections">
       <button data-go="home"><svg class="ic" viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg>Home</button>
-      <button data-go="tones"><svg class="ic" viewBox="0 0 24 24"><path d="M3 14c3 0 4-8 7-8s3 12 6 12 3-6 5-6"/></svg>Tones</button>
+      <button data-go="tones"><svg class="ic" viewBox="0 0 24 24"><path d="M3 14c3 0 4-8 7-8s3 12 6 12 3-6 5-6"/></svg>Sounds</button>
       <button data-go="cards"><svg class="ic" viewBox="0 0 24 24"><rect x="4" y="6" width="13" height="14" rx="2"/><path d="M8 3h10a2 2 0 0 1 2 2v12"/></svg>Words</button>
       <button data-go="grammar"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/><path d="M18 14l2 2-2 2"/></svg>Grammar</button>
       <button data-go="usage"><svg class="ic" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.2-5.5 5-5.5s5 2.5 5 5.5M13.5 20c.3-2.6 1.8-4.4 3.5-4.4s3.2 1.8 3.5 4.4"/></svg>Usage</button>
@@ -371,7 +405,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 6 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 7 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -388,7 +422,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       </div>
     </div>
     <div class="modules">
-      <button class="module" data-go="tones"><span class="big vi" id="mod-tone">má</span><h3>Tone trainer</h3><p>Five Southern tones, with pitch drawings, Saigon sound rules and a listening drill.</p></button>
+      <button class="module" data-go="tones"><span class="big vi" id="mod-tone">a ă â</span><h3>Sounds &amp; basics</h3><p>Alphabet, consonants, vowels, the five tones, numbers and dates, all in Saigon pronunciation.</p></button>
       <button class="module" data-go="cards"><span class="big vi">cám ơn</span><h3>Core words</h3><p><span id="mod-count">344</span> everyday Southern words with spaced repetition.</p></button>
       <button class="module" data-go="grammar"><span class="big vi">ăn chưa?</span><h3>Grammar &amp; dialogues</h3><p>18 core patterns, five Saigon conversations and a sentence builder.</p></button>
       <button class="module" data-go="usage"><span class="big vi">Dạ, anh ơi</span><h3>Pronouns &amp; classifiers</h3><p>Who is anh, chị, cô, chú? Plus một tô phở, một ly cà phê.</p></button>
@@ -427,6 +461,83 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
 
   <!-- TONES -->
   <section class="view" id="v-tones" hidden>
+    <div class="panel" style="display:grid;gap:10px">
+      <div class="row" style="justify-content:space-between">
+        <div style="display:grid;gap:4px"><span class="eyebrow">Phát âm · pronunciation</span><h2>Sounds &amp; basics</h2></div>
+        <div class="subtabs" role="group" aria-label="Sounds section" id="snd-tabs">
+          <button class="chip" data-s="alpha" aria-pressed="true">Alphabet</button>
+          <button class="chip" data-s="cons" aria-pressed="false">Consonants</button>
+          <button class="chip" data-s="vow" aria-pressed="false">Vowels</button>
+          <button class="chip" data-s="tones" aria-pressed="false">Tones</button>
+          <button class="chip" data-s="nums" aria-pressed="false">Numbers &amp; dates</button>
+        </div>
+      </div>
+      <p class="lede" id="snd-lede"></p>
+    </div>
+
+    <div class="sgroup" id="s-alpha">
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>The 29 letters</h3>
+        <p class="note-line">Each letter has a <b>name</b> (used when spelling out loud: "bê, a, huyền: bà") and a <b>sound</b> taught in Vietnamese schools ("bờ"). Tap either to hear it.</p>
+        <div class="abc" id="abc"></div>
+        <p class="note-line">Vietnamese has no f, j, w or z; they appear only in foreign words. The tone marks sit on top of these letters: see Tones.</p>
+      </div>
+    </div>
+
+    <div class="sgroup" id="s-cons" hidden>
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>Consonants at the start of a word</h3>
+        <p class="note-line">Where Saigon and Hanoi differ, the Hanoi sound is shown so you can recognise both. You are learning the Saigon one.</p>
+        <div class="snd-list" id="cons"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>Sounds at the end of a word</h3>
+        <p class="note-line">Final consonants are never released: the mouth closes, but no puff of air comes out. Saigon also merges several endings.</p>
+        <div class="snd-list" id="finals"></div>
+      </div>
+    </div>
+
+    <div class="sgroup" id="s-vow" hidden>
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>The 12 vowels</h3>
+        <p class="note-line">ă and â are short versions of a and ơ. ư has no English match: say "oo" while smiling.</p>
+        <div class="snd-list" id="vowels"></div>
+      </div>
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>Vowel pairs</h3>
+        <p class="note-line">ia/iê, ua/uô and ưa/ươ are the same sound; the spelling changes when a consonant follows (bia, tiền).</p>
+        <div class="snd-list" id="diph"></div>
+      </div>
+    </div>
+
+    <div class="sgroup" id="s-nums" hidden>
+      <div class="panel" style="display:grid;gap:12px">
+        <div class="row" style="justify-content:space-between"><h3>Read any date</h3><button class="btn primary" id="dt-play">Play</button></div>
+        <div class="row"><input type="date" id="dt-in" aria-label="Date"><span class="note-line">Vietnamese writes dates day / month / year.</span></div>
+        <div class="dt-out"><span class="dt-num" id="dt-num"></span><span class="vi" id="dt-vi"></span></div>
+      </div>
+      <div class="num-cols">
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Counting</h3><div class="kv" id="count"></div>
+          <p class="note-line">See Usage → Catch the number to practise prices, times and phone numbers.</p></div>
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Days of the week</h3><div class="kv" id="wdays"></div>
+          <p class="note-line">Weekdays are numbered: thứ hai ("second") is Monday. Signs abbreviate them T2 to T7, and CN for Sunday.</p>
+          <h3 style="margin-top:6px">Order</h3><div class="kv" id="ords"></div></div>
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Months</h3><div class="kv" id="months"></div>
+          <p class="note-line">April is <b>tháng tư</b>, never tháng bốn. In the lunar calendar, month 1 is tháng giêng and month 12 is tháng chạp.</p></div>
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Years</h3><div class="kv" id="years"></div>
+          <p class="note-line">Say "năm" before a year: năm hai ngàn không trăm hai mươi sáu. Older years are often shortened: năm chín mươi = 1990.</p></div>
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Calendar words</h3><div class="kv" id="twords"></div></div>
+        <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Lunar calendar</h3><div class="kv" id="lunar"></div>
+          <p class="note-line">The first ten days of a lunar month use mùng: mùng một Tết is the first day of Lunar New Year.</p></div>
+      </div>
+      <div class="panel" style="display:grid;gap:12px">
+        <h3>Zodiac years · 12 con giáp</h3>
+        <p class="note-line">The same 12 kanji as the Japanese 干支, read in Sino-Vietnamese. Vietnam has the cat where Japan has the rabbit. 2026 is năm Ngọ, the year of the horse.</p>
+        <div class="zod" id="zod"></div>
+      </div>
+    </div>
+
+    <div class="sgroup" id="s-tones" hidden>
     <div class="panel" style="display:grid;gap:12px">
       <span class="eyebrow">Thanh điệu · the tones</span>
       <h2>Five tones in the South, not six</h2>
@@ -454,6 +565,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <h3>How Southern speech differs from the spelling</h3>
       <p class="lede">These rules show up as tags on your flashcards whenever a word uses them.</p>
       <div class="rules" id="rules"></div>
+    </div>
     </div>
   </section>
 
@@ -1520,8 +1632,65 @@ function drawResults() {
   $('#t-again').addEventListener('click', startTest);
 }
 
+/* ---------- SOUNDS & BASICS ---------- */
+function speakSeq(parts) { let i = 0; const next = () => { if (i < parts.length) speak(parts[i++], () => setTimeout(next, 120)); }; next(); }
+const SND_LEDE = {
+  alpha: 'Vietnamese uses the Latin alphabet with extra letters and marks. Once you know the sounds, spelling is almost perfectly regular.',
+  cons: 'Most consonants are close to English. The ones to watch are marked with how Saigon says them.',
+  vow: 'Vowels carry the tone, so getting them clean matters. Tap any example to hear Adam.',
+  tones: 'Saigon speech merges hỏi and ngã into one dipping-rising tone. Pitch is drawn on a 1–5 scale, low to high.',
+  nums: 'Numbers, days, months, years and the lunar calendar, with a reader for any date.'
+};
+function setSnd(v) {
+  $$('#snd-tabs .chip').forEach(c => c.setAttribute('aria-pressed', c.dataset.s === v));
+  ['alpha', 'cons', 'vow', 'tones', 'nums'].forEach(k => { $('#s-' + k).hidden = k !== v; });
+  $('#snd-lede').textContent = SND_LEDE[v]; store.set('snd', v);
+}
+const kvBtn = (k, vi, say) => `<button data-say="${esc(say || vi)}"><span class="k">${esc(k)}</span><span class="vi">${colorize(vi)}</span></button>`;
+function renderDate() {
+  let d = $('#dt-in').valueAsDate; if (!d) return;
+  d = new Date(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+  $('#dt-num').textContent = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  $('#dt-vi').innerHTML = colorize(viDateText(d));
+  return d;
+}
+function initBasics() {
+  $('#abc').innerHTML = VI_ALPHABET.map(([l, name, snd, ex, en]) => `<div class="tile"><div class="ltr">${esc(l)}</div>
+    <button data-say="${esc(name)}"><small>name</small><span class="vi">${esc(name)}</span></button>
+    <button data-say="${esc(snd)}"><small>sound</small><span class="vi">${esc(snd)}</span></button>
+    <button data-say="${esc(ex)}" title="${esc(en)}"><small>e.g.</small><span class="vi">${colorize(ex)}</span></button></div>`).join('');
+  $('#cons').innerHTML = VI_CONSONANTS.map(([sp, sg, hn, ex, en, nt]) => `<div class="snd"><span class="sp">${esc(sp)}</span>
+    <span class="how">${esc(sg)}${hn ? `<em>Hanoi: ${esc(hn)}</em>` : ''}</span>${sayBtn(ex)}
+    <span class="sx"><span class="vi">${colorize(ex)}</span> · ${esc(en)}</span>${nt ? `<span class="nt">${esc(nt)}</span>` : ''}</div>`).join('');
+  $('#finals').innerHTML = VI_FINALS.map(([sp, sg, ex, en]) => `<div class="snd"><span class="sp">${esc(sp)}</span>
+    <span class="how">${esc(sg)}</span>${sayBtn(ex)}<span class="sx"><span class="vi">${colorize(ex)}</span> · ${esc(en)}</span></div>`).join('');
+  const vrow = ([sp, hint, ex, en]) => `<div class="snd"><span class="sp">${esc(sp)}</span><span class="how">${esc(hint)}</span>${sayBtn(ex)}
+    <span class="sx"><span class="vi">${colorize(ex)}</span> · ${esc(en)}</span></div>`;
+  $('#vowels').innerHTML = VI_VOWELS.map(vrow).join('');
+  $('#diph').innerHTML = VI_DIPHTHONGS.map(vrow).join('');
+  $('#count').innerHTML = VI_COUNT.map(c => kvBtn(c.n.toLocaleString('de-DE'), c.vi)).join('');
+  $('#wdays').innerHTML = VI_WEEKDAYS.map(([en, vi, ab]) => kvBtn(ab + ' · ' + en.slice(0, 3), vi)).join('');
+  $('#ords').innerHTML = VI_ORDINALS.map(([en, vi]) => kvBtn(en, vi)).join('');
+  $('#months').innerHTML = VI_MONTHS.map((m, i) => kvBtn(VI_MONTH_EN[i].slice(0, 3), m)).join('');
+  $('#years').innerHTML = [1990, 2000, 2024, 2025, 2026, 2027, 2030].map(y => kvBtn(String(y), 'năm ' + viNum(y))).join('');
+  $('#twords').innerHTML = VI_TIME_WORDS.map(([en, vi]) => kvBtn(en, vi)).join('');
+  $('#lunar').innerHTML = VI_LUNAR_DAYS.map(([en, vi]) => kvBtn(en, vi)).join('');
+  const thisYear = new Date().getFullYear();
+  $('#zod').innerHTML = VI_ZODIAC.map(([kj, vi, animal, en, y]) => {
+    const now = (thisYear - y) % 12 === 0;
+    return `<button data-say="${esc('năm ' + vi)}" class="${now ? 'now' : ''}"><span class="kj">${kj}</span>
+      <span class="vi">${colorize('năm ' + vi)}</span><small>${esc(animal)} · ${esc(en)}</small><small>${y}, ${y + 12}…${now ? ' · this year' : ''}</small></button>`;
+  }).join('');
+  try { $('#dt-in').valueAsDate = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())); } catch (e) {}
+  renderDate();
+  $('#dt-in').addEventListener('change', renderDate);
+  $('#dt-play').addEventListener('click', () => { const d = renderDate(); if (d) speakSeq(viDatePieces(d)); });
+  $$('#snd-tabs .chip').forEach(c => c.addEventListener('click', () => setSnd(c.dataset.s)));
+  setSnd(store.get('snd', 'alpha'));
+}
+
 /* ---------- boot ---------- */
-updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage(); initGrammar();
+updateAudioStatus(); updateDrillHelp(); nextDrill(); renderBridge(); nextBq(); initUsage(); initGrammar(); initBasics();
 const hash = (location.hash || '').slice(1);
 const startView = VIEWS.includes(hash) ? hash : store.get('view', 'home');
 go(startView === 'test' ? 'home' : startView);
