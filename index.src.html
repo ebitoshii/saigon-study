@@ -351,6 +351,13 @@ details summary { cursor: pointer; font-weight: 600; }
 .wl .en small { display: block; font-size: .78rem; color: var(--muted); }
 #browse-cat { flex: 0 1 220px; }
 
+.tn-names { display: grid; gap: 8px; border-top: 1px solid var(--line); padding-top: 14px; }
+.tn-name-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.tn-name { border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; display: grid; gap: 4px; background: var(--surface); }
+.tn-name button { border: 0; background: none; padding: 2px 0; text-align: left; display: flex; gap: 8px; align-items: center; font-family: var(--f-display); font-size: 1.1rem; }
+.tn-name button svg { width: 14px; height: 14px; fill: var(--jade); flex: none; }
+.tn-name small { color: var(--muted); font-size: .78rem; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -382,6 +389,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   .prog-sets { grid-row: auto; }
   .pg-row, .acc { grid-template-columns: 7.5em minmax(0, 1fr) 4.6em; }
   .t-opts.grid5 { grid-template-columns: repeat(3, 1fr); }
+  .tn-name-grid { grid-template-columns: repeat(2, 1fr); }
   .dl { grid-template-columns: minmax(0, 1fr) auto; }
   .dl .who { grid-row: auto; grid-column: 1 / -1; }
   .dl small { grid-column: 1; }
@@ -579,6 +587,11 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
       <h2>Five tones in the South, not six</h2>
       <p class="lede">Saigon speech merges hỏi and ngã into one dipping-rising tone. Pitch is drawn on a 1–5 scale, low to high. Tap a word to hear it.</p>
       <div class="tone-grid" id="tone-grid"></div>
+      <div class="tn-names">
+        <h3>Saying the tone names</h3>
+        <p class="note-line">Each tone has a name (thanh…), and each mark has a name used when spelling a word aloud: "b, a, dấu huyền: bà".</p>
+        <div class="tn-name-grid" id="tone-names"></div>
+      </div>
     </div>
     <div class="panel" style="display:grid;gap:12px">
       <div class="row" style="justify-content:space-between">
@@ -1040,6 +1053,10 @@ $('#tone-grid').innerHTML = VI_TONES.map(t => {
     <div class="ex"><span class="vi">${esc(t.example)}</span>${sayBtn(first)}</div>
     <p>${esc(t.desc)}</p></div>`;
 }).join('');
+$('#tone-names').innerHTML = VI_TONE_NAMES.map(([cls, name, mark, en]) => `<div class="tn-name tn-${cls}">
+  <button data-say="${esc(name)}">${SPEAK_ICON}<span>${colorize(name)}</span></button>
+  <button data-say="${esc(mark)}">${SPEAK_ICON}<span>${colorize(mark)}</span></button>
+  <small>${esc(en)}</small></div>`).join('');
 $('#rules').innerHTML = VI_SOUND_RULES.map(r => `<div class="rule"><b>${esc(r.label)}</b><span>${esc(r.text)}</span></div>`).join('');
 $('#dr-play').innerHTML = SPEAK_ICON;
 

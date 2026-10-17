@@ -1891,3 +1891,13 @@ const VI_CANCHI_PHRASES = (() => {
   for (let y = 1940; y <= 2040; y++) { s.add('năm ' + viNum(y)); s.add('năm ' + viCanChi(y).name); }
   return [...s];
 })();
+
+/* Tone names: [tone class, tone name, mark name used when spelling, English] */
+const VI_TONE_NAMES = [
+  ['ngang', 'thanh ngang', 'không dấu', 'level tone · no mark'],
+  ['huyen', 'thanh huyền', 'dấu huyền', 'falling tone · grave accent'],
+  ['sac', 'thanh sắc', 'dấu sắc', 'rising tone · acute accent'],
+  ['hoinga', 'thanh hỏi', 'dấu hỏi', 'dipping tone · hook'],
+  ['hoinga', 'thanh ngã', 'dấu ngã', 'dipping tone (South) · tilde'],
+  ['nang', 'thanh nặng', 'dấu nặng', 'low tone · dot below']
+];
