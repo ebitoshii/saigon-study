@@ -21,8 +21,12 @@ const VI_CATEGORIES = {
   w: 'Work & jobs',
   l: 'Free time',
   x: 'Nature & animals',
-  z: 'Southern slang'
+  z: 'Southern slang',
+  k: 'Everyday phrases',
+  o: 'Colours',
+  r: 'Romance & intimacy (18+)'
 };
+const VI_PRIVATE_CATS = ['r'];
 
 const VI_VOCAB_RAW = `
 xin chào|hello (polite)|g||
@@ -874,7 +878,238 @@ mắc cười|funny|z|buồn cười|
 mắc ói|nauseating|z|buồn nôn|
 `;
 
-const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim()).split('\n').map((line, i) => {
+/* Tranche 8 additions, appended after T4 so existing ids keep their progress */
+const VI_VOCAB_RAW_T8 = `
+ở|live; stay|v||Anh ở đâu? = Where do you live?
+chết|die|v||
+sinh|be born|v||
+lớn lên|grow up|v||
+làm việc|work|v||
+nghỉ|rest; take time off|v||
+thức|stay awake|v||
+nằm|lie down|v||
+bắt|catch|v||
+ném|throw|v||
+kéo|pull|v||
+đẩy|push|v||
+bật|turn on|v||South also says mở
+tắt|turn off|v||
+rửa|wash|v||
+lau|wipe|v||
+cắt|cut|v||
+thắng|win|v||
+thua|lose (a game)|v||
+chuẩn bị|prepare|v||
+đặt|order; book|v||
+giao|deliver|v||Giao hàng = delivery
+nhận|receive|v||
+cho phép|allow|v||
+cấm|forbid|v||Cấm hút thuốc = no smoking
+đồng ý|agree|v||
+từ chối|refuse|v||
+khen|praise|v||
+chê|criticise|v||
+cãi|argue|v||
+tha thứ|forgive|v||
+chúc|wish (someone well)|v||
+hẹn|arrange to meet|v||
+quen|know (a person); be used to|v||In the South also "to date"
+nhận ra|recognise|v||
+cố gắng|try hard|v||
+ăn mừng|celebrate|v||
+bay|fly|v||
+đậu xe|park (a car)|v|đỗ xe|
+đổ xăng|fill up with petrol|v||
+tải|download|v||
+nhắn tin|text; message|v||
+gọi điện|make a phone call|v||
+chụp|take (a photo)|v||
+lạ|strange; unfamiliar|j||
+tiện|convenient|j||
+thúi|smelly|j|thối|
+đúng giờ|on time|j||
+tuyệt|great|j||
+hay|interesting; good (films, books)|j||Also means "or" in questions
+sướng|blissful; feels great|j||
+khổ|miserable; hard (life)|j||
+lịch sự|polite|j||
+thân thiện|friendly|j||
+nghiêm túc|serious|j||
+bình tĩnh|calm|j||
+lo lắng|anxious|e||
+tự hào|proud|e||
+xấu hổ|ashamed|e||
+màu|colour|o||Màu gì? = What colour?
+đỏ|red|o||
+xanh|blue; green|o||Xanh dương = blue, xanh lá = green
+xanh dương|blue|o||
+xanh lá|green|o||
+vàng|yellow; gold|o||
+trắng|white|o||
+đen|black|o||
+hồng|pink|o||
+tím|purple|o||
+màu cam|orange (colour)|o||
+nâu|brown|o||
+xám|grey|o||
+máy tính|computer|h||
+tin nhắn|message|h||
+hình|photo|h|ảnh|
+tiền lẻ|small change|s||
+bóp|wallet|s|ví|
+túi|bag|s||
+ba lô|backpack|s||
+mắt kính|glasses|s|kính|
+đồng hồ|watch; clock|s||
+xe hơi|car|d|ô tô|
+xe đạp|bicycle|d||
+ghe|small boat|d|thuyền|
+tàu|ship; train|d||
+chùa|pagoda|c||
+nhà thờ|church|c||
+bãi biển|beach|c||
+hồ bơi|swimming pool|c|bể bơi|
+trường|school|c||
+lớp|class|w||
+bài|lesson|w||
+chữ|letter; written word|w||
+câu|sentence|w||
+nghĩa|meaning|w||
+tiếng|language; sound|w||Tiếng Việt = the Vietnamese language
+tên|name|p||Anh tên gì? = What's your name?
+tuổi|age; years old|p||
+số|number|n||Số điện thoại = phone number
+bạn thân|best friend|p||
+em bé|baby|p||
+con nít|kids|p|trẻ con|
+người lớn|adult|p||
+đàn ông|man|p||
+phụ nữ|woman|p||
+Vậy hả?|Oh really? Is that so?|k|Thế à?|
+Đúng rồi.|That's right.|k||
+Không phải.|No, that's not it.|k||
+Hay quá!|Great! How interesting!|k||
+Tiếc quá.|What a pity.|k||
+Tội nghiệp.|Poor thing.|k||
+Chúc mừng nha!|Congratulations!|k||
+Chắc vậy.|Probably. I guess so.|k||
+Tui cũng vậy.|Me too.|k|Tôi cũng thế.|
+Tùy anh.|Up to you.|k||
+Sao cũng được.|Anything's fine.|k||
+Không vấn đề gì.|No problem.|k||
+Để tui coi.|Let me see.|k|Để tôi xem.|
+Để tui nghĩ đã.|Let me think first.|k||
+Từ từ đã.|Hold on a sec.|k||
+Đi đâu đó?|Where are you off to? (casual greeting)|k||
+Ăn cơm chưa?|Have you eaten? (everyday greeting)|k||
+Dạo này sao rồi?|How have you been lately?|k|Dạo này thế nào?|
+Lâu quá không gặp!|Long time no see!|k||
+Cũng được.|It's OK. Not bad.|k||
+Mệt quá!|So tired!|k||
+Đói bụng quá.|I'm starving.|k||
+Nóng quá trời!|So hot!|k||
+Vui quá!|So much fun!|k||
+Kệ đi.|Let it go. Forget it.|k||
+Xin lỗi, tui không hiểu.|Sorry, I don't understand.|k||
+Anh nói lại được không?|Could you say that again?|k||
+Nói chậm chút được không?|Could you speak a bit slower?|k||
+Cái này tiếng Việt nói sao?|How do you say this in Vietnamese?|k|Cái này tiếng Việt nói thế nào?|
+Chữ này nghĩa là gì?|What does this word mean?|k||
+Tui đang học tiếng Việt.|I'm learning Vietnamese.|k||
+Tui nói tiếng Việt chưa giỏi.|My Vietnamese isn't good yet.|k||
+Anh nói tiếng Anh được không?|Do you speak English?|k||
+Giúp tui với!|Help me, please!|k||
+Chỉ đường giùm tui.|Could you show me the way?|k||
+Nhà vệ sinh ở đâu vậy?|Where's the toilet?|k||
+Cho tui hỏi chút.|Excuse me, may I ask something?|k||
+Có wifi không?|Is there wifi?|k||
+Tui bị lạc rồi.|I'm lost.|k||
+Tui bị mất điện thoại.|I've lost my phone.|k||
+Gọi cấp cứu!|Call an ambulance!|k||
+Tui cần bác sĩ.|I need a doctor.|k||
+Đau quá!|It hurts!|k||
+Cho tui coi thực đơn.|Can I see the menu?|k|Cho tôi xem thực đơn.|
+Món nào ngon nhất?|What's the best dish?|k||
+Không cay nha.|Not spicy, please.|k||
+Thêm đá.|More ice.|k||
+Đừng bỏ hành.|No onions, please.|k||
+Tính tiền giùm.|The bill, please.|k||
+Chúc ngon miệng!|Enjoy your meal!|k||
+Cái này bao nhiêu?|How much is this?|k||
+Có cỡ lớn hơn không?|Do you have a bigger size?|k||
+Cho tui thử được không?|Can I try it on?|k||
+Tui coi thôi.|I'm just looking.|k|Tôi chỉ xem thôi.|
+Anh làm nghề gì?|What do you do (for work)?|k||
+Anh bao nhiêu tuổi?|How old are you?|k||
+Tui tới từ Singapore.|I'm from Singapore.|k||
+Mình đi chơi nha!|Let's go out!|k||
+Hẹn gặp lại sau.|See you later.|k||
+Ngủ ngon nha.|Sleep well.|k||
+Về tới nhà chưa?|Are you home yet?|k||
+Nhắn tin cho tui nha.|Text me.|k||
+Cho tui xin số điện thoại.|Can I have your number?|k||
+Cho tui xin Zalo.|Can I have your Zalo?|k||Zalo is Vietnam's main messaging app
+Tui đồng ý.|I agree.|k||
+Tui không nghĩ vậy.|I don't think so.|k||
+Có lẽ.|Maybe.|k||
+Chắc chắn rồi.|Definitely.|k||
+Không chắc.|Not sure.|k||
+Được thôi.|Fine, OK.|k||
+Thôi, khỏi.|No thanks, no need.|k|Thôi, không cần.|
+Khỏi lo.|Don't worry about it.|k|Đừng lo.|
+Ờ…|Uh… (filler)|k||
+Thì…|Well… (filler)|k||
+Kiểu như…|Like… (filler)|k||
+Nói chung là…|Basically…|k||
+Thiệt ra…|Actually…|k|Thật ra…|
+Ủa?|Huh? Wait, what? (surprise)|k||
+Trời đất ơi!|Oh my goodness!|k||
+Ghê vậy!|Wow, seriously?|k||
+Hên quá!|Lucky!|k|May quá!|
+Xui quá!|Bad luck!|k||
+Đã quá!|So satisfying!|k||
+Thôi đi!|Come on! Stop it!|k||
+Đi nè!|Let's go!|k||
+Tới rồi nè.|Here we are.|k||
+Coi chừng!|Watch out!|k||
+anh yêu|darling (to a partner who is anh)|r||
+em yêu|darling (to a partner who is em)|r||
+cưng|sweetie|r||Southern, very common between couples
+bé|babe|r||
+Anh yêu em.|I love you (said by the anh)|r||
+Em yêu anh.|I love you (said by the em)|r||
+Anh thương em nhiều lắm.|I love you so much (warm, Southern)|r||
+Nhớ em quá.|I miss you so much.|r||
+Ôm anh đi.|Hug me.|r||
+Hôn anh đi.|Kiss me.|r||
+Cho anh ôm chút.|Let me hold you for a bit.|r||
+Em đẹp trai quá.|You're so handsome.|r||
+Anh muốn ở bên em.|I want to be with you.|r||
+quen nhau|be dating|r||Southern: Hai đứa quen nhau lâu chưa? = Have you two been dating long?
+hẹn hò|go on a date|r||
+người yêu cũ|ex|r||
+ghen|jealous|r||
+Đừng ghen nữa.|Stop being jealous.|r||
+đồng tính|gay; homosexual (neutral term)|r||Most people simply say gay
+công khai|be out; open about it|r||
+Lại đây.|Come here.|r||
+Anh muốn em.|I want you.|r||
+Nhẹ thôi.|Gently.|r||
+Mạnh hơn đi.|Harder.|r||
+Chậm lại.|Slow down.|r||
+Đừng dừng lại.|Don't stop.|r||
+Sướng quá.|That feels so good.|r||
+Thích quá.|I love that.|r||
+Được không?|Is this OK?|r||Checking in with your partner
+Em có thích không?|Do you like it?|r||
+Dừng lại.|Stop.|r||Always respected, no questions asked
+bao cao su|condom|r||Often shortened to bao
+Có bao không?|Do you have a condom?|r||
+Mình làm an toàn nha.|Let's be safe.|r||
+Anh xét nghiệm gần đây chưa?|Have you been tested recently?|r||
+`;
+
+const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim() + '\n' + VI_VOCAB_RAW_T8.trim()).split('\n').map((line, i) => {
   const [vi, en, cat, north, note] = line.split('|');
   return { id: 'w' + i, vi, en, cat, north: north || '', note: note || '' };
 });
@@ -1208,7 +1443,72 @@ const VI_GRAMMAR = [
   { id: 'part', title: 'Southern particles', formula: '… + nha / hen / ha / nè',
     text: 'End particles carry tone of voice. These are the Saigon set.',
     ex: [['Mai gặp nha.', 'See you tomorrow, OK?'], ['Đẹp quá ha!', 'So pretty, huh!'], ['Nè, cầm cái này.', 'Here, hold this.']],
-    tip: 'Hen is a warm "OK?" or "right?": Ngon hen? = Tasty, right?' }
+    tip: 'Hen is a warm "OK?" or "right?": Ngon hen? = Tasty, right?' },
+  /* Tranche 8 */
+  { id: 'bi', title: 'Things that happen to you', formula: 'bị + verb (bad) · được + verb (good)',
+    text: 'Bị marks something unwelcome happening to you, được something welcome. This is how Vietnamese does the passive.',
+    ex: [['Tui bị phạt.', 'I got fined.'], ['Em được khen.', 'I was praised.'], ['Anh bị kẹt xe hả?', 'Did you get stuck in traffic?']],
+    tip: 'Bị also goes with illness: bị cảm (have a cold), bị sốt (have a fever).' },
+  { id: 'dung', title: 'Don’t and not allowed', formula: 'đừng + verb · không được + verb',
+    text: 'Đừng tells someone not to do something. Không được means it is not allowed.',
+    ex: [['Đừng lo.', 'Don’t worry.'], ['Ở đây không được hút thuốc.', 'No smoking here.'], ['Đừng quên nha.', 'Don’t forget, OK?']],
+    tip: '' },
+  { id: 'phai', title: 'Must and should', formula: 'phải + verb · nên + verb',
+    text: 'Phải is "have to". Nên is "should", a softer suggestion.',
+    ex: [['Tui phải đi làm.', 'I have to go to work.'], ['Anh nên nghỉ ngơi.', 'You should rest.'], ['Mai em phải dậy sớm.', 'I have to get up early tomorrow.']],
+    tip: '' },
+  { id: 'sap', title: 'About to, just now', formula: 'sắp + verb · mới / vừa + verb',
+    text: 'Sắp means about to happen. Mới and vừa mean it just happened.',
+    ex: [['Máy bay sắp cất cánh.', 'The plane is about to take off.'], ['Tui mới tới.', 'I just arrived.'], ['Em vừa ăn xong.', 'I’ve just finished eating.']],
+    tip: '' },
+  { id: 'van', title: 'Still and more', formula: 'vẫn / còn + verb · … + nữa',
+    text: 'Vẫn and còn mean "still". Nữa at the end means "more" or "again".',
+    ex: [['Anh vẫn ở Sài Gòn hả?', 'Are you still in Saigon?'], ['Còn phòng không?', 'Are there rooms left?'], ['Cho tui thêm một ly nữa.', 'One more glass, please.']],
+    tip: '' },
+  { id: 'het', title: 'All gone', formula: 'hết + noun · hết rồi',
+    text: 'Hết means used up or finished. Hết rồi is what you hear when something is sold out.',
+    ex: [['Hết rồi anh ơi.', 'Sorry, it’s all gone.'], ['Tui hết tiền rồi.', 'I’m out of money.'], ['Hết giờ rồi.', 'Time’s up.']],
+    tip: '' },
+  { id: 'cang', title: 'The more… the more', formula: 'càng… càng…',
+    text: 'Put càng before both halves.',
+    ex: [['Càng học càng thích.', 'The more I study, the more I like it.'], ['Càng sớm càng tốt.', 'The sooner the better.']],
+    tip: '' },
+  { id: 'vua', title: 'Both… and…', formula: 'vừa… vừa…',
+    text: 'Vừa before each of two qualities or actions happening together.',
+    ex: [['Quán này vừa ngon vừa rẻ.', 'This place is both tasty and cheap.'], ['Anh ấy vừa ăn vừa nói.', 'He talks while he eats.']],
+    tip: '' },
+  { id: 'khi', title: 'Before, after, when', formula: 'trước khi · sau khi · khi / lúc',
+    text: 'These go at the start of the time clause, like in English.',
+    ex: [['Rửa tay trước khi ăn.', 'Wash your hands before eating.'], ['Sau khi ăn, mình đi dạo nha.', 'After eating, let’s go for a walk.'], ['Khi nào anh rảnh?', 'When are you free?']],
+    tip: 'Khi nào at the start asks about the future; at the end it asks about the past: Anh tới khi nào? = When did you arrive?' },
+  { id: 'chac', title: 'Probably and it seems', formula: 'chắc · hình như',
+    text: 'Chắc is "probably". Hình như is "it seems" or "I think".',
+    ex: [['Chắc trời sắp mưa.', 'It’s probably about to rain.'], ['Hình như anh mệt.', 'You seem tired.']],
+    tip: '' },
+  { id: 'thu', title: 'Try and see', formula: 'verb + thử (xem)',
+    text: 'Thử after a verb means "try doing it". Adding xem makes it "and see".',
+    ex: [['Anh ăn thử xem.', 'Try it and see.'], ['Em mặc thử được không?', 'Can I try it on?']],
+    tip: '' },
+  { id: 'gium', title: 'Do it for me', formula: 'verb + giùm / dùm (+ person)',
+    text: 'Giùm (or dùm) is the Southern way to ask someone to do something for you.',
+    ex: [['Chụp hình giùm tui với.', 'Could you take a photo for me?'], ['Mở cửa dùm em.', 'Open the door for me, please.']],
+    tip: 'Hanoi uses hộ or giúp instead.' },
+  { id: 'ma', title: 'But, and emphasis', formula: '… mà …',
+    text: 'Mà links two contrasting ideas. At the end of a sentence it adds "I told you" or "you know".',
+    ex: [['Đẹp mà mắc.', 'Pretty, but expensive.'], ['Tui nói rồi mà!', 'I already told you!']],
+    tip: '' },
+  { id: 'thi', title: 'Setting the topic', formula: 'topic + thì + comment',
+    text: 'Thì marks what you are talking about, a bit like "as for…".',
+    ex: [['Cà phê thì quán này ngon nhất.', 'As for coffee, this place is the best.'], ['Nếu mưa thì mình ở nhà.', 'If it rains, we’ll stay home.']],
+    tip: '' },
+  { id: 'tu', title: 'From… to…', formula: 'từ… tới / đến…',
+    text: 'Works for places and times. Southerners usually say tới.',
+    ex: [['Từ đây tới sân bay bao xa?', 'How far is it from here to the airport?'], ['Tui làm từ chín giờ tới năm giờ.', 'I work from nine to five.']],
+    tip: '' },
+  { id: 'de', title: 'In order to', formula: '… để + verb',
+    text: 'Để gives the purpose.',
+    ex: [['Tui học tiếng Việt để nói chuyện với bạn bè.', 'I’m learning Vietnamese to talk with friends.'], ['Đi sớm để khỏi kẹt xe.', 'Leave early to avoid traffic.']],
+    tip: '' }
 ];
 
 /* Dialogues. lines: [speaker, vietnamese, english] */
@@ -1316,6 +1616,16 @@ const VI_DIALOGUES = [
       ['Minh', 'Quán ốc gần nhà tui đi, ngon lắm.', 'The snail place near my house. It’s really good.'],
       ['You', 'Ok, tui đi Grab tới. Gửi địa chỉ cho tui nha.', 'OK, I’ll get a Grab there. Send me the address.'],
       ['Minh', 'Rồi, mai gặp nha!', 'Done. See you tomorrow!']
+    ] },
+  { id: 'date', title: 'Date night', place: 'Nhắn tin · texting', private: true,
+    cast: 'Khang is older, so in this couple he is anh and Tom is em. Many Vietnamese gay couples use anh and em this way.',
+    lines: [
+      ['Khang', 'Tối nay em rảnh không? Anh mời em đi ăn nha.', 'Are you free tonight? Let me take you to dinner.'],
+      ['Tom', 'Dạ rảnh. Mình đi đâu anh?', 'Yes, I’m free. Where are we going?'],
+      ['Khang', 'Quán lẩu gần bờ sông, view đẹp lắm.', 'A hotpot place by the river. The view is beautiful.'],
+      ['Tom', 'Nghe hay quá. Mấy giờ anh tới đón em?', 'Sounds great. What time will you pick me up?'],
+      ['Khang', 'Bảy giờ nha. Nhớ em quá trời.', 'Seven. I miss you so much.'],
+      ['Tom', 'Em cũng nhớ anh. Lát gặp nha!', 'I miss you too. See you soon!']
     ] }
 ];
 
@@ -1371,7 +1681,7 @@ const VI_NUM_POOL = (() => {
 const VI_BUILD_POOL = (() => {
   const out = [];
   VI_GRAMMAR.forEach(g => g.ex.forEach(([vi, en]) => out.push({ vi, en })));
-  VI_DIALOGUES.forEach(d => d.lines.forEach(([, vi, en]) => { if (!/[.!?]/.test(vi.slice(0, -1))) out.push({ vi, en }); }));
+  VI_DIALOGUES.filter(d => !d.private).forEach(d => d.lines.forEach(([, vi, en]) => { if (!/[.!?]/.test(vi.slice(0, -1))) out.push({ vi, en }); }));
   return out.filter(s => { const n = s.vi.split(/\s+/).length; return n >= 3 && n <= 9; });
 })();
 
@@ -1500,5 +1810,17 @@ const VI_BASICS_PHRASES = (() => {
   VI_ZODIAC.forEach(z => { s.add('năm ' + z[1]); s.add(z[2]); });
   VI_YEARS.forEach(y => { s.add(viNum(y)); s.add('năm ' + viNum(y)); });
   for (let d = 1; d <= 31; d++) s.add('ngày ' + viNum(d));
+  return [...s];
+})();
+
+/* Can Chi (sexagenary cycle): same system as Japanese 干支 */
+const VI_CAN = [['甲', 'Giáp'], ['乙', 'Ất'], ['丙', 'Bính'], ['丁', 'Đinh'], ['戊', 'Mậu'], ['己', 'Kỷ'], ['庚', 'Canh'], ['辛', 'Tân'], ['壬', 'Nhâm'], ['癸', 'Quý']];
+function viCanChi(y) {
+  const c = VI_CAN[((y - 4) % 10 + 10) % 10], z = VI_ZODIAC[((y - 4) % 12 + 12) % 12];
+  return { kanji: c[0] + z[0], name: c[1] + ' ' + z[1], animal: z[2], en: z[3] };
+}
+const VI_CANCHI_PHRASES = (() => {
+  const s = new Set();
+  for (let y = 1940; y <= 2040; y++) { s.add('năm ' + viNum(y)); s.add('năm ' + viCanChi(y).name); }
   return [...s];
 })();

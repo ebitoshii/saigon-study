@@ -331,6 +331,21 @@ details summary { cursor: pointer; font-weight: 600; }
 .zod .vi { font-size: 1.05rem; }
 .zod small { color: var(--muted); font-size: .78rem; }
 
+.cc-calc { gap: 14px 20px; align-items: center; }
+#cc-in { font: inherit; font-size: 1.2rem; width: 6em; padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--ink); font-variant-numeric: tabular-nums; }
+.cc-out { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; }
+.cc-out .kj { font-family: var(--f-kanji); font-size: 2rem; font-weight: 600; }
+.cc-out .vi { font-size: 1.4rem; }
+.cc-out small { color: var(--muted); }
+.cc-stems { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 6px; margin-top: 8px; }
+.cc-stems button { border: 1px solid var(--line); border-radius: 8px; background: var(--surface); padding: 6px 8px; display: flex; gap: 8px; align-items: baseline; }
+.cc-stems .kj { font-family: var(--f-kanji); font-weight: 600; font-size: 1.2rem; }
+.cc-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0 16px; max-height: 360px; overflow-y: auto; border-top: 1px solid var(--line); padding-right: 4px; }
+.cc-list button { display: grid; grid-template-columns: 3.2em 2.4em minmax(0, 1fr); gap: 6px; align-items: baseline; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 6px 2px; }
+.cc-list button.now { background: var(--ochre-soft); }
+.cc-list .y { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; }
+.cc-list .kj { font-family: var(--f-kanji); font-weight: 600; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -405,7 +420,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
   <section class="view" id="v-home">
     <div class="hero">
       <div class="panel hero-text">
-        <span class="eyebrow">Tranche 7 · Southern Vietnamese</span>
+        <span class="eyebrow">Tranche 8 · Southern Vietnamese</span>
         <h1>Học tiếng Việt <span class="vi">giọng Sài Gòn</span></h1>
         <p class="lede">Southern Vietnamese, the way it sounds in Hồ Chí Minh City. Every word is shown in its Southern form, with the Hanoi form beside it where they differ. Syllables are coloured by tone.</p>
         <div class="legend" id="legend"></div>
@@ -516,6 +531,22 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
         <div class="row"><input type="date" id="dt-in" aria-label="Date"><span class="note-line">Vietnamese writes dates day / month / year.</span></div>
         <div class="dt-out"><span class="dt-num" id="dt-num"></span><span class="vi" id="dt-vi"></span></div>
       </div>
+      <div class="panel" style="display:grid;gap:12px">
+        <div class="row" style="justify-content:space-between">
+          <div style="display:grid;gap:4px"><span class="eyebrow">Can Chi · 干支</span><h3>Traditional year names</h3></div>
+          <button class="btn primary" id="cc-play">Play</button>
+        </div>
+        <p class="note-line">Each year pairs one of 10 stems (Can) with one of 12 animals (Chi), repeating every 60 years: the same system as Japanese 干支. The traditional year begins at Tết, not on 1 January.</p>
+        <div class="row cc-calc">
+          <label class="row" style="gap:8px">Year <input type="number" id="cc-in" min="1900" max="2100" inputmode="numeric"></label>
+          <div class="cc-out" id="cc-out"></div>
+        </div>
+        <details>
+          <summary>The 10 stems</summary>
+          <div class="cc-stems" id="cc-stems"></div>
+        </details>
+        <div class="cc-list" id="cc-list" aria-label="Years 1950 to 2040"></div>
+      </div>
       <div class="num-cols">
         <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Counting</h3><div class="kv" id="count"></div>
           <p class="note-line">See Usage → Catch the number to practise prices, times and phone numbers.</p></div>
@@ -525,7 +556,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
         <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Months</h3><div class="kv" id="months"></div>
           <p class="note-line">April is <b>tháng tư</b>, never tháng bốn. In the lunar calendar, month 1 is tháng giêng and month 12 is tháng chạp.</p></div>
         <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Years</h3><div class="kv" id="years"></div>
-          <p class="note-line">Say "năm" before a year: năm hai ngàn không trăm hai mươi sáu. Older years are often shortened: năm chín mươi = 1990.</p></div>
+          <p class="note-line">Say "năm" before a year: năm hai ngàn không trăm hai mươi sáu. In casual speech most people drop "không trăm": hai ngàn hai mươi sáu. Older years are often shortened: năm chín mươi = 1990.</p></div>
         <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Calendar words</h3><div class="kv" id="twords"></div></div>
         <div class="panel" style="display:grid;gap:10px;align-content:start"><h3>Lunar calendar</h3><div class="kv" id="lunar"></div>
           <p class="note-line">The first ten days of a lunar month use mùng: mùng một Tết is the first day of Lunar New Year.</p></div>
@@ -588,6 +619,9 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
               <select id="dir-sel"><option value="vi">Vietnamese</option><option value="en">English</option></select></label>
             <label class="row" style="gap:6px;font-size:.9rem">New words per day
               <select id="new-sel"><option>10</option><option selected>20</option><option>30</option><option>50</option></select></label>
+          </div>
+          <div class="row adult-row">
+            <label style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start;font-size:.9rem"><input type="checkbox" id="adult-on" style="margin-top:3px"> Show the Romance &amp; intimacy (18+) set and the date-night dialogue</label>
           </div>
         </div>
       </details>
@@ -815,6 +849,16 @@ const store = {
 };
 const settings = Object.assign({ voice: '', rate: '0.8', dir: 'vi', newPerDay: 20, cats: Object.keys(VI_CATEGORIES), drill: 'listen' }, store.get('settings', {}));
 const saveSettings = () => store.set('settings', settings);
+/* New word sets switch on automatically (private 18+ sets stay off until enabled) */
+(() => {
+  const all = Object.keys(VI_CATEGORIES);
+  const known = settings.knownCats || ['g', 'p', 'n', 't', 'f', 'd', 'a', 'b', 'v', 'j', 'q', 's'];
+  all.forEach(c => { if (!known.includes(c) && !VI_PRIVATE_CATS.includes(c) && !settings.cats.includes(c)) settings.cats.push(c); });
+  if (!settings.adult) settings.cats = settings.cats.filter(c => !VI_PRIVATE_CATS.includes(c));
+  settings.knownCats = all; saveSettings();
+})();
+const visibleCats = () => Object.entries(VI_CATEGORIES).filter(([k]) => settings.adult || !VI_PRIVATE_CATS.includes(k));
+const visibleDialogues = () => VI_DIALOGUES.filter(d => settings.adult || !d.private);
 
 /* ---------- tones ---------- */
 const TONE_OF = { '̀': 'huyen', '́': 'sac', '̉': 'hoinga', '̃': 'hoinga', '̣': 'nang' };
@@ -932,7 +976,7 @@ function streak() {
 }
 const newToday = () => store.get('new_' + today(), 0);
 function recordStat(k, ok) { const st = store.get('stats', {}); const a = st[k] || [0, 0]; if (ok) a[0]++; a[1]++; st[k] = a; store.set('stats', st); }
-function deckWords() { return VI_VOCAB.filter(w => settings.cats.includes(w.cat)); }
+function deckWords() { return VI_VOCAB.filter(w => settings.cats.includes(w.cat) && (settings.adult || !VI_PRIVATE_CATS.includes(w.cat))); }
 function buildQueue() {
   const now = Date.now();
   const due = deckWords().filter(w => srs[w.id] && srs[w.id].due <= now).sort((a, b) => srs[a.id].due - srs[b.id].due);
@@ -1028,13 +1072,23 @@ $('#dm-read').addEventListener('click', () => { settings.drill = 'read'; saveSet
 
 /* ---------- CARDS ---------- */
 let queue = [], qi = 0, revealed = false, cardView = 'study';
-$('#cat-chips').innerHTML = Object.entries(VI_CATEGORIES).map(([k, v]) => `<button class="chip" data-cat="${k}" aria-pressed="${settings.cats.includes(k)}">${esc(v)}</button>`).join('');
+function renderCatChips() { $('#cat-chips').innerHTML = visibleCats().map(([k, v]) => `<button class="chip" data-cat="${k}" aria-pressed="${settings.cats.includes(k)}">${esc(v)}</button>`).join(''); }
+renderCatChips();
 $('#cat-chips').addEventListener('click', e => {
   const b = e.target.closest('[data-cat]'); if (!b) return;
   const k = b.dataset.cat, on = settings.cats.includes(k);
   if (on && settings.cats.length === 1) return;
   settings.cats = on ? settings.cats.filter(c => c !== k) : settings.cats.concat(k);
   b.setAttribute('aria-pressed', !on); saveSettings(); renderCards();
+});
+$('#adult-on').checked = !!settings.adult;
+$('#adult-on').addEventListener('change', e => {
+  settings.adult = e.target.checked;
+  VI_PRIVATE_CATS.forEach(c => {
+    if (settings.adult && !settings.cats.includes(c)) settings.cats.push(c);
+    if (!settings.adult) settings.cats = settings.cats.filter(x => x !== c);
+  });
+  saveSettings(); renderCatChips(); renderCards(); renderDiaPick(); renderDialogue();
 });
 $('#dir-sel').value = settings.dir;
 $('#new-sel').value = String(settings.newPerDay);
@@ -1253,6 +1307,10 @@ function setGv(v) {
 }
 
 /* dialogues */
+function renderDiaPick() {
+  if (!visibleDialogues().some(d => d.id === diaId)) diaId = VI_DIALOGUES[0].id;
+  $('#dia-pick').innerHTML = visibleDialogues().map(d => `<button class="chip" data-d="${d.id}">${esc(d.title)}</button>`).join('');
+}
 let diaId = store.get('dia', VI_DIALOGUES[0].id), diaRun = null;
 function renderDialogue() {
   const d = VI_DIALOGUES.find(x => x.id === diaId) || VI_DIALOGUES[0];
@@ -1285,7 +1343,7 @@ function playDialogue() {
 }
 function initGrammar() {
   renderPatterns();
-  $('#dia-pick').innerHTML = VI_DIALOGUES.map(d => `<button class="chip" data-d="${d.id}">${esc(d.title)}</button>`).join('');
+  renderDiaPick();
   $('#dia-pick').addEventListener('click', e => { const b = e.target.closest('[data-d]'); if (!b) return; stopDialogue(); diaId = b.dataset.d; store.set('dia', diaId); renderDialogue(); });
   $('#dia-play').addEventListener('click', playDialogue);
   const toggle = (id, cls, invert) => $(id).addEventListener('click', e => {
@@ -1305,7 +1363,7 @@ function initGrammar() {
 const LQ_POOL = (() => {
   const out = [], seen = new Set();
   VI_GRAMMAR.forEach(g => g.ex.forEach(([vi, en]) => { if (!seen.has(vi)) { seen.add(vi); out.push({ vi, en }); } }));
-  VI_DIALOGUES.forEach(d => d.lines.forEach(([, vi, en]) => { if (!seen.has(vi)) { seen.add(vi); out.push({ vi, en }); } }));
+  VI_DIALOGUES.filter(d => !d.private).forEach(d => d.lines.forEach(([, vi, en]) => { if (!seen.has(vi)) { seen.add(vi); out.push({ vi, en }); } }));
   return out;
 })();
 const lq = { mode: store.get('lqmode', 'vi'), item: null, opts: [], done: false, right: 0, total: 0 };
@@ -1486,7 +1544,7 @@ $('#bd-check').addEventListener('click', () => {
 /* ---------- PROGRESS ---------- */
 const ACC_LABELS = { cards: 'Flashcard recall', tone: 'Tone drill', listen: 'Listening', numbers: 'Numbers', build: 'Sentence builder', cl: 'Classifiers', kanji: 'Kanji quiz' };
 function renderProgress() {
-  const rows = Object.entries(VI_CATEGORIES).map(([k, label]) => {
+  const rows = visibleCats().map(([k, label]) => {
     const ws = VI_VOCAB.filter(w => w.cat === k);
     const st = ws.filter(w => srs[w.id]).length, ms = ws.filter(w => srs[w.id] && srs[w.id].lvl >= 5).length;
     return { label, total: ws.length, st, ms };
@@ -1685,6 +1743,26 @@ function initBasics() {
   renderDate();
   $('#dt-in').addEventListener('change', renderDate);
   $('#dt-play').addEventListener('click', () => { const d = renderDate(); if (d) speakSeq(viDatePieces(d)); });
+  const cy = new Date().getFullYear();
+  const drawCC = () => {
+    const y = parseInt($('#cc-in').value, 10);
+    if (!(y >= 1900 && y <= 2100)) { $('#cc-out').innerHTML = '<small>Enter a year from 1900 to 2100</small>'; return null; }
+    const c = viCanChi(y);
+    $('#cc-out').innerHTML = `<span class="kj">${c.kanji}</span><span class="vi">${colorize('năm ' + c.name)}</span><small>${esc(c.animal)} · ${esc(c.en)}</small>`;
+    return y;
+  };
+  $('#cc-in').value = cy; drawCC();
+  $('#cc-in').addEventListener('input', drawCC);
+  $('#cc-play').addEventListener('click', () => { const y = drawCC(); if (y) speakSeq(['năm ' + viNum(y), 'năm ' + viCanChi(y).name]); });
+  $('#cc-stems').innerHTML = VI_CAN.map(([kj, vi]) => `<button data-say="${esc(vi)}"><span class="kj">${kj}</span><span class="vi">${esc(vi)}</span></button>`).join('');
+  let ccRows = '';
+  for (let y = 1950; y <= 2040; y++) {
+    const c = viCanChi(y);
+    ccRows += `<button data-say="${esc('năm ' + c.name)}" class="${y === cy ? 'now' : ''}" data-y="${y}"><span class="y">${y}</span><span class="kj">${c.kanji}</span><span class="vi">${esc(c.name)}</span></button>`;
+  }
+  $('#cc-list').innerHTML = ccRows;
+  $('#cc-list').addEventListener('click', e => { const b = e.target.closest('[data-y]'); if (b) { $('#cc-in').value = b.dataset.y; drawCC(); } });
+  const nowRow = $('#cc-list .now'); if (nowRow) $('#cc-list').scrollTop = nowRow.offsetTop - 120;
   $$('#snd-tabs .chip').forEach(c => c.addEventListener('click', () => setSnd(c.dataset.s)));
   setSnd(store.get('snd', 'alpha'));
 }
