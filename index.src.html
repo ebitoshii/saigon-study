@@ -346,6 +346,11 @@ details summary { cursor: pointer; font-weight: 600; }
 .cc-list .y { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; }
 .cc-list .kj { font-family: var(--f-kanji); font-weight: 600; }
 
+.wl-head { position: sticky; top: calc(56px + env(safe-area-inset-top, 0px)); z-index: 2; background: var(--surface); margin: 0; padding: 12px 0 6px; font-family: var(--f-display); font-size: 1.05rem; display: flex; gap: 8px; align-items: baseline; border-bottom: 2px solid var(--jade); }
+.wl-head span { font-family: var(--f-body); font-size: .78rem; color: var(--muted); font-weight: 500; }
+.wl .en small { display: block; font-size: .78rem; color: var(--muted); }
+#browse-cat { flex: 0 1 220px; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -607,7 +612,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
         <h2>Core words</h2>
         <div class="subtabs" role="group" aria-label="View">
           <button class="chip" id="cv-study" aria-pressed="true">Study</button>
-          <button class="chip" id="cv-browse" aria-pressed="false">Browse</button>
+          <button class="chip" id="cv-browse" aria-pressed="false">Word list</button>
         </div>
       </div>
       <details id="deck-opts">
@@ -628,7 +633,11 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
     </div>
     <div id="study-wrap" class="card-stage"></div>
     <div id="browse-wrap" class="panel" hidden>
-      <div class="row" style="margin-bottom:8px"><input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)"><span class="score" id="browse-count"></span></div>
+      <div class="row" style="margin-bottom:8px">
+        <input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)">
+        <select id="browse-cat" aria-label="Word set"></select>
+        <span class="score" id="browse-count"></span>
+      </div>
       <div class="wordlist" id="browse-list"></div>
     </div>
   </section>
@@ -1154,14 +1163,26 @@ document.addEventListener('keydown', e => {
 });
 
 function renderBrowse() {
+  const sel = $('#browse-cat'), cats = visibleCats();
+  const prev = sel.value || store.get('bcat', 'all');
+  sel.innerHTML = '<option value="all">All sets</option>' + cats.map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('');
+  sel.value = cats.some(([k]) => k === prev) ? prev : 'all';
   const q = strip($('#browse-q').value.trim());
-  const list = deckWords().filter(w => !q || strip(w.vi).includes(q) || w.en.toLowerCase().includes(q) || strip(w.north).includes(q));
-  $('#browse-count').textContent = `${list.length} words`;
-  $('#browse-list').innerHTML = list.map(w => `<div class="wl">
-      <div class="row" style="gap:6px;flex-wrap:nowrap;min-width:0"><span class="vi">${colorize(w.vi)}</span></div>
-      <div class="en">${esc(w.en)}${w.north ? ` <em>· Hanoi: ${esc(w.north)}</em>` : ''}</div>
+  const match = w => !q || strip(w.vi).includes(q) || w.en.toLowerCase().includes(q) || strip(w.north).includes(q);
+  let total = 0, html = '';
+  cats.filter(([k]) => sel.value === 'all' || sel.value === k).forEach(([k, label]) => {
+    const ws = VI_VOCAB.filter(w => w.cat === k && match(w));
+    if (!ws.length) return;
+    total += ws.length;
+    html += `<h4 class="wl-head">${esc(label)} <span>${ws.length}</span></h4>` + ws.map(w => `<div class="wl">
+      <div style="min-width:0"><span class="vi">${colorize(w.vi)}</span></div>
+      <div class="en">${esc(w.en)}${w.north ? ` <em>· Hanoi: ${esc(w.north)}</em>` : ''}${w.note ? `<small>${esc(w.note)}</small>` : ''}</div>
       <div class="row" style="gap:8px;flex-wrap:nowrap"><span class="lvl">${lvlBars(w)}</span>${sayBtn(w.vi)}</div></div>`).join('');
+  });
+  $('#browse-count').textContent = `${total} words`;
+  $('#browse-list').innerHTML = html || '<p class="note-line">No words match.</p>';
 }
+$('#browse-cat').addEventListener('change', e => { store.set('bcat', e.target.value); renderBrowse(); });
 $('#browse-q').addEventListener('input', renderBrowse);
 
 /* ---------- BRIDGE ---------- */

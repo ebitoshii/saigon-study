@@ -346,6 +346,11 @@ details summary { cursor: pointer; font-weight: 600; }
 .cc-list .y { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .85rem; }
 .cc-list .kj { font-family: var(--f-kanji); font-weight: 600; }
 
+.wl-head { position: sticky; top: calc(56px + env(safe-area-inset-top, 0px)); z-index: 2; background: var(--surface); margin: 0; padding: 12px 0 6px; font-family: var(--f-display); font-size: 1.05rem; display: flex; gap: 8px; align-items: baseline; border-bottom: 2px solid var(--jade); }
+.wl-head span { font-family: var(--f-body); font-size: .78rem; color: var(--muted); font-weight: 500; }
+.wl .en small { display: block; font-size: .78rem; color: var(--muted); }
+#browse-cat { flex: 0 1 220px; }
+
 /* Usage */
 fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 600; padding: 0; margin-bottom: 6px; }
@@ -607,7 +612,7 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
         <h2>Core words</h2>
         <div class="subtabs" role="group" aria-label="View">
           <button class="chip" id="cv-study" aria-pressed="true">Study</button>
-          <button class="chip" id="cv-browse" aria-pressed="false">Browse</button>
+          <button class="chip" id="cv-browse" aria-pressed="false">Word list</button>
         </div>
       </div>
       <details id="deck-opts">
@@ -628,7 +633,11 @@ legend { font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; col
     </div>
     <div id="study-wrap" class="card-stage"></div>
     <div id="browse-wrap" class="panel" hidden>
-      <div class="row" style="margin-bottom:8px"><input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)"><span class="score" id="browse-count"></span></div>
+      <div class="row" style="margin-bottom:8px">
+        <input type="search" id="browse-q" placeholder="Search Vietnamese or English (no accents needed)">
+        <select id="browse-cat" aria-label="Word set"></select>
+        <span class="score" id="browse-count"></span>
+      </div>
       <div class="wordlist" id="browse-list"></div>
     </div>
   </section>
@@ -1943,7 +1952,74 @@ Mình làm an toàn nha.|Let's be safe.|r||
 Anh xét nghiệm gần đây chưa?|Have you been tested recently?|r||
 `;
 
-const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim() + '\n' + VI_VOCAB_RAW_T8.trim()).split('\n').map((line, i) => {
+/* Tranche 9 additions */
+const VI_VOCAB_RAW_T9 = `
+thả thính|flirt (slang, lit. "throw bait")|r||Very common among young Saigonese
+tán|hit on; court someone|r||Anh đang tán em hả? = Are you hitting on me?
+Anh đang tán em hả?|Are you hitting on me?|r||
+bồ|partner (casual)|r||Southern; có bồ = to have a partner
+có bồ|have a partner|r||Anh có bồ chưa? = Are you seeing someone?
+app hẹn hò|dating app|r||
+gặp mặt|meet in person|r||Used when moving from chatting to meeting
+người tình|lover|r||
+nụ hôn|a kiss|r||
+cái ôm|a hug|r||
+âu yếm|cuddle; caress|r||
+hấp dẫn|attractive|r||
+quyến rũ|seductive; charming|r||
+gợi cảm|sexy|r||
+Em dễ thương quá.|You're so cute.|r||
+Hôm nay em đẹp trai quá.|You look so handsome today.|r||
+Em là của anh.|You're mine.|r||
+Anh chỉ thương mình em.|I only love you.|r||
+Em làm anh điên lên.|You drive me crazy.|r||
+chia tay|break up|r||
+làm lành|make up (after a fight)|r||
+Em giận anh hả?|Are you mad at me?|r||
+Anh xin lỗi mà.|I'm sorry, OK?|r||
+Mình về nhà anh nha?|Shall we go back to my place?|r||
+Ở lại với anh đêm nay nha.|Stay with me tonight.|r||
+ngủ chung|sleep together; share a bed|r||
+Ôm chặt anh đi.|Hold me tight.|r||
+Hôn nữa đi.|Kiss me more.|r||
+Tắt đèn đi.|Turn off the light.|r||
+Cởi áo ra đi.|Take your shirt off.|r||
+Anh thích em như vậy.|I like you like this.|r||
+Từ từ thôi.|Take it slow.|r||
+Nhanh lên.|Faster.|r||
+Sướng không?|Does it feel good?|r||
+Anh sướng quá.|It feels so good (for me).|r||
+Đau không?|Does it hurt?|r||Check in, and slow down if the answer is yes
+Thoải mái không?|Are you comfortable?|r||
+Anh sắp ra rồi.|I'm about to come.|r||
+Mình nghỉ chút nha.|Let's take a break.|r||
+Tuyệt quá.|That was amazing.|r||
+làm tình|make love|r||
+quan hệ|have sex (lit. "relations")|r||Polite euphemism
+nứng|horny|r||Crude slang: only with a partner, never in public
+Không, anh không muốn.|No, I don't want to.|r||
+Em chưa sẵn sàng.|I'm not ready.|r||
+Em muốn anh vào trong em.|I want you inside me.|r||
+Vào đi anh.|Come in. Put it in.|r||
+Sướng quá, em không kiềm chế được.|It feels so good, I can't control myself.|r||
+Sướng quá, em chịu không nổi.|It feels so good, I can't take it.|r||Southern word order: chịu không nổi
+Anh làm em sướng quá.|You make me feel so good.|r||
+Em thích cảm giác này.|I love this feeling.|r||
+Sâu nữa đi.|Deeper.|r||
+Chậm thôi anh.|Slower, babe.|r||
+Đừng rút ra.|Don't pull out.|r||
+Ra trong em đi.|Come inside me.|r||
+Em sắp ra rồi.|I'm about to come.|r||
+Ra chung nha.|Let's come together.|r||
+Lần nữa nha?|Again?|r||
+Anh có sao không?|Are you OK? (after)|r||
+Ôm em ngủ đi.|Hold me while we sleep.|r||
+Mình đều xét nghiệm rồi.|We've both been tested.|r||
+Anh có uống PrEP không?|Are you on PrEP?|r||PrEP is widely available in Vietnam
+Mình không cần bao nữa ha?|We don't need condoms anymore, right?|r||Only once you have both agreed
+`;
+
+const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim() + '\n' + VI_VOCAB_RAW_T8.trim() + '\n' + VI_VOCAB_RAW_T9.trim()).split('\n').map((line, i) => {
   const [vi, en, cat, north, note] = line.split('|');
   return { id: 'w' + i, vi, en, cat, north: north || '', note: note || '' };
 });
@@ -2659,7 +2735,7 @@ const VI_CANCHI_PHRASES = (() => {
   return [...s];
 })();
 
-const AUDIO_LIST_SIZE = 1831;
+const AUDIO_LIST_SIZE = 1894;
 
 
 </script>
@@ -2982,14 +3058,26 @@ document.addEventListener('keydown', e => {
 });
 
 function renderBrowse() {
+  const sel = $('#browse-cat'), cats = visibleCats();
+  const prev = sel.value || store.get('bcat', 'all');
+  sel.innerHTML = '<option value="all">All sets</option>' + cats.map(([k, v]) => `<option value="${k}">${esc(v)}</option>`).join('');
+  sel.value = cats.some(([k]) => k === prev) ? prev : 'all';
   const q = strip($('#browse-q').value.trim());
-  const list = deckWords().filter(w => !q || strip(w.vi).includes(q) || w.en.toLowerCase().includes(q) || strip(w.north).includes(q));
-  $('#browse-count').textContent = `${list.length} words`;
-  $('#browse-list').innerHTML = list.map(w => `<div class="wl">
-      <div class="row" style="gap:6px;flex-wrap:nowrap;min-width:0"><span class="vi">${colorize(w.vi)}</span></div>
-      <div class="en">${esc(w.en)}${w.north ? ` <em>· Hanoi: ${esc(w.north)}</em>` : ''}</div>
+  const match = w => !q || strip(w.vi).includes(q) || w.en.toLowerCase().includes(q) || strip(w.north).includes(q);
+  let total = 0, html = '';
+  cats.filter(([k]) => sel.value === 'all' || sel.value === k).forEach(([k, label]) => {
+    const ws = VI_VOCAB.filter(w => w.cat === k && match(w));
+    if (!ws.length) return;
+    total += ws.length;
+    html += `<h4 class="wl-head">${esc(label)} <span>${ws.length}</span></h4>` + ws.map(w => `<div class="wl">
+      <div style="min-width:0"><span class="vi">${colorize(w.vi)}</span></div>
+      <div class="en">${esc(w.en)}${w.north ? ` <em>· Hanoi: ${esc(w.north)}</em>` : ''}${w.note ? `<small>${esc(w.note)}</small>` : ''}</div>
       <div class="row" style="gap:8px;flex-wrap:nowrap"><span class="lvl">${lvlBars(w)}</span>${sayBtn(w.vi)}</div></div>`).join('');
+  });
+  $('#browse-count').textContent = `${total} words`;
+  $('#browse-list').innerHTML = html || '<p class="note-line">No words match.</p>';
 }
+$('#browse-cat').addEventListener('change', e => { store.set('bcat', e.target.value); renderBrowse(); });
 $('#browse-q').addEventListener('input', renderBrowse);
 
 /* ---------- BRIDGE ---------- */

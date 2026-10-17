@@ -1109,7 +1109,74 @@ Mình làm an toàn nha.|Let's be safe.|r||
 Anh xét nghiệm gần đây chưa?|Have you been tested recently?|r||
 `;
 
-const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim() + '\n' + VI_VOCAB_RAW_T8.trim()).split('\n').map((line, i) => {
+/* Tranche 9 additions */
+const VI_VOCAB_RAW_T9 = `
+thả thính|flirt (slang, lit. "throw bait")|r||Very common among young Saigonese
+tán|hit on; court someone|r||Anh đang tán em hả? = Are you hitting on me?
+Anh đang tán em hả?|Are you hitting on me?|r||
+bồ|partner (casual)|r||Southern; có bồ = to have a partner
+có bồ|have a partner|r||Anh có bồ chưa? = Are you seeing someone?
+app hẹn hò|dating app|r||
+gặp mặt|meet in person|r||Used when moving from chatting to meeting
+người tình|lover|r||
+nụ hôn|a kiss|r||
+cái ôm|a hug|r||
+âu yếm|cuddle; caress|r||
+hấp dẫn|attractive|r||
+quyến rũ|seductive; charming|r||
+gợi cảm|sexy|r||
+Em dễ thương quá.|You're so cute.|r||
+Hôm nay em đẹp trai quá.|You look so handsome today.|r||
+Em là của anh.|You're mine.|r||
+Anh chỉ thương mình em.|I only love you.|r||
+Em làm anh điên lên.|You drive me crazy.|r||
+chia tay|break up|r||
+làm lành|make up (after a fight)|r||
+Em giận anh hả?|Are you mad at me?|r||
+Anh xin lỗi mà.|I'm sorry, OK?|r||
+Mình về nhà anh nha?|Shall we go back to my place?|r||
+Ở lại với anh đêm nay nha.|Stay with me tonight.|r||
+ngủ chung|sleep together; share a bed|r||
+Ôm chặt anh đi.|Hold me tight.|r||
+Hôn nữa đi.|Kiss me more.|r||
+Tắt đèn đi.|Turn off the light.|r||
+Cởi áo ra đi.|Take your shirt off.|r||
+Anh thích em như vậy.|I like you like this.|r||
+Từ từ thôi.|Take it slow.|r||
+Nhanh lên.|Faster.|r||
+Sướng không?|Does it feel good?|r||
+Anh sướng quá.|It feels so good (for me).|r||
+Đau không?|Does it hurt?|r||Check in, and slow down if the answer is yes
+Thoải mái không?|Are you comfortable?|r||
+Anh sắp ra rồi.|I'm about to come.|r||
+Mình nghỉ chút nha.|Let's take a break.|r||
+Tuyệt quá.|That was amazing.|r||
+làm tình|make love|r||
+quan hệ|have sex (lit. "relations")|r||Polite euphemism
+nứng|horny|r||Crude slang: only with a partner, never in public
+Không, anh không muốn.|No, I don't want to.|r||
+Em chưa sẵn sàng.|I'm not ready.|r||
+Em muốn anh vào trong em.|I want you inside me.|r||
+Vào đi anh.|Come in. Put it in.|r||
+Sướng quá, em không kiềm chế được.|It feels so good, I can't control myself.|r||
+Sướng quá, em chịu không nổi.|It feels so good, I can't take it.|r||Southern word order: chịu không nổi
+Anh làm em sướng quá.|You make me feel so good.|r||
+Em thích cảm giác này.|I love this feeling.|r||
+Sâu nữa đi.|Deeper.|r||
+Chậm thôi anh.|Slower, babe.|r||
+Đừng rút ra.|Don't pull out.|r||
+Ra trong em đi.|Come inside me.|r||
+Em sắp ra rồi.|I'm about to come.|r||
+Ra chung nha.|Let's come together.|r||
+Lần nữa nha?|Again?|r||
+Anh có sao không?|Are you OK? (after)|r||
+Ôm em ngủ đi.|Hold me while we sleep.|r||
+Mình đều xét nghiệm rồi.|We've both been tested.|r||
+Anh có uống PrEP không?|Are you on PrEP?|r||PrEP is widely available in Vietnam
+Mình không cần bao nữa ha?|We don't need condoms anymore, right?|r||Only once you have both agreed
+`;
+
+const VI_VOCAB = (VI_VOCAB_RAW.trim() + '\n' + VI_VOCAB_RAW_T4.trim() + '\n' + VI_VOCAB_RAW_T8.trim() + '\n' + VI_VOCAB_RAW_T9.trim()).split('\n').map((line, i) => {
   const [vi, en, cat, north, note] = line.split('|');
   return { id: 'w' + i, vi, en, cat, north: north || '', note: note || '' };
 });
